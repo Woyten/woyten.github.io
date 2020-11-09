@@ -1,0 +1,21 @@
+{
+  "name": "microwave",
+  "collaborators": [
+    "Woyten <woyten.tielesch@online.de>"
+  ],
+  "description": "Make xenharmonic music and explore musical tunings.",
+  "version": "0.10.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Woyten/tune/tree/master/microwave"
+  },
+  "files": [
+    "microwave_bg.wasm",
+    "microwave.js",
+    "microwave.d.ts"
+  ],
+  "module": "microwave.js",
+  "types": "microwave.d.ts",
+  "sideEffects": false
+}
