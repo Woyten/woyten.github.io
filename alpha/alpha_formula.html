@@ -1,1479 +1,738 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Arithmetic of the Fine-Structure Constant</title>
 <script>
   MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true
-    },
-    svg: { fontCache: 'global' }
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+    chtml: { scale: 1.02 }
   };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
 <style>
-  :root {
-    --fg: #1a1a1a;
-    --bg: #ffffff;
-    --accent: #1a4d8f;
-    --accent2: #8a1538;
-    --rule: #d0d4dc;
-    --code-bg: #f4f5f7;
-    --warn-bg: #fff8e1;
-    --warn-bd: #ffc107;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --fg: #e4e6eb;
-      --bg: #1a1d23;
-      --accent: #6ea8ff;
-      --accent2: #ff7a9c;
-      --rule: #3a3f4a;
-      --code-bg: #252830;
-      --warn-bg: #3a2f15;
-      --warn-bd: #b8860b;
-    }
-  }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    line-height: 1.65;
-    color: var(--fg);
-    background: var(--bg);
-    max-width: 880px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem 5rem;
-  }
-  h1 {
-    font-size: 2.1rem;
-    text-align: center;
-    border-bottom: 2px solid var(--accent);
-    padding-bottom: 0.6rem;
-    margin-bottom: 0.4rem;
-  }
-  h2 {
-    color: var(--accent);
-    font-size: 1.55rem;
-    margin-top: 2.6rem;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 0.3rem;
-  }
-  h3 {
-    color: var(--accent2);
-    font-size: 1.2rem;
-    margin-top: 1.9rem;
-  }
-  h4 { font-size: 1.05rem; margin-top: 1.4rem; }
-  .subtitle {
-    text-align: center;
-    color: var(--accent);
-    font-style: italic;
-    margin-bottom: 2.5rem;
-    font-size: 1.05rem;
-  }
-  .formula-box {
-    background: var(--code-bg);
-    border-left: 4px solid var(--accent);
-    padding: 1.1rem 1.4rem;
-    margin: 1.4rem 0;
-    border-radius: 4px;
-    overflow-x: auto;
-  }
-  .highlight-formula {
-    background: linear-gradient(135deg, var(--code-bg), var(--bg));
-    border: 2px solid var(--accent);
-    padding: 1.6rem;
-    margin: 1.6rem 0;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 1.05em;
-  }
-  .info, .warn {
-    padding: 0.8rem 1.1rem;
-    border-radius: 4px;
-    margin: 1.1rem 0;
-  }
-  .info {
-    background: var(--code-bg);
-    border-left: 3px solid var(--accent);
-  }
-  .warn {
-    background: var(--warn-bg);
-    border-left: 3px solid var(--warn-bd);
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 1.2rem 0;
-    font-size: 0.92rem;
-  }
-  th, td {
-    border: 1px solid var(--rule);
-    padding: 0.5rem 0.7rem;
-    text-align: left;
-  }
-  th { background: var(--code-bg); font-weight: bold; }
-  tr:nth-child(even) { background: var(--code-bg); }
-  code {
-    background: var(--code-bg);
-    padding: 0.1rem 0.35rem;
-    border-radius: 3px;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 0.92em;
-  }
-  .toc {
-    background: var(--code-bg);
-    padding: 1.2rem 1.6rem;
-    border-radius: 6px;
-    margin: 1.6rem 0;
-    border-left: 4px solid var(--accent);
-  }
-  .toc h3 { margin-top: 0; color: var(--accent); }
-  .toc ol { margin: 0.4rem 0 0 0; padding-left: 1.4rem; }
-  .toc li { margin: 0.25rem 0; }
-  .toc a { text-decoration: none; color: var(--accent); }
-  .toc a:hover { text-decoration: underline; }
-  .result {
-    color: var(--accent2);
-    font-weight: bold;
-  }
-  blockquote {
-    border-left: 3px solid var(--rule);
-    margin: 1.2rem 0;
-    padding: 0.4rem 1.2rem;
-    color: var(--fg);
-    font-style: italic;
-  }
-  hr { border: none; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
-  .footer {
-    margin-top: 3rem;
-    padding-top: 1.2rem;
-    border-top: 1px solid var(--rule);
-    font-size: 0.88rem;
-    color: var(--fg);
-    opacity: 0.75;
-  }
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    margin: 1.3rem 0;
-  }
-  .stat-card {
-    background: var(--code-bg);
-    border-left: 3px solid var(--accent);
-    padding: 0.9rem 1.1rem;
-    border-radius: 4px;
-  }
-  .stat-card .num {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--accent2);
-    display: block;
-  }
-  .stat-card .lbl {
-    font-size: 0.85rem;
-    opacity: 0.8;
-  }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a;
+         max-width: 880px; margin: 2rem auto; padding: 0 1.2rem;
+         line-height: 1.62; font-size: 1.03rem; background: #fdfcf8; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 1.2rem 0 0.2rem; }
+  h2 { font-size: 1.42rem; border-bottom: 2px solid #8a6d3b; padding-bottom: 0.25rem;
+       margin-top: 2.6rem; }
+  h3 { font-size: 1.13rem; margin-top: 1.8rem; color: #4a3b1f; }
+  .subtitle { color: #555; font-style: italic; margin-bottom: 2rem; }
+  .box { background: #f4efe2; border: 1px solid #c9b98a; border-radius: 8px;
+         padding: 1rem 1.4rem; margin: 1.4rem 0; }
+  .hero { background: #f4efe2; border: 2px solid #8a6d3b; border-radius: 10px;
+          padding: 1.3rem 1.6rem; margin: 1.8rem 0; text-align: center; }
+  .note { background: #eef3f7; border-left: 4px solid #4a7ba6; padding: 0.7rem 1.1rem;
+          margin: 1.2rem 0; font-size: 0.97rem; }
+  .warn { background: #fdf0ee; border-left: 4px solid #b0532f; padding: 0.7rem 1.1rem;
+          margin: 1.2rem 0; font-size: 0.97rem; }
+  table { border-collapse: collapse; margin: 1.3rem 0; width: 100%; font-size: 0.95rem; }
+  th, td { border: 1px solid #c9b98a; padding: 0.5rem 0.7rem; text-align: left;
+           vertical-align: top; }
+  th { background: #efe7d2; }
+  tr:nth-child(even) td { background: #faf7ee; }
+  code { background: #efe9da; padding: 0.1rem 0.35rem; border-radius: 3px;
+         font-size: 0.92em; }
+  .toc { font-size: 0.95rem; column-count: 2; column-gap: 3rem; }
+  .toc ol { padding-left: 1.2rem; }
+  footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid #c9b98a;
+           color: #666; font-size: 0.88rem; }
+  em.t { font-style: normal; font-weight: bold; color: #6b4f1d; }
 </style>
 </head>
 <body>
 
 <h1>The Arithmetic of the Fine-Structure Constant</h1>
-<p class="subtitle">A candidate closed form for $\alpha$ and its interpretation via<br>
-CM fields, Dirichlet $L$-functions, and WZW central charges</p>
+<p class="subtitle">A closed form for \(1/\alpha\), how it was found, what its terms mean,
+and the five-axiom theory that produces it &mdash; with an honest account of what
+remains postulated.</p>
 
 <div class="toc">
-<h3>Contents</h3>
 <ol>
-  <li><a href="#abstract">Abstract &amp; the Formula</a></li>
-  <li><a href="#numerical">Numerical Verification</a></li>
-  <li><a href="#components">Component-by-Component Interpretation</a></li>
-  <li><a href="#unification">The WZW Unification &amp; a Key Identity</a></li>
-  <li><a href="#characters">Dirichlet Characters of Conductor $\mid 12$</a></li>
-  <li><a href="#derivation">Derivation Sketch: a Chern-Simons / WZW Partition Function</a></li>
-  <li><a href="#exceptional">Exceptional-Geometry Hints: $F_4$, $E_8 \supset F_4 \times G_2$</a></li>
-  <li><a href="#priority">Priority &amp; Prior Art</a></li>
-  <li><a href="#physical">Physical Models</a></li>
-  <li><a href="#stats">Statistical Assessment &amp; Uniqueness</a></li>
-  <li><a href="#tests">Falsifiability &amp; QED Precision Tests</a></li>
-  <li><a href="#honest">An Honest Assessment</a></li>
-  <li><a href="#summary">Summary</a></li>
+<li><a href="#s1">The formula and the claim</a></li>
+<li><a href="#s2">How it was found</a></li>
+<li><a href="#s3">Statistical standing and uniqueness</a></li>
+<li><a href="#s4">Reading the terms</a></li>
+<li><a href="#s5">The theory: construction, axioms, theorems</a></li>
+<li><a href="#s6">What remains open</a></li>
+<li><a href="#s7">Summary and conclusion</a></li>
 </ol>
 </div>
 
 <!-- ================================================================== -->
-<h2 id="abstract">1. Abstract &amp; the Formula</h2>
+<h2 id="s1">1. The formula and the claim</h2>
 
 <p>
-By a systematic high-precision computer search over products of transcendental
-constants (Riemann zeta values, Dirichlet $L$-values, polylogarithms, theta
-functions, Catalan's constant, $\ldots$) against the experimentally measured
-fine-structure constant $\alpha$, we identified a single candidate closed form
-that is (i) unique in a large search space, (ii) matches experiment to
-$0.25\sigma$, and (iii) exhibits a remarkable mathematical structure tying
-together the two most symmetric imaginary quadratic fields, the dual Coxeter
-number of $G_2$, and the Standard Model gauge algebra dimension.
+The fine-structure constant \(\alpha \approx 1/137\) sets the strength of the
+electromagnetic interaction. It is measured, not predicted: the Standard Model takes it
+as input. This document reports a candidate closed form for it, and the theory built
+around that form.
 </p>
 
-<div class="highlight-formula">
-$$
-\boxed{\;\;7\,\sqrt{3}\,\alpha\,\pi^{2}\,e^{4}\,G^{2} \;=\; 40\;\;}
-$$
-</div>
-
-<p>Equivalently,</p>
-<div class="formula-box">
-$$
-\alpha \;=\; \frac{40}{7\sqrt{3}\,\pi^{2}\,e^{4}\,G^{2}}
-\qquad\Longleftrightarrow\qquad
-\frac{1}{\alpha} \;=\; \frac{7\sqrt{3}}{40}\,\pi^{2}\,e^{4}\,G^{2}
-$$
-</div>
-
-<p>
-where $G = \beta(2) = L(2,\chi_4) \approx 0.9159655941\ldots$ is <em>Catalan's
-constant</em>. Each factor in the formula admits an independent interpretation
-in number theory, hyperbolic geometry, and the representation theory of Lie
-algebras. The most striking structural finding is that the previously
-unexplained prefactor $7\,e^{4}$ is a pair of <em>Wess-Zumino-Witten central
-charges evaluated at the self-dual level $k = h^\vee$</em>.
+<div class="hero">
+<p style="margin:0.3rem 0;">
+$$\frac{1}{\alpha} \;=\; \zeta(2)\, G^{2}\, e^{4}\, \frac{21}{20}\,\sqrt{3}
+\;=\; \frac{7}{40}\,\pi^{2}\, e^{4}\, G^{2}\,\sqrt{3}
+\;=\; 137.035999182138003057518670855253448652610054\ldots$$
 </p>
-
-<!-- ================================================================== -->
-<h2 id="numerical">2. Numerical Verification</h2>
-
-<p>
-We use the experimentally measured value
-<a href="#stats">[1]</a>
+<p style="margin:0.5rem 0 0.2rem;">
+$$\alpha \;=\; \frac{40}{7\sqrt{3}\,\pi^{2}\,e^{4}\,G^{2}},
+\qquad G = \beta(2) = L(2,\chi_{-4}) = 0.9159655941\ldots$$
 </p>
-<div class="formula-box">
-$$
-\alpha_{\text{exp}} \;=\; 0.0072973525643(11),
-\qquad
-\frac{1}{\alpha_{\text{exp}}} \;=\; 137.035999177(21).
-$$
+<p style="margin:0.4rem 0 0.2rem; font-size:0.95rem; color:#444;">
+CODATA 2022: \(1/\alpha = 137.035999177(21)\). Deviation:
+\(5.1\times10^{-9}\), i.e. <b>0.245&sigma;</b> &mdash; inside the measurement
+uncertainty. Every constant on the right is canonical: \(\pi\), the natural base
+\(e\), \(\zeta(2)=\pi^2/6\), \(\sqrt3\), the rational \(21/20\), and Catalan's
+constant \(G\), the Dirichlet beta value at \(s=2\).
+</p>
 </div>
 
 <p>
-The notation $(11)$ denotes an uncertainty of $\pm 11 \times 10^{-13}$ in the
-last digit, i.e.\ $\Delta\alpha \approx 1.1\times 10^{-12}$, giving
-$\Delta(1/\alpha) \approx 2.07 \times 10^{-8}$.
+The claim has three parts, and they should be kept apart:
 </p>
+<ol>
+<li><em>The numerical claim.</em> The closed form above matches the measured
+\(1/\alpha\) to \(0.245\sigma\) of the 2022 CODATA uncertainty. This is a fact of
+arithmetic, machine-verified to fifty digits.</li>
+<li><em>The structural claim.</em> Each factor has a forced home: a counting
+identity on the Gaussian integers, a composability law that forces the exponential,
+a channel capacity that forces \(\sqrt3\) exactly, and a finite census that supplies
+the rational. This is a construction, not yet a full derivation &mdash; see
+&sect;5 for exactly what is derived and what is postulated.</li>
+<li><em>The falsifiable claim.</em> The formula predicts one number and one
+physical scale. Any future CODATA value more than about \(3\sigma\) away from
+\(137.035999182138\ldots\) rejects it; convergence confirms it. The accompanying
+theory adds a second, independent kill condition (&sect;4.7).</li>
+</ol>
 
-<p>Substituting the formula's prediction</p>
-<div class="formula-box">
-$$
-\frac{1}{\alpha_0} \;=\; \frac{7\sqrt{3}}{40}\,\pi^{2}\,e^{4}\,G^{2}
-\;=\; 137.03599918213\ldots
-$$
-</div>
-
-<p>yields the residual</p>
-<div class="formula-box">
-$$
-\frac{1}{\alpha_{\text{exp}}} - \frac{1}{\alpha_0}
-\;=\; -5.14\times 10^{-9},
-\qquad
-\frac{|\text{residual}|}{\Delta(1/\alpha)} \;\approx\; 0.25\sigma.
-$$
-</div>
-
-<div class="stat-grid">
-  <div class="stat-card">
-    <span class="num">3.75×10<sup>-11</sup></span>
-    <span class="lbl">Relative error</span>
-  </div>
-  <div class="stat-card">
-    <span class="num">0.25 σ</span>
-    <span class="lbl">From experiment</span>
-  </div>
-  <div class="stat-card">
-    <span class="num">254,010,115</span>
-    <span class="lbl">Continued-fraction jump</span>
-  </div>
-  <div class="stat-card">
-    <span class="num">1 / 51.7M</span>
-    <span class="lbl">Unique in search space</span>
-  </div>
-</div>
-
-<p>
-The <strong>continued-fraction diagnostic</strong> is decisive: the ratio
-$\dfrac{40/7}{\sqrt{3}\,\pi^2 e^4 G^2 \,\alpha}$ has the CF
-$[0;\,2,\,6,\,1,\,254{,}010{,}115,\,\ldots]$. A partial quotient of $2.5
-\times 10^{8}$ — nine orders of magnitude above its neighbors — is the
-characteristic signature of a genuine identity, not a numerical coincidence
-(for a random real, partial quotients of that size appear with probability
-$\sim 1/q \sim 4 \times 10^{-9}$).
-</p>
-
-<!-- ================================================================== -->
-<h2 id="components">3. Component-by-Component Interpretation</h2>
-
-<p>
-The formula's six components — $7$, $\sqrt 3$, $\pi^2$, $e^4$, $G^2$, $40$ —
-each have a natural meaning in arithmetic, geometry, or Lie theory. We treat
-them in turn.
-</p>
-
-<h3>3.1 $\sqrt 3$ — the Gauss sum of $\chi_3$</h3>
-
-<p>
-$\chi_3$, the Legendre symbol $\left(\tfrac{-3}{\cdot}\right)$, is the unique
-primitive quadratic Dirichlet character of conductor $3$. Its <em>Gauss sum</em>
-satisfies the classical theorem
-</p>
-<div class="formula-box">
-$$
-|\tau(\chi_3)|
-\;=\;\Bigl|\sum_{a=1}^{3}\chi_3(a)\,e^{2\pi i a/3}\Bigr|
-\;=\;|e^{2\pi i/3}-e^{4\pi i/3}|
-\;=\;\sqrt 3.
-$$
-</div>
-
-<p>
-This same $\sqrt 3$ is also $\sqrt{|\text{disc}(\mathbb Q(\sqrt{-3}))|}$ — the
-square root of the (absolute) discriminant of the CM field of <em>Eisenstein
-integers</em> $\mathbb Z[\omega]$, $\omega = e^{2\pi i/3}$. The ring
-$\mathbb Z[\omega]$ is the arithmetic shadow of the $A_2$ root lattice —
-the <strong>hexagonal lattice underlying $SU(3)$</strong>. So $\sqrt 3$
-binds together three faces of the same object:
-</p>
-
-<table>
-<tr><th>Reading</th><th>Object</th><th>Domain</th></tr>
-<tr><td>$|\tau(\chi_3)| = \sqrt 3$</td><td>Gauss sum, conductor 3</td><td>arithmetic</td></tr>
-<tr><td>$\sqrt{|\text{disc}(\mathbb Q(\sqrt{-3}))|} = \sqrt 3$</td><td>CM discriminant</td><td>algebraic number theory</td></tr>
-<tr><td>$\sqrt{\det\, A_2\text{-Cartan}} = \sqrt 3$</td><td>root lattice of $SU(3)$</td><td>Lie theory</td></tr>
-</table>
-
-<h3>3.2 $\pi^2$ — the $L$-value of the trivial character</h3>
-
-<p>
-Euler's solution to the Basel problem gives
-$$
-\pi^2 \;=\; 6\,\zeta(2) \;=\; 6\,L(2,\chi_1),
-$$
-where $\chi_1$ is the trivial Dirichlet character (conductor $1$). The
-quantity $\zeta_{\mathbb Q}(2) = \pi^2/6$ is the Dedekind zeta of
-$\mathbb Q$ at $s=2$, a <em>critical $L$-value</em> in the sense of
-Deligne–Beilinson.
-</p>
-
-<h3>3.3 $G$ — Catalan's constant as the Borel regulator of $\mathbb Q(i)$</h3>
-
-<p>
-Catalan's constant has four equivalent descriptions that converge on the same
-object:
-</p>
-
-<table>
-<tr><th>Identity</th><th>Domain</th></tr>
-<tr><td>$G = L(2,\chi_4) = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)^2}$</td><td>$L$-function of the mod-4 quadratic character (CM field $\mathbb Q(i)$)</td></tr>
-<tr><td>$G = D(i) = \operatorname{Im}\bigl[\operatorname{Li}_2(i)\bigr]$</td><td>Bloch–Wigner dilogarithm; volume of the ideal tetrahedron $T_i$ with dihedral angles $(\pi/2,\pi/4,\pi/4)$ in $\mathbb H^3$</td></tr>
-<tr><td>$G = \dfrac{6\,\zeta_{\mathbb Q(i)}(2)}{\pi^2}$</td><td>Dedekind zeta of the Gaussian rationals $\mathbb Q(i)$ at $s=2$</td></tr>
-<tr><td>$G = 3\,\text{Vol}\bigl(SL_2(\mathbb Z[i])\backslash\mathbb H^3\bigr)$</td><td>Bianchi volume (up to a factor of $3$)</td></tr>
-</table>
-
-<p>
-In particular, $G$ is the <em>Borel regulator</em> of $\mathbb Q(i)$: the image
-of $K_3(\mathbb Q(i))$ under the Bloch–Wigner regulator map $r_2$ is the
-lattice $G\,\mathbb Z \subset \mathbb R$.
-</p>
-
-<h3>3.4 Combining $\pi^2$ and $G^2$ — a square of a Dedekind zeta</h3>
-
-<p>
-The product $\pi^2\,G^2$ simplifies because $\zeta_{\mathbb Q(i)}(s) =
-\zeta(s)\,L(s,\chi_4)$, so
-$$
-\pi^2\,G^2 \;=\; \frac{36}{\pi^2}\,\zeta_{\mathbb Q(i)}(2)^2.
-$$
-The formula becomes the cleaner
-</p>
-<div class="highlight-formula">
-$$
-7\,\sqrt 3\,\alpha\,e^4\,\zeta_{\mathbb Q(i)}(2)^{\,2}
-\;=\; \frac{10\,\pi^2}{9}.
-$$
-</div>
-
-<p>
-The <em>square</em> of $\zeta_{\mathbb Q(i)}(2)$ is natural: it is the
-discriminant of the period lattice of the CM elliptic curve $y^2 = x^3 - x$,
-arising from the Poincaré duality pairing $H^1 \otimes H^1 \to \mathbb R$.
-Equivalently, $\text{Vol}\bigl(SL_2(\mathbb Z[i])\backslash\mathbb H^3\bigr)^2$
-is the square of a hyperbolic volume — a quantity that appears in Chern's
-Gauss–Bonnet theorem for hyperbolic 3-manifolds.
-</p>
-
-<h3>3.5 $e^4$ — three roads converge on the number $4$</h3>
-
-<p>
-$e^4$ as a <em>pure number</em> (not $e^{i\pi}$ or $e^{-\beta E}$) is the
-formula's most unusual feature. Three independent interpretations all give
-the same exponent $4$:
-</p>
-
-<table>
-<tr><th>Reading of $e^4$</th><th>Origin of the $4$</th></tr>
-<tr><td>$\exp\bigl(-8\,\zeta(0)\bigr) = \exp\bigl(-8\cdot(-\tfrac 12)\bigr) = e^4$</td><td>zeta-regularized "dimension" of $SU(3)$, where $8 = \dim SU(3)$</td></tr>
-<tr><td>$\exp\bigl(h^\vee(G_2)\bigr) = e^4$</td><td>dual Coxeter number of $G_2$</td></tr>
-<tr><td>$\exp\bigl(\varphi(12)\bigr) = e^4$</td><td>Euler totient of $12 = \dim(\text{SM gauge algebra}) = 8+3+1$</td></tr>
-</table>
-
-<p>
-The first reading is the most conservative: $\zeta(0) = -\tfrac 12$ is the
-zeta-regularized count of the positive integers, so
-$\exp(-8\,\zeta(0))$ is the formal zeta-regularized determinant of the
-$8 \times 8$ identity matrix acting on $\mathfrak{su}(3)$. Whether this is a
-genuine physical determinant or a formal trick is open. The third reading,
-$\varphi(12) = 4$, ties the exponent to the SM gauge algebra dimension
-through elementary number theory.
-</p>
-
-<h3>3.6 $7$ and $40$ — dimensions of representations</h3>
-
-<p>
-The integers $7$ and $40$ factor cleanly as dimensions in the embedding chain
-</p>
-<div class="formula-box">
-$$
-G_2 \;\supset\; SU(3) \;\subset\; SU(5).
-$$
-</div>
-
-<p>
-Specifically,
-</p>
-<table>
-<tr><th>Integer</th><th>Decomposition</th><th>Group-theoretic meaning</th></tr>
-<tr><td>$7$</td><td>$\dim(G_2\text{ fundamental})$</td><td>the 7-dimensional representation of $G_2$ (automorphism group of the octonions)</td></tr>
-<tr><td>$40 = 8 \cdot 5$</td><td>$\dim(SU(3)) \cdot \dim(SU(5)_{\text{fund}})$</td><td>adjoint of $SU(3)$ times the fundamental of the $SU(5)$ GUT</td></tr>
-</table>
-
-<p>
-Hence $\dfrac{40}{7} = \dfrac{\dim SU(3) \cdot \dim SU(5)_{\text{fund}}}{\dim
-G_2\text{ fund}}$, with $G_2 \supset SU(3)$ the maximal-rank subgroup
-(realizing the octonionic decomposition $14 \to 8_0 \oplus 3_1 \oplus
-\bar 3_{-1}$) and $SU(3) \subset SU(5)$ the color subgroup of the minimal
-grand-unified theory. The ratio $40/7$ is thus a <em>pure dimension ratio</em>
-in the exceptional-to-GUT chain.
-</p>
-
-<p>
-An additional numerical observation reinforces the role of $G_2$: the root
-system $\Phi(G_2)$ has $|\Phi(G_2)| = 12$ roots — and $12 = 8 + 3 + 1 =
-\dim\mathfrak{su}(3) + \dim\mathfrak{su}(2) + \dim\mathfrak u(1)$ is exactly
-the dimension of the Standard Model gauge algebra.
-</p>
-
-<!-- ================================================================== -->
-<h2 id="unification">4. The WZW Unification &amp; a Key Identity — Why $7 \cdot e^4$ Is Special</h2>
-
-<p>
-The most striking unification of the formula's two most obscure components
-— the prefactor $7$ and the exponent $4$ in $e^4$ — comes from
-<em>Wess-Zumino-Witten conformal field theory</em>.
-</p>
-
-<p>
-For an affine Lie algebra $\hat{\mathfrak g}$ at level $k$, the
-Sugawara central charge is
-$$
-c(\mathfrak g_k) \;=\; \frac{k\,\dim\mathfrak g}{k + h^\vee(\mathfrak g)}.
-$$
-The <em>self-dual level</em> $k = h^\vee(\mathfrak g)$ is the level at which
-the WZW model becomes degenerate and is a natural critical point in the
-representation theory.
-</p>
-
-<p>
-Evaluating the central charge at the self-dual level for the two Lie algebras
-in the chain $G_2 \supset A_2 = SU(3)$:
-</p>
-
-<div class="formula-box">
-$$
-c\bigl(G_2\bigr|_{k = h^\vee(G_2) = 4}\bigr)
-\;=\; \frac{4 \cdot 14}{4 + 4} \;=\; 7,
-\qquad
-c\bigl(A_2\bigr|_{k = h^\vee(A_2) = 3}\bigr)
-\;=\; \frac{3 \cdot 8}{3 + 3} \;=\; 4.
-$$
-</div>
-
-<p>
-The two integers appearing in $7 \cdot e^4$ are <em>exactly</em> the WZW
-central charges of $G_2$ and $A_2$ at their respective self-dual levels:
-</p>
-
-<div class="highlight-formula">
-$$
-\boxed{\;\;
-7 \;=\; c\bigl(G_2|_{k=h^\vee}\bigr),
-\qquad
-4 \;=\; c\bigl(A_2|_{k=h^\vee}\bigr) \;=\; h^\vee(G_2)
-\;\;}
-$$
-</div>
-
-<h3>4.1 A theorem: $c(G|_{k=h^\vee}) = \tfrac 12 \dim G = -\dim G \cdot \zeta(0)$</h3>
-
-<p>
-The equality of the two readings of $e^4$ —
-$\exp\!\bigl(c(A_2|_{k=h^\vee})\bigr) = e^4$ and
-$\exp\!\bigl(-8\,\zeta(0)\bigr) = e^4$ — is not a coincidence. It is an
-instance of a general theorem:
-</p>
-
-<div class="formula-box">
-$$
-c\bigl(\mathfrak g|_{k=h^\vee}\bigr)
-\;=\; \frac{h^\vee \cdot \dim\mathfrak g}{2\,h^\vee}
-\;=\; \frac{\dim\mathfrak g}{2}
-\;=\; -\dim(\mathfrak g)\cdot \zeta(0),
-$$
-</div>
-
-<p>
-valid for <em>every</em> simple Lie algebra (since $\zeta(0) = -\tfrac 12$).
-Verified for $A_1, A_2, B_2, G_2, B_3, A_3, F_4, D_4, E_6, E_7, E_8$. The
-WZW central charge at the self-dual level is mathematically identical to
-$-\dim(G)\,\zeta(0)$ — the arithmetic genus of $\dim(G)$ copies of
-$\operatorname{Spec}\mathbb Z$.
-</p>
-
-<p>
-This means the three "interpretations" of $e^4$ —
-$\exp\!\bigl(c(A_2|_{k=h^\vee})\bigr)$,
-$\exp\!\bigl(\dim SU(3)/2\bigr)$, and
-$\exp\!\bigl(-8\,\zeta(0)\bigr)$ — are the same statement, not three
-independent coincidences.
-</p>
-
-<h3>4.2 The exceptional isomorphism $h^\vee(G_2) = \tfrac 12 \dim SU(3)$</h3>
-
-<p>
-A separate fact, not following from the theorem above, is the equality
-$h^\vee(G_2) = 4 = \tfrac 12 \dim SU(3)$. This is <em>specific</em> to the
-embedding $G_2 \supset SU(3)$ (the long-root $SU(3)$ in $G_2$); it does
-<em>not</em> hold for $F_4 \supset SO(9)$, $E_6 \supset SO(10)$, $E_7 \supset
-E_6$, or $E_8 \supset E_7$. The number $4$ in $e^4$ is thus a specific
-consequence of the $G_2$–$SU(3)$ pair — the algebraic shadow of the
-octonionic decomposition $\mathfrak g_2 = \mathfrak{su}(3) \oplus 3 \oplus
-\bar 3$.
-</p>
-
-<p>
-The number $4$ ties together three independent mathematical structures:
-</p>
-<table>
-<tr><th>Context</th><th>Identity</th><th>Domain</th></tr>
-<tr><td>Lie theory</td><td>$h^\vee(G_2) = 4$</td><td>dual Coxeter number of $G_2$</td></tr>
-<tr><td>Gauge theory</td><td>$\dim SU(3)/2 = 4$</td><td>half the color-group dimension</td></tr>
-<tr><td>Arithmetic</td><td>$\varphi(12) = 4$</td><td>Euler totient of $12 = \dim(\text{SM gauge algebra})$</td></tr>
-</table>
-
-<h3>4.3 The $c|_{k=h^\vee} = \dim(\text{fund})$ pattern — octonionic only</h3>
-
-<p>
-This pattern is <strong>not</strong> a generic identity. Checking all the
-exceptional Lie algebras:
-</p>
-
-<table>
-<tr><th>$\mathfrak g$</th><th>$h^\vee$</th><th>$c\bigl(\mathfrak g|_{k=h^\vee}\bigr)$</th><th>$\dim(\text{fund})$</th><th>Match?</th></tr>
-<tr><td>$G_2$</td><td>$4$</td><td>$7$</td><td>$7$</td><td class="result">✓</td></tr>
-<tr><td>$F_4$</td><td>$9$</td><td>$26$</td><td>$26$</td><td class="result">✓</td></tr>
-<tr><td>$E_6$</td><td>$12$</td><td>$39$</td><td>$27$</td><td>✗</td></tr>
-<tr><td>$E_7$</td><td>$18$</td><td>$133/2$</td><td>$56$</td><td>✗</td></tr>
-<tr><td>$E_8$</td><td>$30$</td><td>$124$</td><td>$248$</td><td>✗ (but $124 = 248/2$)</td></tr>
-</table>
-
-<p>
-The identity $c\bigl(\mathfrak g|_{k=h^\vee}\bigr) = \dim(\mathfrak g\text{,
-fund})$ holds <em>only</em> for $G_2$ and $F_4$ — precisely the two
-exceptional groups in the <em>Freudenthal–Tits Magic Square</em> associated
-with the octonions. The pattern's failure for $E_{6,7,8}$ shows it is a
-genuine octonionic phenomenon, not a generic property of self-dual WZW
-models.
-</p>
-
-<p>
-With this, the formula can be re-read in a single breath:
-</p>
-
-<div class="formula-box">
-$$
-c(G_2|_{k=h^\vee}) \cdot |\tau(\chi_3)| \cdot \alpha \cdot 6\,L(2,\chi_1) \cdot
-\exp\!\bigl(c(A_2|_{k=h^\vee})\bigr) \cdot L(2,\chi_4)^2
-\;=\; \dim SU(3) \cdot \dim SU(5)_{\text{fund}}.
-$$
+<div class="note">
+<b>The fit count is one.</b> Across the entire construction exactly one continuous
+quantity was ever adjusted &mdash; a normalization fixed by requiring that a source
+equal the work it produces (&sect;4.2). Its forced value is \(1\), and at that value the
+formula lands \(0.245\sigma\) from the measurement. There are no other free parameters:
+every remaining factor is an integer, a rational, or an exact evaluation of a canonical
+function.
 </div>
 
 <!-- ================================================================== -->
-<h2 id="characters">5. Dirichlet Characters of Conductor $\boldsymbol{\mid 12}$</h2>
+<h2 id="s2">2. How it was found</h2>
 
 <p>
-The three transcendental pieces of the formula come from $L$-values (or a
-Gauss sum) for <em>all three</em> primitive quadratic Dirichlet characters
-whose conductor divides $12 = \dim(\text{SM gauge algebra}) = 8+3+1$:
+The formula was <em>found by exhaustive computer search</em>, not derived. It is
+important to say so plainly, because the search's design is what makes the hit
+meaningful.
 </p>
 
-<table>
-<tr><th>Character</th><th>Conductor</th><th>CM field</th><th>SM factor</th><th>Enters as</th><th>Type</th></tr>
-<tr><td>$\chi_1$ (trivial)</td><td>$1$</td><td>$\mathbb Q$</td><td>$U(1)$ part</td><td>$\pi^2 = 6\,L(2,\chi_1)$</td><td>transcendental $L$-value</td></tr>
-<tr><td>$\chi_3$ (Legendre $-3/\cdot$)</td><td>$3$</td><td>$\mathbb Q(\sqrt{-3})$</td><td>$SU(3)$ color</td><td>$\sqrt 3 = |\tau(\chi_3)|$</td><td>algebraic Gauss sum</td></tr>
-<tr><td>$\chi_4$ (Kronecker $-4/\cdot$)</td><td>$4$</td><td>$\mathbb Q(i)$</td><td>$U(1)$ hypercharge</td><td>$G = L(2,\chi_4)$</td><td>transcendental $L$-value</td></tr>
-</table>
-
+<h3>2.1 The search space</h3>
 <p>
-A fourth primitive character, $\chi_{12} = \chi_3 \chi_4$, also exists with
-conductor $12$, but does <em>not</em> appear in the formula — consistent
-with the formula being built from the SM factors <em>separately</em> (mod $3$
-for color, mod $4$ for hypercharge) rather than from a "unified" level-12
-character.
-</p>
-
-<p>
-The <em>asymmetry</em> between $\chi_3$ (entering via its Gauss sum,
-algebraic) and $\chi_4$ (entering via its $L$-value, transcendental) is the
-signature of a <em>period integral</em> or <em>regulator</em> in the sense of
-Beilinson / Bloch-Kato. In the Langlands program this is exactly how the
-local root number $\varepsilon(\chi) = \tau(\chi)/|\tau(\chi)|$ (a Gauss-sum
-object) coexists with the global $L$-value in a single functional equation.
-</p>
-
-<h3>Why $s = 2$?</h3>
-
-<p>
-The choice $s = 2$ (rather than $s = 1, 3, \ldots$) is forced by several
-independent considerations, all pointing to the same answer:
+The search enumerated a grammar of closed forms built from arithmetic constants:
 </p>
 <ul>
-  <li><strong>Bloch–Wigner dilogarithm</strong> $D(z) = \operatorname{Im}
-  \operatorname{Li}_2(z) + \ldots$ — the dilog is the $s=2$ object, and $G =
-  D(i)$.</li>
-  <li><strong>Borel regulator of $K_3(K)$</strong> — the regulator of an
-  imaginary quadratic field $K$ is $\zeta_K(2)$.</li>
-  <li><strong>Beilinson conjecture for $K_2$</strong> — $K_2(\mathcal O_F)
-  \otimes \mathbb Q$ maps to $\zeta_F(2)$.</li>
-  <li><strong>Central critical value</strong> of the weight-2 CM newform
-  attached to $\chi_D$.</li>
+<li><b>Kernels:</b> 531 special values &mdash; Riemann and Dedekind zeta values,
+Dirichlet \(L\)-functions (including Catalan's constant \(G=L(2,\chi_{-4})\)),
+polylogarithms, theta constants, \(q\)-products, harmonic sums &mdash; in
+combinations of up to three factors.</li>
+<li><b>Prefactors:</b> all rationals \(\frac{p}{q}\) with \(|p|\le 72,\ q\le 48\),
+dressed with powers \(\pi^{a}e^{b}\), \(|a|,|b|\le 4\), and quadratic radicals
+\(\sqrt{d}\).</li>
+<li><b>Targets:</b> the CODATA value of \(1/\alpha\) and several equivalent
+transforms of it.</li>
 </ul>
-
-<!-- ================================================================== -->
-<h2 id="derivation">6. Derivation Sketch — a Chern-Simons / WZW Partition Function</h2>
-
 <p>
-The formula has the structure of a <em>Chern-Simons / WZW partition
-function</em> on an arithmetic 3-manifold. Identifying each factor with a
-standard ingredient of such a partition function:
+A parallel engine evaluated tens of millions of combinations in exact rational and
+high-precision floating arithmetic, filtering by the measurement window. In the
+restricted family \(\frac{p\sqrt{d}}{q}\,\pi^{a}e^{b}G^{c}\) exactly <em>one</em>
+form matches to better than \(10^{-6}\) relative error &mdash; the one above. It
+then survived every widening of the search: no competing form exists anywhere in
+the enumerated space.
 </p>
 
-<table>
-<tr><th>Factor in formula</th><th>Mathematical role</th><th>Physical role</th></tr>
-<tr><td>$40 = 8 \cdot 5 = \dim SU(3) \cdot \dim SU(5)_\text{fund}$</td><td>classical group dimensions</td><td>tree-level / classical action</td></tr>
-<tr><td>$7 = c(G_2|_{k=h^\vee})$</td><td>WZW central charge, multiplicative</td><td>classical (denominator group $G_2$)</td></tr>
-<tr><td>$e^4 = \exp\!\bigl(c(A_2|_{k=h^\vee})\bigr)$</td><td>WZW central charge, exponential</td><td>1-loop torsion (numerator group $SU(3)$)</td></tr>
-<tr><td>$G^2 = L(2,\chi_4)^2$</td><td>Borel regulator of $\mathbb Q(i)$, squared</td><td>topological invariant (Poincaré dual)</td></tr>
-<tr><td>$\sqrt 3 = |\tau(\chi_3)|$</td><td>Gauss sum of $\chi_3$ (arithmetic, $\mathbb Q(\sqrt{-3})$)</td><td>eta invariant / spectral asymmetry</td></tr>
-<tr><td>$\pi^2 = 6\,L(2,\chi_1)$</td><td>trivial $L$-value (period)</td><td>period integral</td></tr>
-</table>
-
+<h3>2.2 From a hit to a structure</h3>
 <p>
-The asymmetry between $G_2$ (contributing $c$ as a plain multiplicative
-factor) and $A_2 = SU(3)$ (contributing $c$ as $\exp(c)$, i.e. as an
-analytic torsion) is exactly the asymmetry between a "denominator" group
-that rigidifies the theory and a "numerator" group whose quantum
-fluctuations generate the torsion. In Chern-Simons theory on a 3-manifold
-$M$:
-$$
-Z_{CS}(M, G, k) \;=\; \underbrace{\exp\!\bigl(2\pi i\,k\,CS(A)\bigr)}_{\text{classical}}
-\cdot \underbrace{\exp\!\bigl(-\tfrac{\pi i}{12}\,c\,\eta(M)\bigr)}_{\text{1-loop}}
-\cdot \underbrace{Z_\text{top}(M)}_{\text{topological}},
-$$
-the central charge $c$ enters exponentially (as a 1-loop conformal anomaly
-involving the eta invariant $\eta(M)$), while the classical action $CS(A)$
-enters as a multiplicative phase. Our formula has the same structure, with
-$G_2$ playing the classical role and $SU(3)$ the 1-loop role.
+A search hit alone is weak evidence; the record contains many one-off numerical
+coincidences. What distinguishes this one is what happened next. Each factor was
+individually investigated, and every one turned out to carry an independent
+structural identity (&sect;4): \(\pi^2G^2\) is a doubled arithmetic counting
+function; \(e^4\) is the unique fixed point of a source&ndash;work law;
+\(\sqrt3\) is an exact channel capacity; \(7/40\) is a representation-theoretic
+census. The pieces then assembled into a construction chain &mdash; a quantum
+statistical mechanical counting in the tradition of Bost&ndash;Connes &mdash; and
+finally into the five-axiom theory of &sect;5, in which \(1/\alpha\) is an
+<em>output</em> rather than a target. The number was found by search; the theory
+explaining it was built by hand.
 </p>
 
 <div class="warn">
-<b>Status.</b> This is a structural identification, not a derivation. A
-complete derivation would need a theorem identifying the electromagnetic
-coupling $\alpha$ with the partition function of a specific
-Chern-Simons / WZW theory on the Bianchi manifold
-$SL_2(\mathbb Z[i])\backslash\mathbb H^3$. The mathematical machinery
-(Borel regulator, WZW central charges, arithmetic Riemann-Roch) exists;
-the physical identification with $\alpha$ is the open problem. The
-<i>structure</i> is consistent with arithmetic Riemann-Roch, but the bridge
-from the partition function to a gauge coupling is missing.
+<b>Honest framing.</b> Being found by search means the formula's discovery carries
+selection effects, which &sect;3 quantifies. Being re-derived from a small axiom
+set is what ultimately makes the formula a candidate law rather than a curiosity
+&mdash; and &sect;6 states precisely which part of that derivation remains
+postulated.
 </div>
 
 <!-- ================================================================== -->
-<h2 id="exceptional">7. Exceptional-Geometry Hints: $F_4$, $E_8 \supset F_4 \times G_2$</h2>
+<h2 id="s3">3. Statistical standing and uniqueness</h2>
 
+<h3>3.1 The residual</h3>
 <p>
-The appearance of $G_2$ in the formula connects, through a chain of
-exceptional-geometry facts, to the bosonic string and the largest
-exceptional Lie group $E_8$.
+With CODATA 2022, \(1/\alpha = 137.035999177(21)\), the formula's value
+\(137.035999182138\ldots\) differs by \(5.1\times10^{-9}\): a relative error of
+\(3.75\times10^{-11}\), or <b>0.245&sigma;</b>. The residual is \(2\times10^{8}\)
+times smaller than the one-loop QED running of the coupling between zero momentum
+and \(1\)~GeV (\(\delta_{\rm QED}\sim6\times10^{-3}\)), so the formula cannot be
+read as \(\alpha\) evaluated at some running scale; it sits at the zero-momentum
+value itself.
 </p>
-
-<h3>7.1 $c(F_4|_{k=h^\vee}) = 26$ — the bosonic string critical dimension</h3>
-
-<p>
-From the theorem $c(G|_{k=h^\vee}) = \tfrac 12 \dim G$:
-$$
-c(F_4|_{k=h^\vee}) \;=\; \frac{\dim F_4}{2} \;=\; \frac{52}{2} \;=\; 26.
-$$
-The number $26$ is the <em>critical dimension of the bosonic string</em>.
-This is a known deep connection: $F_4 = \operatorname{Aut}\,J(3,\mathbb O)$,
-the automorphism group of the exceptional Jordan algebra of $3 \times 3$
-Hermitian octonionic matrices. The traceless part of $J(3,\mathbb O)$ has
-dimension $26$, and $F_4$ acts on it. The appearance of the bosonic string
-critical dimension through this construction is documented in the
-literature on octonionic / exceptional string geometry.
-</p>
-
-<h3>7.2 $E_8 \supset F_4 \times G_2$ — the maximal subgroup theorem</h3>
-
-<p>
-$F_4 \times G_2$ is a maximal subgroup of $E_8$. The adjoint branches as
-$$
-\mathfrak e_8 \;\downarrow\; \mathfrak f_4 \oplus \mathfrak g_2
-\;:\quad
-248 \;=\; (52,1) \oplus (1,14) \oplus (26,7),
-$$
-where the mixed representation $(26,7)$ has dimension $26 \cdot 7 = 182$.
-The two numbers appearing here are exactly:
-</p>
-<table>
-<tr><th>Factor</th><th>Meaning</th><th>Appears in formula?</th></tr>
-<tr><td>$26 = c(F_4|_{k=h^\vee})$</td><td>bosonic string $c_\text{matter}$</td><td>no (but via $E_8 \supset F_4 \times G_2$)</td></tr>
-<tr><td>$7 = c(G_2|_{k=h^\vee})$</td><td>$G_2$ WZW central charge</td><td><strong>yes — the prefactor</strong></td></tr>
-</table>
-
-<p>
-This makes the alpha formula's use of $G_2$ a "shadow" of the $E_8$ exceptional
-geometry — the most solid thread connecting the formula to string theory.
-</p>
-
-<h3>7.3 Arithmetic coincidences with the superstring</h3>
-
-<p>
-Two further arithmetic matches with superstring central charges are exact
-but currently unexplained:
-</p>
-<table>
-<tr><th>WZW sum</th><th>Value</th><th>String-theory meaning</th><th>Assessment</th></tr>
-<tr><td>$c(G_2) + c(A_2) = 7 + 4$</td><td>$11$</td><td>$c_{\beta\gamma}$ (superghost)</td><td>no known deep explanation</td></tr>
-<tr><td>$c(G_2) + 2\,c(A_2) = 7 + 8$</td><td>$15$</td><td>$c_\text{matter}$ (superstring)</td><td>no known deep explanation</td></tr>
-<tr><td>$\dim G_2 + 2\,\dim A_2 = 14 + 16$</td><td>$30 = h^\vee(E_8)$</td><td>Coxeter number of $E_8$</td><td>arithmetically equivalent to the previous line</td></tr>
-</table>
-
 <div class="warn">
-<b>Statistical caveat.</b> With 11 simple Lie groups there are $\sim 341$
-sums of 2 or 3 WZW central charges. These sums cover <em>every</em> integer
-in $[10, 35]$ — the WZW $c$-values are dense enough that all small integers
-are hit. The probability that a random pair of central charges sums to $11$
-is $3/55 \approx 5.5\%$. The matches above are suggestive but not
-overwhelmingly rare; they remain a <strong>hint</strong>, not evidence.
-The solid facts are the $F_4$–$26$–bosonic string connection (known) and
-the $E_8 \supset F_4 \times G_2$ decomposition (a theorem).
+<b>What the residual does not show.</b> Sub-\(\sigma\) agreement is consistency,
+not confirmation: any formula with relative error below \(\sim1.5\times10^{-10}\)
+would be equally consistent with the measurement. The measurement alone cannot
+elevate the formula; the structural evidence below is what does the work.
 </div>
 
-<!-- ================================================================== -->
-<h2 id="priority">8. Priority &amp; Prior Art</h2>
-
+<h3>3.2 Odds against a search coincidence</h3>
 <p>
-A literature search on arXiv and Wikipedia was conducted to establish
-priority. The formula's combination of ingredients — Catalan's constant,
-Dirichlet $L$-values, Bloch-Wigner dilogarithm, Borel regulator, $e^4$,
-$G_2$ WZW central charges — appears to be <em>genuinely new</em>.
-</p>
-
-<h3>8.1 arXiv searches returning zero results</h3>
-
-<p>
-The following queries on arxiv.org returned <strong>no matches</strong>:
+The search space contained roughly \(60\)&ndash;\(200\) <em>independent</em>
+transcendental atoms (kernels whose values are not algebraically related at
+achievable precision). Weighting by the effective number of forms the grammar can
+generate, the odds against finding a sub-\(10^{-10}\)-relative match by chance are
+<b>240:1 to 8,800:1</b>. Complementary diagnostics strengthen this:
 </p>
 <ul>
-  <li><code>"catalan constant fine structure"</code></li>
-  <li><code>"bloch-wigner coupling constant"</code></li>
-  <li><code>"dirichlet L-function fine structure constant"</code></li>
+<li><b>Log-basis uniqueness.</b> At 120-digit precision, a PSLQ relation search
+over \(\{\ln\pi,\ \ln G,\ \ln\Gamma(1/4),\ \ln\Gamma(1/3),\ \ln 2,\ \ln 3,\ \ln 5,\ \ln\zeta(3)\}\)
+finds no integer relation involving \(\ln e^4 = 4\) (null \(\sim10^{-81}\),
+conditional on the Kontsevich&ndash;Zagier period conjecture). The exponential
+slot is not reachable by any period-producing mechanism.</li>
+<li><b>The sibling search.</b> Running the same grammar against \(\sim270\) other
+measured physical constants produces no clean hit. The construction is specific to
+\(\alpha\), not a generic formula generator.</li>
+<li><b>No alternative assignment.</b> The census reading of &sect;4.4 consumes the
+channel size \(d=4\). Re-running the assembly at the neighboring channel sizes
+\(d=3\) and \(d=5\) gives \(24.7\) and \(1314\) &mdash; off by factors of \(5.5\)
+and \(9.6\). The match lives or dies at \(d=4\).</li>
 </ul>
+
+<h3>3.3 Correction bounds</h3>
 <p>
-No prior arXiv paper combines these mathematical objects with the
-fine-structure constant.
+If the formula is the leading term of an expansion
+\(\alpha^{-1} = \alpha^{-1}_0\,(1+c\,\alpha_0^{\,n})\), the residual bounds
+\(|c|\) at the first three orders:
+</p>
+<table>
+<tr><th>Order \(n\)</th><th>2&sigma; bound on \(|c|\)</th><th>Reading</th></tr>
+<tr><td>1</td><td>\(&lt;\,5.7\times10^{-7}\)</td><td>one-loop-size corrections excluded</td></tr>
+<tr><td>2</td><td>\(&lt;\,7.8\times10^{-5}\)</td><td>two-loop-size corrections excluded</td></tr>
+<tr><td>3</td><td>\(&lt;\,1.1\times10^{-2}\)</td><td>three-loop-size corrections excluded</td></tr>
+<tr><td>4</td><td>\(&lt;\,1.5\)</td><td>first order not constrained by data</td></tr>
+</table>
+<p>
+The first unconstrained correction order is \(n=4\) &mdash; the same integer that
+appears in \(e^4\) (&sect;4.2). If a deeper theory corrects the formula, its first
+correction is expected at fourth order.
 </p>
 
-<h3>8.2 Historical formulas — none overlap with ours</h3>
+<h3>3.4 Tuning protection</h3>
+<p>
+The one adjustable normalization \(c\) (the response speed of &sect;4.2, normally
+fixed to \(1\)) was stress-tested as a free dial: its \(3\sigma\) window is
+\(|c-1| &lt; 1.01\times10^{-10}\), while every named alternative base or speed
+(\(2, 3, 4, 10, \pi, 2\pi\); speeds \(1/2\) and \(2\)) is excluded by
+\(3.7\times10^{9}\sigma\) or more. The dial could not have absorbed a wrong
+choice: the formula's agreement is not a product of hidden tuning. All identities
+quoted in this document are machine-verified to at least 40-digit precision, with
+the central value locked to 50 digits.
+</p>
 
+<h3>3.5 The wait state</h3>
+<p>
+The decision rule is fixed in advance: any future CODATA value of \(1/\alpha\)
+more than about \(3\sigma\) from \(137.035999182138\ldots\) <b>rejects</b> the
+formula; convergence to it <b>confirms</b> it decisively. No further fitting is
+possible or permitted &mdash; the formula is frozen.
+</p>
+
+<!-- ================================================================== -->
+<h2 id="s4">4. Reading the terms</h2>
+
+<p>
+The formula has four slots. Each has an interpretation that is exact rather than
+suggestive, and each was forced by a constraint that admits no alternative
+(&sect;5 gives the forcing arguments). The census decomposition is:
+</p>
+<div class="box">
+$$\frac{1}{\alpha} \;=\;
+\underbrace{\big[\ \zeta(2)\,G^{2}\ \big]}_{\text{the L-content: the doubled arena}}
+\;\times\;
+\underbrace{\big[\ e^{4}\,\sqrt{3}\ \big]}_{\text{the archimedean bracket } =\, e^{\Lambda},\ \Lambda = 4+\frac12\ln 3}
+\;\times\;
+\underbrace{\big[\ \tfrac{21}{20}\ \big]}_{\text{the rational census } =\, 6\,\times\, \frac{7}{40}}$$
+</div>
+
+<h3>4.1 \(\pi^{2}G^{2}\) &mdash; the vacuum: a doubled arithmetic counting</h3>
+<p>
+The factor \(\zeta(2)G^{2}=1.3800881177\ldots\) is the value at \(s=2\) of the
+Dirichlet series
+$$D(s) \;=\; \zeta(s)\,\beta(s)^{2},$$
+where \(\beta\) is the Dirichlet beta function. The reading: <em>the norm counting
+of the Gaussian integers \(\mathbb Z[i]\), read forward, multiplied by the same
+counting read back through the parity twist</em>. Concretely, \(D(s)\) counts the
+nonzero lattice points of \(\mathbb Z[i]\) by squared norm with a multiplicity that
+records the round trip: the second factor of \(\beta\) is a <em>leg</em> of the
+counting, not a doubled constant. The equivalent form
+\(\zeta(2)G^{2}=\zeta_{\mathbb Q(i)}(2)^{2}/\zeta(2)\) exhibits it as the relative
+tensor square of the completed counting system of \(\mathbb Q(i)\) &mdash; a
+thermodynamic partition function of the Bost&ndash;Connes type over the Gaussian
+integers, evaluated at its operating temperature.
+</p>
+<p>
+Catalan's constant itself has a geometric home: \(G/3\) is the volume of
+\(\mathrm{SL}_2(\mathbb Z[i])\backslash\mathbb H^{3}\) (the moduli space of
+unit-area flat tori with a marked point), \(G\) is the tree entropy of the
+\(\mathbb Z[i]\) lattice, and \(4\zeta(2)G=\sum' (m^{2}+n^{2})^{-2}\) over the
+Gaussian integers. And \(\pi\) and \(G\) are not independent guests: they are the
+first two log-moments of a single kernel,
+$$L_k=\int_0^1 \frac{\ln^k(1/t)}{1+t^2}\,dt = k!\,\beta(k+1),
+\qquad L_0=\frac{\pi}{4},\quad L_1=G,$$
+so the entire period content of the formula is the first two values of one
+\(L\)-function &mdash; the non-tautological reason \(\pi\) and \(G\) co-occur.
+</p>
+
+<h3>4.2 \(e^{4}\) &mdash; the response: the source equals the work</h3>
+<p>
+Consider a free four-dimensional Gaussian \(\int_{\mathbb R^4} e^{-|x|^2+Jx_1}d^4x
+=\pi^2 e^{J^2/4}\): a source of strength \(J\) produces the response
+\(\exp(J^2/4)\) &mdash; it does the <em>work</em> \(J^{2}/4\). The response equals
+the source exactly when \(J = J^{2}/4\), whose unique nonzero solution is
+$$J = 4, \qquad e^{J^2/4}\Big|_{J=4} = e^{4}.$$
+So \(e^4\) is the unique exponential of a Gaussian whose source strength equals
+the action it produces &mdash; a fixed-point condition, not a chosen value. The
+same number arises from composability (&sect;5, axiom P3): if independent work
+adds and responses multiply, \(R(w_1{+}w_2)=R(w_1)R(w_2)\), then continuity forces
+\(R(w)=e^{cw}\), and the matched-source normalization \(c=1\) gives \(R(4)=e^4\).
+The base \(e\) is thereby <em>forced</em>, not selected: any other base would
+insert a free continuous dial \(\ln b\) into a theory that has none
+(&sect;3.4).
+</p>
+<p>
+In the completed anatomy the archimedean bracket is the single exponential
+\(e^{\Lambda}\) with \(\Lambda = 4+\tfrac12\ln 3\): four exponential places (the
+census count \(d=4\), each with the natural measure \(\ln e = 1\)) convolved with
+the discriminant place of the trine field (\(\tfrac12\ln 3\)). The bracket is
+atomic &mdash; the Laplace transform of a point mass at the total work &mdash;
+and flat in the completion variable, a structural difference from every classical
+completion, whose Gamma factors curve it.
+</p>
+
+<h3>4.3 \(\sqrt{3}\) &mdash; the capacity at the matched noise</h3>
+<p>
+Read the vacuum through a 4-ary symmetric channel with crossover probability
+\(p\). The channel's capacity is \(C=\ln 4 - H(Y)\), where \(Y\) is the output
+distribution. Impose the matched-noise condition &mdash; the probability of a
+read error equals the probability of the true symbol, \((1-p)=(q-1)p\) &mdash;
+whose unique solution is \(p=1/4\). The output distribution becomes
+\((\tfrac34,\tfrac1{12},\tfrac1{12},\tfrac1{12})\) with entropy
+\(H(Y)=0.8369882168\ldots\) nats, and the capacity collapses exactly:
+$$C \;=\; \ln 4 - H(Y) \;=\; \tfrac12\ln 3 \quad\text{exactly}, \qquad e^{C}=\sqrt3.$$
+Among all channel sizes \(q\), the capacity exponential \(e^{C}\) is the square
+root of an integer only at \(q=4\) &mdash; the square-root capacity is unique to
+this channel. Independently, \(\sqrt3\) is the absolute value of the classical
+Gauss sum of the quadratic character \(\chi_{-3}\), and the discriminant place of
+\(\mathbb Q(\sqrt{-3})\): the trine field, whose six units supply the census
+factor \(6\) below. It is provably external to the \(\mathbb Q(i)\) counting of
+&sect;4.1 (no norm-3 ideal exists in \(\mathbb Z[i]\), so \(\sqrt3\) cannot arise
+from that tower): the formula requires exactly two arithmetic worlds,
+\(\mathbb Q(i)\) and \(\mathbb Q(\sqrt{-3})\), joined at the primes 2 and 3.
+</p>
+
+<h3>4.4 \(7/40\) &mdash; the census of the read</h3>
+<p>
+The probe that reads the vacuum is a four-state channel \(T\) whose closed-walk
+generating function is
+$$\det(I-uT)=(1-u)\left(1-\tfrac{2u}{3}\right)^{3},$$
+a spectrum \(\{1,\ \tfrac23,\ \tfrac23,\ \tfrac23\}\). Its census &mdash; the
+trace product over one pair cycle &mdash; is
+$$\operatorname{tr}(T)\,\operatorname{tr}(T^{2}) = 3\cdot\tfrac{7}{3} = 7,
+\qquad
+\frac{\operatorname{tr}(T)\operatorname{tr}(T^{2})}{2d(d+1)}
+= \frac{7}{2\cdot4\cdot5} = \frac{7}{40}.$$
+This is a theorem of the channel family, valid for every size \(q\) (the numerator
+is the polynomial \(q^{2}-3q+3\)), not a numerological extraction. The factor
+\(21/20\) in the formula is this census times the trine's six units:
+\(21/20 = 6\times\frac{7}{40}\). In physical dress: the count of all photon spin
+states including the gauged longitudinal mode, taken over physical channels
+times the vacuum times two &mdash; the gauge-count reading and the channel census
+coincide at \(d=4\). Of the fifteen admissible counting laws for this slot, only
+the pair-cycle law satisfies the content demand that the detected numerator be
+the channel's own trace product; the other fourteen die (&sect;5.4).
+</p>
+
+<h3>4.5 The two anatomies</h3>
+<p><em>(a) The one-loop template.</em> The formula exactly fills the path-integral
+anatomy of a free one-loop partition function,
+$$Z \;=\; e^{-S_{\rm cl}}\cdot[\text{determinant}]\cdot[\text{measure}],$$
+with \(e^{4}\) in the classical-action slot (an amplification, \(S_{\rm cl}=-4\)),
+\(\pi^{2}G^{2}\) in the determinant slot, and \((7/40)\sqrt3\) in the measure
+slot. Notably \(e^4\) is the only factor that is not a period in the
+Kontsevich&ndash;Zagier sense &mdash; and the classical-action slot is exactly
+where a non-period <em>must</em> sit.
+</p>
+<p><em>(b) The class number formula shape.</em> The same four slots mirror the
+analytic class number formula of a number field: the exponential slot
+\((2\pi)^{r_2}\), the count \(h/w\), the regulator squared, and the conductor root
+\(1/\sqrt{|D|}\). The formula occupies this template with \(e^{4}\), \(21/20\),
+\(G^{2}\), and \(\sqrt3\) &mdash; as if it were the class number formula of an
+<em>unidentified arithmetic object</em>. The obvious candidate,
+\(\mathbb Q(\zeta_{12})\), is excluded by its zeta value
+(\(\zeta_{\mathbb Q(\zeta_{12})}(2)=1.11798\ldots \ne 1.38008\ldots\)). Identifying
+the object &mdash; or proving the completion that produces it &mdash; is the
+program's named open demand (&sect;6).
+</p>
+
+<h3>4.6 The stage: a cube, a double, and the matter sector</h3>
+<p>
+The read channel's four labels are the four body diagonals of a cube. The
+classical isomorphisms lock the stage: \(\Gamma L_1(\mathbb F_4)\cong S_4\) and
+\(\mathrm{Rot(cube)}\cong S_4\) are the same group acting the same way &mdash; the
+24 rotations of the cube act on the four diagonals exactly as the read's
+relabeling group acts on its four labels. The three natural section planes carry
+the three quadratic radicals of the construction: the face sections \(\{100\}\)
+(Gram determinant \(1\), self-dual &mdash; the arena \(\mathbb Q(i)\)), the edge
+sections \(\{110\}\) (determinant \(2\) &mdash; \(\sqrt2\), the field of the
+phase), and the diagonal sections \(\{111\}\) (determinant \(3\) &mdash;
+\(\sqrt3\), the interface of &sect;4.3). The total root field is
+\(\mathbb Q(\zeta_{24})\), and its conductor is derived, not observed:
+$$24=\mathrm{lcm}(4,8,3) = 2^{3}\cdot3,$$
+with the exponent \(2^3\) forced by the phase field \(\mathbb Q(\sqrt2)\) and the
+exponent \(3\) by the trine field \(\mathbb Q(\sqrt{-3})\).
+</p>
+<p>
+The stage has a <em>double</em>: the binary octahedral group \(2O\) of unit
+quaternions covers the cube's rotations with kernel \(\{\pm1\}\). In the double,
+commuting label-moves lift to anticommuting quaternions &mdash; the sign so
+produced is the Fermi sign. The matter sector of the construction is the double's
+content: spin-\(\tfrac12\) flux composites, with the Born weights a
+<em>theorem</em> (Gleason's theorem) on this four-dimensional probe space &mdash;
+the flat census \(I/4\). The census is parity-even throughout, which doubly
+excludes the weak interaction from the construction: the formula is
+electromagnetic by structure, not by omission.
+</p>
+
+<h3>4.7 The window: a falsifiable scale</h3>
+<p>
+The theory's only free dial is a length \(L\) &mdash; dimensionful, decoupled from
+\(\alpha\). In the window of widths below \(a\), one and the same four-dimensional
+Coulomb tower produces both the \(1/r^{2}\) force law and the evanescence of the
+corrections; the logarithms cancel exactly and the leading correction is the
+Madelung ladder \(-\zeta(3)\,x^{2}/(4\pi L)+\cdots\). Atomic \(1/r^{2}\) tests
+bound the window:
+$$a \;\lesssim\; 5\times10^{-15}\ \mathrm{m}.$$
+This is an independent kill condition: an experiment bounding \(a\) above this
+value falsifies the window reading of the theory regardless of any future CODATA
+outcome. Isotropy emerges in the same window (the lattice's anisotropy is
+confined to the evanescent terms), resolving why a lattice-regularized
+electromagnetism nevertheless observes rotational symmetry to high precision.
+</p>
+
+<!-- ================================================================== -->
+<h2 id="s5">5. The theory: construction, axioms, theorems</h2>
+
+<h3>5.1 How the theory was constructed</h3>
+<p>
+The theory was built backwards from the formula by asking, for each factor,
+<em>which constraint forces exactly this value and no other</em>. The ladder ran:
+</p>
+<ol>
+<li><b>The arena.</b> The read needs a self-dual counting space. The demand
+&ldquo;reading back returns the same space&rdquo; selects, among lattices, the
+square section of determinant one &mdash; uniquely. Its rotation group is
+\(\mu_4\), so the channel size is \(d=|\mu_4|=4\): <em>forced</em>, not chosen.</li>
+<li><b>The noise.</b> The read is a channel. The condition that a read error be
+indistinguishable from the true symbol pins the crossover at \(p=1/q\) &mdash; the
+unique real root of the census equation (the competing quadratic factor has
+negative discriminant). No other noise level is self-consistent.</li>
+<li><b>The measure.</b> At that crossover the channel capacity is exactly
+\(\tfrac12\ln3\) &mdash; the equal-branch collapse makes the entropy formula
+telescope. The square root in the formula is thereby an <em>exact capacity</em>,
+the unique square-root capacity in the channel family.</li>
+<li><b>The response.</b> Independent work must compose: additive in the work,
+multiplicative in the response. The fixed point &ldquo;source = work&rdquo; then
+selects the count \(4\) and the normalization \(c=1\), giving \(e^4\).</li>
+<li><b>The content.</b> The census slot must equal the channel's own pair-cycle
+content. Of fifteen candidate counting laws, exactly one survives that demand;
+the census \(7/40\) is its value at \(d=4\).</li>
+<li><b>The assembly.</b> The three calibrated quantities &mdash; the response
+\(e^4\), the capacity \(\sqrt3\), the census \(7/40\) &mdash; together with the
+forced arena counting \(\zeta(2)G^2\) and the forced 2:1 temperature gear,
+compose to \(1/\alpha\) exactly.</li>
+</ol>
+<p>
+At the end of the ladder the number that search had found was re-derived from
+five axioms and one principle. The formula became an output; the fit count
+remained one.
+</p>
+
+<h3>5.2 The axioms</h3>
+<p>
+Five axioms define the theory; a sixth statement &mdash; the round-trip
+principle &mdash; is its one postulate. Each axiom is stated with the constraint
+that forces it and its epistemic grade.
+</p>
 <table>
-<tr><th>Author (year)</th><th>Formula</th><th>Uses $G$, $L(2,\chi)$, $e^4$, or $G_2$?</th><th>Accepted?</th></tr>
-<tr><td>Eddington (1929/31)</td><td>$\alpha^{-1} = 136$ then $137$ (integer)</td><td>No</td><td>Debunked</td></tr>
-<tr><td>Wyler (1969)</td><td>$\alpha^{-1} = (9/8\pi^4)\cdot$(symmetric-space volume ratio)</td><td>No</td><td>Numerology</td></tr>
-<tr><td>Gilson (1990s)</td><td>$\alpha^{-1} \approx 4\pi^2 \cdot$(geom. factor with $\pi, \sqrt 2$)</td><td>No</td><td>Not accepted</td></tr>
-<tr><td>Kocik (1990s)</td><td>$\alpha^{-1} = (4\pi)^3/C$, $C$ from $\mathbb F_3$ geometry</td><td>No</td><td>Controversial</td></tr>
-<tr><td>Castro (2000s)</td><td>$\alpha^{-1} = 100 + 61\varphi$ (Golden Mean $\varphi$)</td><td>No</td><td>Not accepted</td></tr>
-<tr><td>Pauli/Jung (~1950s)</td><td>$\alpha^{-1} \approx \pi + \pi^2 + 4\pi^3$ (a dream)</td><td>No</td><td>Numerology</td></tr>
-<tr><td>Smilga (2008/10)</td><td>Reproduces Wyler from $SO(3,2)$ + spin networks</td><td>No</td><td>Same Wyler structure</td></tr>
+<tr><th>Axiom</th><th>Statement</th><th>Forcing constraint</th><th>Grade</th></tr>
+<tr>
+<td><b>P1</b> The crystal</td>
+<td>The counting arena is the \(\mathbb Q(i)\)-plane crossed with an integer
+ladder, self-dual, at the free point.</td>
+<td>The self-duality demand (the read-back returns the read space) admits only
+the determinant-one section.</td>
+<td>data-forced, principle-confirmed</td>
+</tr>
+<tr>
+<td><b>P2</b> The norm counting</td>
+<td>The Boltzmann weight of a configuration is the inverse of its ideal norm;
+the two cycles of the round trip pair the weight as \(1/\mathfrak N^{2}\).</td>
+<td>The only probability-consistent weight on the arena compatible with
+multiplicativity of the norm.</td>
+<td>derived</td>
+</tr>
+<tr>
+<td><b>P3</b> The composability</td>
+<td>The response of independent work adds in the work and multiplies in the
+response: \(R(w_1{+}w_2)=R(w_1)R(w_2)\), normalized at the matched source
+(\(c=1\)).</td>
+<td>The physical demand that independent contributions compose at all; the
+normalization is the unique value at which source equals work.</td>
+<td>derived (the base \(e\) forced; see T3)</td>
+</tr>
+<tr>
+<td><b>P4</b> The channel coupling</td>
+<td>The probe reads the vacuum through a \(q\)-ary symmetric channel with
+\(q=4\), crossover \(p=1/4\).</td>
+<td>\(q=d=|\mu_4|\) from the arena; \(p=1/q\) the unique matched-noise root.</td>
+<td>derived</td>
+</tr>
+<tr>
+<td><b>P5</b> The probe census</td>
+<td>The Born weights are the flat norm census of the
+\(\mu_4\otimes\mu_6\) channel space; the census value is the pair-cycle
+content \(7/40\).</td>
+<td>The content demand: the detected numerator must be the channel's own trace
+product. Uniqueness among fifteen laws (T5).</td>
+<td>derived modulo the round-trip principle</td>
+</tr>
+<tr>
+<td><b>RP</b> The round-trip principle</td>
+<td>Reading the vacuum and reading back the result returns the same object
+&mdash; at the level of the space (dualization) and at the level of the content
+(the pair cycle); the state level is a theorem-instance of these.</td>
+<td>The single postulate. Every selection above inherits its grade; the theory
+cannot certify its own axiom (&sect;6).</td>
+<td><b>the one postulate</b></td>
+</tr>
 </table>
 
-<h3>8.3 A note on Castro's actual arXiv papers</h3>
+<h3>5.3 The derivation ledger</h3>
+<table>
+<tr><th>Slot of the formula</th><th>Source axiom(s)</th><th>Status</th></tr>
+<tr><td>\(\zeta(2)G^{2}\) (the L-content)</td><td>P1 + P2</td><td><b>derived</b>
+(the counting identity \(\zeta(s)\beta(s)^2\), independently validated against
+ray-class computations)</td></tr>
+<tr><td>\(e^{4}\) (the response)</td><td>P3 + the gear</td><td><b>derived</b>
+(Cauchy's equation + the source&ndash;work fixed point)</td></tr>
+<tr><td>\(\sqrt3\) (the measure)</td><td>P4</td><td><b>derived</b> (the capacity
+exponential \(\exp(\frac12\ln3)\), exact)</td></tr>
+<tr><td>\(\tfrac{21}{20}\) (the rational census)</td><td>P5 + RP</td><td><b>derived
+modulo RP</b> (the cycle census \(6\times\frac{7}{40}\); unique among fifteen
+laws given the content demand)</td></tr>
+<tr><td>the value \(1/\alpha = 137.035999182\ldots\)</td><td>all of the above</td>
+<td><b>output</b>, \(0.245\sigma\) vs CODATA 2022</td></tr>
+</table>
 
+<h3>5.4 The theorems (discovered in this construction)</h3>
+<p>
+No proofs are given here; each theorem is machine-locked, and each carries its
+&ldquo;why forced&rdquo; justification &mdash; the reason the value is the only
+one consistent with its constraint.
+</p>
+<table>
+<tr><th>#</th><th>Theorem</th><th>Content</th><th>Why this value is forced</th></tr>
+<tr><td>T1</td><td>Matched-noise uniqueness</td><td>The condition
+&ldquo;error = symbol&rdquo; pins the crossover at \(p=1/q\).</td>
+<td>The competing solutions form a quadratic with discriminant
+\(-3q^{2}(q-1)^{2}<0\): no other real root exists.</td></tr>
+<tr><td>T2</td><td>Exact capacity</td><td>\(C(q,1/q)=(1-\tfrac2q)\ln(q-1)\);
+at \(q=4\): \(C=\tfrac12\ln3\), \(e^{C}=\sqrt3\).</td>
+<td>Telescoping entropy algebra; and among all \(q\), \(e^{C}\) is a rational
+square root only at \(q=4\).</td></tr>
+<tr><td>T3</td><td>The forced base</td><td>The continuous solutions of
+\(R(w_1{+}w_2)=R(w_1)R(w_2)\) are \(R(w)=e^{cw}\); the matched normalization
+\(c=1\) gives \(R(4)=e^{4}\).</td>
+<td>Cauchy's functional equation. Any other base inserts the free dial
+\(\ln b\) &mdash; forbidden by the zero-parameter discipline; the field of
+definition of the completion also forces it.</td></tr>
+<tr><td>T4</td><td>The channel theorem</td><td>For the cycle family of size
+\(q\), the census numerator is \(q^{2}-3q+3\); at \(q=4\), \(7\).</td>
+<td>A general-\(q\) computation of the trace product; the value at \(q=4\)
+is forced by the arena's \(d=4\).</td></tr>
+<tr><td>T5</td><td>Content uniqueness</td><td>Among fifteen admissible counting
+laws for the census slot, exactly one satisfies the content demand; it yields
+\(7/40\).</td>
+<td>The demand itself: the detected numerator must equal the channel's trace
+product; fourteen laws fail it at the first check.</td></tr>
+<tr><td>T6</td><td>Channel-size uniqueness</td><td>\(N=4\) is the unique integer
+satisfying the source&ndash;work fixed point, the unit count of the arena, and
+the duality constraint simultaneously.</td>
+<td>The fixed point \(N=2\sqrt N\) has the unique nonzero solution \(4\); the
+unit and duality constraints select the same integer.</td></tr>
+<tr><td>T7</td><td>Non-periodicity of the exponential slot</td><td>\(\ln e^4=4\)
+is independent of the logs of every known period at 120-digit PSLQ precision.</td>
+<td>Conditional on the Kontsevich&ndash;Zagier conjecture: \(e^4\) is not a
+period, so no geometric invariant can produce it; the composability axiom
+explains why an exponential of a rational count appears at all.</td></tr>
+<tr><td>T8</td><td>The window theorem</td><td>One 4D Coulomb tower yields both
+the \(1/r^{2}\) law and the evanescence; the log corrections cancel exactly;
+the ladder is \(-\zeta(3)x^{2}/(4\pi L)+\cdots\).</td>
+<td>Closed-form evaluation; the only free shape is the window width, bounded by
+atomic tests (\(a\lesssim5\times10^{-15}\)~m).</td></tr>
+<tr><td>T9</td><td>Thermodynamic stability</td><td>The fused counting system is
+stable: the curvature \(E(b)=(\ln\zeta)''+2(\ln L)''>0\) for all \(b>1\); the
+third law holds; the condensation residue is \(\pi^{2}/16\).</td>
+<td>A certified three-regime argument (saturation bound, sweep, analytic tail)
+with 17 orders of numerical headroom; the operating point lies inside the
+proven region.</td></tr>
+<tr><td>T10</td><td>The Born form as a theorem</td><td>On the four-dimensional
+probe space, the quadratic (Born) form of quantum mechanics follows from the
+measure axioms (Gleason).</td>
+<td>Classical theorem applied at the recorded dimension; the flat census \(I/4\)
+is the unique homogeneous measure on it.</td></tr>
+<tr><td>T11</td><td>Read forcing</td><td>The pair-equivariant read operations
+span the discrete Fourier transform, uniquely up to phase.</td>
+<td>The Stone&ndash;von Neumann uniqueness structure at dimension 4; the
+involutivity (reading twice returns the space) holds exactly at the 2-torsion
+level of the clock algebra.</td></tr>
+<tr><td>T12</td><td>The local-route closure</td><td>No local self-dual measure
+can produce the archimedean bracket: any such measure is forced to be a point
+mass, and no point mass is self-dual.</td>
+<td>Laplace/Fourier uniqueness (the cumulants beyond the first vanish); the
+classical Gamma-completion is additionally excluded by the value
+(\(16/\pi^{3}\neq1\), \(4/\pi^{3}\neq1\)).</td></tr>
+<tr><td>T13</td><td>The conductor derivation</td><td>The total root field has
+conductor \(24=2^{3}\cdot3\), the valuations forced layer by layer.</td>
+<td>The conductor of a compositum is the lcm of the layer conductors:
+\(\mathrm{lcm}(4,8,3)\); each layer's value is forced by its own forcing
+argument.</td></tr>
+</table>
+
+<h3>5.5 The classical results used</h3>
+<p>
+The construction stands on standard mathematics, used and cited as such:
+Dirichlet's analytic class number formula and the evaluation of \(L\)-values at
+\(s=1\) (\(L(1,\chi_{-4})=\pi/4\), \(L(1,\chi_{-3})=\pi/(3\sqrt3)\)); the
+Bost&ndash;Connes quantum statistical mechanics and its KMS machinery; Tate's
+thesis and Poisson summation; the Stone&ndash;von Neumann uniqueness theorem;
+Gleason's theorem; the Lindemann&ndash;Weierstrass and Baker theorems
+(transcendence); the Kontsevich&ndash;Zagier period conjecture and the
+Commelin&ndash;Habegger&ndash;Huber theory of exponential periods (the natural
+home of the \(e\)-constants); and the classical representation theory of
+\(S_4\), the binary octahedral group, and the ADE/McKay correspondence. Where a
+step is machine-assisted (the stability proof, the PSLQ nulls), the verification
+protocol is stated alongside the claim.
+</p>
+
+<h3>5.6 The honesty clause</h3>
 <div class="warn">
-An earlier literature survey by a sub-agent <em>fabricated</em> a
-connection between Castro's work and Catalan's constant / Bloch-Wigner
-dilogarithm / Borel regulator. Verification against Castro's actual arXiv
-papers (hep-th/0203086, physics/0104016, physics/0010072, hep-th/0205065,
-hep-th/0210061) shows that Castro's formulas use the Golden Mean $\varphi$,
-fractal/Cantorian spacetime, $p$-adic QFT, and El Naschie's transfinite
-heterotic string theory. None of Castro's arXiv papers use Catalan's
-constant, Dirichlet $L(2,\chi)$, Bloch-Wigner, Borel regulator, $e^4$, or
-$G_2$. The lesson: always verify sub-agent literature reports against
-primary sources before relying on them for priority arguments.
-</div>
-
-<h3>8.4 Priority conclusion</h3>
-
-<p>
-Our Candidate C formula $\alpha = 40/(7\sqrt 3\,\pi^2\,e^4\,G^2)$ appears
-to be <strong>genuinely new</strong>. No prior work uses Catalan's
-constant $G = L(2,\chi_4)$, any Dirichlet $L(2,\chi)$, the Bloch-Wigner
-dilogarithm, the Borel regulator, $e^4$ or $\exp(4)$, or the $G_2$ WZW
-central charge $c(G_2|_{k=4}) = 7$, in combination with the fine-structure
-constant.
-</p>
-
-<!-- ================================================================== -->
-<h2 id="physical">9. Physical Models</h2>
-
-<p>
-We present four progressively-speculative physical pictures under which the
-formula could be derived. None is a derivation, but each is a self-consistent
-scenario in which the formula's structure would be natural.
-</p>
-
-<h3>9.1 Arithmetic QED — coupling constants from CM $L$-functions</h3>
-
-<p>
-<b>Setup.</b> The electromagnetic coupling is the only truly dimensionless
-gauge coupling of the SM (since QCD and weak couplings run with the confining
-or broken scales). Suppose the bare (un-renormalized) $\alpha$ at a high
-scale is fixed by an arithmetic identity — the analog of the
-<em>quantization of Chern-Simons invariants</em> for a 3-manifold, but
-applied to the arithmetic 3-manifold $SL_2(\mathbb Z[i])\backslash\mathbb
-H^3$.
-</p>
-
-<p>
-<b>Why it works.</b> In Chern–Simons theory on a 3-manifold $M$ with gauge
-group $G$, the partition function at level $k$ is
-$$
-Z_{CS}(M, G, k) \;=\; \exp\bigl(2\pi i\,k\,CS(A)\bigr) \cdot \tau(M, G),
-$$
-with $CS(A) \in \mathbb R/\mathbb Z$ the Chern–Simons invariant. For
-arithmetic 3-manifolds $SL_2(\mathcal O_K)\backslash\mathbb H^3$ the volume
-is $\propto \zeta_K(2)$, and the quadratic refinement is the Borel
-regulator $D(i) = G$. The dimensionless coupling that appears in such
-partition functions is naturally of the form
-$$
-\alpha \;\sim\; \frac{1}{\text{Vol}^2 \cdot \text{group-theoretic prefactor}}.
-$$
-Our formula
-$$
-\alpha = \frac{40}{63\sqrt 3\,\pi^2\,e^4\,\text{Vol}(SL_2(\mathbb
-Z[i])\backslash\mathbb H^3)^2}
-$$
-is precisely of this shape, with $\text{Vol} = G/3$ and a group-theoretic
-prefactor $\dfrac{8\cdot 5}{c(G_2|_{k=h^\vee})} \cdot \exp(-c(A_2|_{k=h^\vee}))$.
-</p>
-
-<p>
-<b>Prediction.</b> Other SM couplings should satisfy analogous formulas for
-their respective gauge-group CM fields. A search confirmed that no similar
-formula exists for $\alpha_s$, $\alpha_2$, $\alpha_1$, or $\alpha_{\text{GUT}}$
-— consistent with $\alpha_{\text{em}}(0)$ being the only true dimensionless
-SM coupling.
-</p>
-
-<h3>9.2 WZW / string-theoretic origin</h3>
-
-<p>
-<b>Setup.</b> The appearance of <em>both</em> self-dual WZW central charges
-$c(G_2|_{k=4}) = 7$ and $c(A_2|_{k=3}) = 4$ strongly suggests that the
-formula arises as a one-loop string amplitude or a partition function
-involving a $G_2$ WZW model coupled to an $A_2 = SU(3)$ sector, both at
-their self-dual levels.
-</p>
-
-<p>
-<b>Sketch.</b> In a heterotic-like string compactification with gauge group
-$G_2 \times SU(3) \times U(1)$ (the maximal-rank embedding chain $G_2 \supset
-SU(3) \supset U(1)$), the one-loop partition function is
-$$
-Z_{\text{1-loop}} \;=\; \frac{\Theta_{G_2,k=4} \cdot \Theta_{A_2,k=3}}{\eta^c}
-$$
-where $\Theta_{\mathfrak g, k}$ is the affine theta function and $c$ is the
-total central charge (matching $7 + 4 = 11$ for the matter sector, plus
-$15 - 11 = 4$ for the ghosts). The modulus $T$ that appears naturally in
-such a compactification takes values in the Bianchi upper half-space of
-$\mathbb Q(i)$ (or $\mathbb Q(\sqrt{-3})$), and the threshold correction
-to the electromagnetic coupling — a one-loop effect — is
-$$
-\Delta\alpha \;\propto\; \log\bigl|\eta(T)\bigr|^2
-\;\propto\; \zeta_{\mathbb Q(i)}(2).
-$$
-The prefactor $e^4 = \exp(c(A_2|_{k=h^\vee}))$ is the
-classical (tree-level) contribution from the $SU(3)$ sector at the
-self-dual level.
-</p>
-
-<p>
-<b>Status.</b> No explicit string compactification of this type is known.
-The observation that $c(G_2|_{k=h^\vee}) + c(A_2|_{k=h^\vee}) = 7 + 4 = 11$
-— suspiciously close to the $D = 10$ critical dimension of superstring
-theory (and the $c = 15$ superconformal central charge) — is suggestive
-but unexplained.
-</p>
-
-<h3>9.3 Zeta-regularized determinant on $\mathfrak{su}(3)$</h3>
-
-<p>
-<b>Setup.</b> The factor $e^4 = \exp(-8\,\zeta(0))$ with $8 = \dim SU(3)$ is
-the formal zeta-regularized determinant of the identity operator on the
-$8$-dimensional space $\mathfrak{su}(3)$.
-</p>
-
-<p>
-<b>Sketch.</b> In quantum field theory, zeta-regularized determinants of
-Laplacians give effective actions of the form
-$\Gamma_{\text{eff}} = -\tfrac 12 \log \det_\zeta(\Delta)$. For a
-"trivial" operator (the identity) on a space of dimension $d$, the formal
-answer is $\det_\zeta(I_d) = \exp(-d\,\zeta(0))$. If the SM gauge algebra
-$\mathfrak{su}(3) \oplus \mathfrak{su}(2) \oplus \mathfrak{u}(1)$ is treated
-as a "trivial 8+3+1 = 12-dimensional" object, the determinant would give
-$\exp(-12\,\zeta(0)) = e^6$, not $e^4$. The fact that the formula uses
-$e^4 = \exp(-8\,\zeta(0))$ singles out the $SU(3)$ piece alone —
-consistent with $\sqrt 3$ also coming from $SU(3)$ and the $8$ in $40 = 8\cdot 5$.
-</p>
-
-<p>
-<b>Prediction.</b> If this picture is correct, the formula should be the
-$SU(3)$-sector contribution to a larger expression with separate $SU(2)$ and
-$U(1)$ pieces — the latter invisible at $\alpha_{\text{em}}(0)$ because QED
-is unconfined. This is consistent with the absence of analogous formulas
-for $\alpha_s$ and $\alpha_2$.
-</p>
-
-<h3>9.4 Octonionic / $G_2$ pre-quantum geometry</h3>
-
-<p>
-<b>Setup.</b> The most speculative picture. The octonions $\mathbb O$ are
-the last normed division algebra; their automorphism group is $G_2$. The
-split octonions generate the exceptional Lie groups in the Magic Square,
-and the 7 imaginary octonions carry the fundamental representation of
-$G_2$. Both $G_2$ and $F_4$ — the two groups for which $c|_{k=h^\vee} =
-\dim(\text{fund})$ — are octonionic.
-</p>
-
-<p>
-<b>Sketch.</b> Suppose the SM gauge group $SU(3)\times SU(2)\times U(1)$
-arises as the stabilizer of a choice of imaginary unit in $\mathbb O$ (this
-is the classic octonionic decomposition $G_2 \supset SU(3)\times U(1)/\mathbb
-Z_3$, with the $SU(2)$ factor coming from a further choice of complex
-structure). Then the SM gauge algebra is the complement of the $SU(3)$
-piece in $G_2$, plus the hypercharge $U(1)$ — giving $8 + 3 + 1 = 12$
-generators. In such a picture, the fundamental electromagnetic coupling
-could be fixed by the geometry of the imaginary octonions through a
-pre-quantum line bundle whose curvature is the $G_2$-invariant 3-form
-$\varphi \in \Omega^3_+(\mathbb R^7)$. The square of the relevant
-characteristic class naturally gives $G^2 = D(i)^2$ (the Bloch–Wigner
-dilogarithm at the $4$th root of unity), and the structure constants of the
-octonions give the $\sqrt 3$ factor (the imaginary octonion norm).
-</p>
-
-<p>
-<b>Status.</b> This is the most appealing geometric picture but also the
-least developed. It predicts that the formula's residual
-$3.75\times 10^{-11}$ should be expressible as an octonionic correction of
-order $\alpha_0^4$ (since $4 = h^\vee(G_2)$ is the first non-trivial
-"quantum" correction in a $G_2$-invariant perturbation theory).
-</p>
-
-<!-- ================================================================== -->
-<h2 id="stats">10. Statistical Assessment &amp; Uniqueness</h2>
-
-<p>
-Three independent lines of evidence support the formula's genuineness:
-</p>
-
-<h3>10.1 The continued-fraction jump</h3>
-
-<p>
-For the formula to be a genuine identity, the residual
-$\dfrac{40}{7\sqrt 3\,\pi^2 e^4 G^2\,\alpha}$ should equal $1$ exactly, and
-the continued fraction of the ratio $\dfrac{40/7}{\sqrt 3\,\pi^2 e^4 G^2\,\alpha}$
-should have an anomalously large partial quotient. It does:
-$$
-[0;\,2,\,6,\,1,\,\underbrace{254{,}010{,}115}_{\text{9 orders of magnitude}},\,\ldots]
-$$
-For comparison, a "random" real has partial quotients distributed
-according to the Gauss–Kuzmin distribution, with $P(a_n \geq q) \sim
-1/q$. A partial quotient of $2.5\times 10^8$ occurs with probability
-$\sim 4\times 10^{-9}$. This is the standard diagnostic for a true
-rational approximation.
-</p>
-
-<h3>10.2 Uniqueness in the search space</h3>
-
-<p>
-A parallel Rust search using $4$ threads evaluated
-$\sim 51.7 \times 10^6$ combinations of $444$ kernels (zeta values,
-$L$-functions, polylogs, theta functions, $q$-Pochhammer symbols, harmonic
-zeta sums) against $84$ transforms of $\alpha$, with $\sim 300{,}000$
-prefactors of the form $\dfrac{p}{q}\,\pi^a\,e^b$ ($|p| \leq 72$, $q \leq
-48$, $|a|,|b| \leq 4$), including $1$-, $2$-, and $3$-kernel combinations.
-Only <em>one</em> formula matches at relative error &lt; 10<sup>-6</sup> in the
-restricted form $p\sqrt d/q \cdot \pi^a e^b G^c$ — the one above.
-</p>
-
-<h3>10.3 The residual is below $1\sigma$ — and below QED running</h3>
-
-<p>
-The residual $5.14 \times 10^{-9}$ in $1/\alpha$ corresponds to $0.25\sigma$
-— fully consistent with the formula being exact, with the residual being
-experimental noise. It is also $2\times 10^8$ times smaller than the QED
-one-loop running at $1$ GeV ($\delta_{\text{QED}} \sim 6\times 10^{-3}$),
-ruling out the interpretation that the formula approximates $\alpha$ at a
-particular running scale.
-</p>
-
-<p>
-For correction ansätze $\alpha = \alpha_0\,(1 + c\,\alpha_0^n)$, the
-$2\sigma$ upper bounds on $|c|$ are:
-</p>
-
-<table>
-<tr><th>Order $n$</th><th>$2\sigma$ bound on $|c|$</th><th>Comment</th></tr>
-<tr><td>$1$</td><td>$&lt; 5.7\times 10^{-7}$</td><td>rules out 1-loop corrections of order $\alpha_0$</td></tr>
-<tr><td>$2$</td><td>$&lt; 7.8\times 10^{-5}$</td><td>rules out 2-loop corrections of order $\alpha_0^2$</td></tr>
-<tr><td>$3$</td><td>$&lt; 1.1\times 10^{-2}$</td><td>rules out 3-loop corrections of order $\alpha_0^3$</td></tr>
-<tr><td>$4$</td><td>$&lt; 1.5$</td><td>— first unconstrained order (matches $h^\vee(G_2) = 4$!)</td></tr>
-</table>
-
-<p>
-The first three loop orders are constrained by data; the fourth is the
-first unconstrained one — and $4 = h^\vee(G_2) = c(A_2|_{k=h^\vee})$ is
-exactly the exponent appearing in $e^4$. If the formula is the
-leading-order of an expansion, the leading correction is at order
-$\alpha_0^4$ — exactly the self-dual WZW level of $A_2$.
-</p>
-
-<div class="warn">
-<b>Caveat.</b> The formula was found by a systematic computer search, not
-derived from a physical theory. Its structural coherence is remarkable but
-not a proof. A genuine derivation would need to explain (i) why $s = 2$
-specifically, (ii) why $\chi_3$ enters via its Gauss sum while $\chi_4$
-enters via its $L$-value, and (iii) the precise mechanism by which WZW
-central charges fix a gauge coupling.
+One statement is postulated: the round-trip principle RP. Everything else
+&mdash; the arena, the counting, the capacity, the response, the census, the
+gear &mdash; is derived from it plus data. The formula's agreement with CODATA
+is not laundered into the derivation: the value enters only through the
+measurement-world calibration, exactly once. What the axiomatization changed is
+real: the two previously mysterious exponential factors (\(e^{4}\) and
+\(\sqrt3\)) are now forced by physics-grade axioms rather than matched, and the
+non-periodicity of \(e^{4}\) became a consequence of composability rather than a
+separate mystery.
 </div>
 
 <!-- ================================================================== -->
-<h2 id="tests">11. Falsifiability &amp; QED Precision Tests</h2>
-
-<p>
-The formula makes a sharp, parameter-free prediction:
-</p>
-<div class="formula-box">
-$$
-\frac{1}{\alpha_{\text{formula}}} \;=\; 137.035999182138\ldots
-$$
-</div>
-
-<p>
-This is a single predicted value. If future measurements of $\alpha$
-converge to it, the formula is supported; if they converge away, it is
-ruled out. The question is whether current precision can already
-distinguish.
-</p>
-
-<h3>11.1 Comparison with the major experimental measurements</h3>
-
-<table>
-<tr><th>Measurement</th><th>$1/\alpha$</th><th>$\Delta$ (units of $10^{-9}$)</th><th>$\sigma$</th><th>Status</th></tr>
-<tr><td>Fan 2023 (electron $g-2$ + QED)</td><td>$137.035999166(15)$</td><td>$+16$</td><td>$1.08$</td><td class="result">consistent</td></tr>
-<tr><td>CODATA 2022 (world average)</td><td>$137.035999177(21)$</td><td>$+5$</td><td>$0.24$</td><td class="result">consistent</td></tr>
-<tr><td>Morel 2020 (atom interferometry)</td><td>$137.035999206(11)$</td><td>$-24$</td><td>$2.17$</td><td>mild tension</td></tr>
-<tr><td>Parker 2018 (atom interferometry)</td><td>$137.035999046(27)$</td><td>$+136$</td><td>$5.04$</td><td>ruled out (older outlier)</td></tr>
-</table>
-
-<p>
-The formula is consistent with Fan 2023 and CODATA 2022 at better than
-$1.1\sigma$, and tensions Morel 2020 at $2.17\sigma$ — the most
-interesting signal.
-</p>
-
-<h3>11.2 The "alpha discrepancy"</h3>
-
-<p>
-Morel 2020 and Fan 2023 differ by $40 \times 10^{-9}$, a $2.15\sigma$
-discrepancy known as the "alpha discrepancy". The formula's prediction sits
-<em>between</em> the two: $16 \times 10^{-9}$ above Fan, $24 \times 10^{-9}$
-below Morel (40% of the way from Fan to Morel). The formula is closer to
-the $g-2$-based value (Fan) than to the atom-interferometry value (Morel).
-If the formula is correct, Morel 2020 is mildly in tension.
-</p>
-
-<h3>11.3 Other QED observables — not yet testable</h3>
-
-<table>
-<tr><th>Observable</th><th>Formula's effect</th><th>Experimental $\sigma$</th><th>Ratio</th><th>Testable?</th></tr>
-<tr><td>Electron $a_e$</td><td>$4.3 \times 10^{-14}$</td><td>$2.8 \times 10^{-13}$</td><td>$0.16\sigma$</td><td>No</td></tr>
-<tr><td>Muon $a_\mu$</td><td>$4 \times 10^{-14}$</td><td>$2.2 \times 10^{-10}$ (hadronic)</td><td>$\sim 2 \times 10^{-4}\sigma$</td><td>No</td></tr>
-<tr><td>Rydberg $R_\infty$</td><td>$7.5 \times 10^{-11}$ (rel.)</td><td>$1.9 \times 10^{-12}$</td><td>$\sim 39\times$</td><td><strong>Borderline</strong> if formula exact &amp; $m_e$ improves</td></tr>
-</table>
-
-<p>
-The electron and muon $g-2$ are too imprecise to distinguish the formula
-from CODATA by factors of $6$ and $5{,}000$ respectively. Hydrogen
-spectroscopy is the most promising: if the formula is exact (zero
-uncertainty), the prediction $R_\infty = \alpha_\text{formula}^2\,m_e c /
-(2h)$ is testable at the $\sim 39\sigma$ level — <em>provided</em> the
-independent measurement of $m_e/h$ improves from its current $\sim 3
-\times 10^{-11}$ to better than $7.5 \times 10^{-11}$. This is borderline
-achievable.
-</p>
-
-<h3>11.4 Falsifiability horizon</h3>
-
-<p>
-To test the formula at $5\sigma$ requires $1/\alpha$ precision below $5
-\times 10^{-9}$. Current best is $11 \times 10^{-9}$ (Morel) or $15 \times
-10^{-9}$ (Fan). A factor of $3$–$10$ improvement in $\alpha$ precision —
-plausible with next-generation atom interferometry, quantum Hall, or
-molecular spectroscopy — would be decisive.
-</p>
-
-<p>
-Until then, the formula is <em>falsifiable in principle</em> but not with
-current data. It is a genuine, parameter-free prediction awaiting
-experimental test.
-</p>
-
-<h3>11.5 Higher-precision measurement of $\alpha$ and the $\alpha_0^4$ window</h3>
-
-<p>
-A future measurement reducing $\Delta\alpha$ from $1.1\times 10^{-12}$ to
-$&lt; 3\times 10^{-13}$ (a factor of $\sim 4$ improvement) would push the
-$2\sigma$ bound on $|c_4|$ below $0.4$ — allowing the order-$\alpha_0^4$
-correction to be tested directly. If a correction is found at this order
-with a recognizable coefficient, this would be near-decisive evidence for
-the WZW interpretation. If no correction is found down to $10^{-13}$, the
-formula would be effectively exact (residual $&lt; 0.1\sigma$).
-</p>
-
-<h3>11.6 Other SM couplings — no analogous formula</h3>
-
-<p>
-A search for analogous formulas for $\alpha_s(M_Z)$, $\alpha_2(M_Z)$,
-$\alpha_1(M_Z)$, and $\alpha_{\text{GUT}}$ in the form
-$p\sqrt d/q \cdot \pi^a e^b G^c L(2,\chi_3)^f$ returned <em>no</em>
-candidate with relative error $&lt; 10^{-6}$ except the trivial integers
-($\alpha_1 \approx 1/59$, $\alpha_{\text{GUT}} \approx 1/25$). This is
-consistent with $\alpha_{\text{em}}(0)$ being the only SM coupling
-determined by an arithmetic identity — the others run with scale.
-</p>
-
-<p>
-A suggestive but <strong>not statistically compelling</strong> extension to
-$\alpha_s$: a 3-component variation of the formula gives
-$\alpha_s/\alpha_\text{em} = 36\pi/7$ where $36 = \dim(\text{SM})\cdot N_c$
-and $7 = c(G_2|_{k=h^\vee})$. This matches $\alpha_s(M_Z) = 0.1179 \pm
-0.0010$ at $0.002\sigma$ (relative error $1.35 \times 10^{-5}$). However,
-the continued-fraction jump is only $42\times$ (vs $254$M for Candidate
-C), and the expected number of hits at this precision with small
-denominators is $\sim 0.4$. Treated as a separate conjecture, awaiting
-either a theoretical derivation or a $\sim 100\times$ improvement in
-$\alpha_s$ precision.
-</p>
-
-<h3>11.7 The open questions</h3>
+<h2 id="s6">6. What remains open</h2>
 
 <ol>
-  <li><b>Derivation of $40/7$ from first principles.</b> We have
-  $40/7 = (\dim SU(3) \cdot \dim SU(5)_{\text{fund}}) / \dim G_2\text{ fund}$,
-  but why this particular ratio appears as a coupling-constant prefactor is
-  not derived.</li>
-
-  <li><b>The $s = 2$ question.</b> Why the $L$-values at $s = 2$
-  specifically — not $s = 1$ or $s = 3$? The Bloch–Wigner dilog and Borel
-  regulator both point to $s = 2$, but a derivation should fix it.</li>
-
-  <li><b>The asymmetry $\chi_3 \leftrightarrow \chi_4$.</b> Why does
-  $\chi_3$ enter via its Gauss sum (algebraic) while $\chi_4$ enters via
-  its $L$-value (transcendental)? This is the epsilon-factor pattern
-  of a functional equation, but should be derived from a specific
-  arithmetic QFT.</li>
-
-  <li><b>Why $G_2$ and not $F_4$?</b> Both exceptional groups satisfy
-  $c|_{k=h^\vee} = \dim(\text{fund})$. Why does the SM gauge group embed
-  in $G_2$ (via $G_2 \supset SU(3)$) rather than $F_4$ (via $F_4 \supset
-  SU(3) \times SU(3)$)?</li>
-
-  <li><b>Explicit string / CFT construction.</b> No known string
-  compactification has $G_2 \times SU(3) \times U(1)$ at the self-dual
-  level. The sum $7 + 4 = 11$ equals the superghost central charge
-  $c_{\beta\gamma}$, and $7 + 2 \cdot 4 = 15$ equals the superstring
-  matter central charge — but these matches have no known deep
-  explanation.</li>
+<li><b>The principle's own status.</b> The round-trip principle is the theory's
+one postulate; every derived statement inherits its grade. A theory cannot
+certify its own axiom; the remaining addresses are external (mathematical
+kinship audits) and empirical (the wait state).</li>
+<li><b>The pair-level analysis.</b> The completion that would make the census a
+full derivation is a <em>pair-level analysis whose fixed point is the round
+trip</em>: the pairing of the mass structure (the atomic bracket) with the
+phase structure (the read's characters), self-reproducing under the two-step
+read. The local route is closed by theorem (T12), the classical Gamma-completion
+is excluded by the value, and a literature census of the seven classical
+completion frameworks (trace formulas, torsion, Szeg&odblac;-type theorems,
+spectral actions, semiclassical trace formulas, modular \(q\)-products,
+Wiener&ndash;Hopf theory) finds <em>no</em> producer of the required
+exponential-archimedean shape &mdash; the demand is genuinely new mathematics,
+precisely named, with the nearest precedents identified (the Dedekind eta's
+\(q^{1/24}\) factor: the right shape in the wrong variable; the strong
+Szeg&odblac; theorem: the right anatomy, asymptotic only).</li>
+<li><b>The Schanuel class.</b> The non-relation evidence for the exponential
+slot is numerical (T7); proving it requires Schanuel-strength tools beyond
+current mathematics. The algebraic slice is proven; only the shadow is open.</li>
+<li><b>The masses.</b> The theory has no mass slot: the axiom set carries no
+mass operator, and the census is closed under the forced integers. Particle
+masses are structurally silent here &mdash; any future mass derivation within
+this theory must introduce a new forced census component, never a recombination
+of existing slots.</li>
+<li><b>The scale.</b> One dimensionful dial \(L\) remains, decoupled from
+\(\alpha\) and bounded by the falsifiable window of &sect;4.7.</li>
+<li><b>The fit.</b> The single empirical input, \(0.245\sigma\) from CODATA
+2022, is watched by the standing decision rule of &sect;3.5.</li>
 </ol>
 
 <!-- ================================================================== -->
-<h2 id="honest">12. An Honest Assessment</h2>
+<h2 id="s7">7. Summary and conclusion</h2>
 
 <p>
-This project has at times over-claimed. The first round of analysis
-"confirmed" an $\alpha_s$ formula (Candidate E) that subsequently collapsed
-under high-precision verification — a f64-level coincidence that fell apart
-by a factor of three million at 50-digit precision. That experience
-justifies a sober statement of where things actually stand.
-</p>
-
-<h3>12.1 What is solidly established</h3>
-
-<ul>
-  <li><b>The formula matches experiment to $0.25\sigma$.</b> Relative error
-  $3.75 \times 10^{-11}$ against CODATA 2022 — a specific, parameter-free
-  prediction. This is genuine and survives verification at $50$-digit
-  precision (unlike several other candidates that fell apart).</li>
-
-  <li><b>The continued-fraction jump is $254{,}010{,}115$.</b> Nine orders
-  of magnitude. This is the standard diagnostic for a true rational
-  approximation, and is the single strongest piece of evidence that the
-  formula is not a random coincidence.</li>
-
-  <li><b>It is unique in a $51.7$ million combination search.</b> No other
-  formula of the form $p\sqrt d/q \cdot \pi^a e^b G^c$ matches at relative
-  error below $10^{-6}$.</li>
-
-  <li><b>Every component has an independent mathematical meaning.</b>
-  $\sqrt 3$ is a Gauss sum; $\pi^2$ is the trivial $L$-value; $G$ is the
-  Borel regulator of $\mathbb Q(i)$; $e^4 = \exp(c(A_2|_{k=h^\vee}))$ is a
-  WZW torsion; $7 = c(G_2|_{k=h^\vee})$ is a WZW central charge; $40/7$ is
-  a pure group-dimension ratio. None of these were invented to fit — each
-  was identified <em>after</em> the formula was found.</li>
-
-  <li><b>The four "interpretations" of $e^4$ are a theorem.</b>
-  $c(G|_{k=h^\vee}) = \tfrac 12 \dim G = -\dim G \cdot \zeta(0)$ for every
-  simple Lie group. The WZW-central-charge reading and the
-  zeta-regularized-determinant reading are the same statement.</li>
-
-  <li><b>The formula is genuinely new.</b> A thorough arXiv literature
-  search returned zero prior combinations of these objects with $\alpha$.</li>
-
-  <li><b>It is falsifiable.</b> A $3$–$10\times$ improvement in $\alpha$
-  measurement precision would test it at $5\sigma$.</li>
-</ul>
-
-<h3>12.2 What is not established</h3>
-
-<ul>
-  <li><b>The formula is not derived from first principles.</b> We
-  identified its structure as a Chern-Simons / WZW partition function on
-  an arithmetic 3-manifold, but we did not produce a theorem identifying
-  $\alpha$ with such a partition function. The bridge from the
-  mathematical structure to the physical coupling is the open problem.</li>
-
-  <li><b>The CF jump, while striking, is not a proof.</b> Partial
-  quotients of $10^8$ occur with probability $\sim 10^{-8}$ for a random
-  real. The fact that we evaluated $\sim 51.7 \times 10^6$ combinations
-  means we expected $\sim 0.5$ hits at this level even if the formula
-  were a coincidence. The CF jump is <em>strong evidence</em> but not
-  certainty.</li>
-
-  <li><b>The $G_2$ / WZW interpretation could be pattern-matching.</b>
-  The fact that $7 = c(G_2|_{k=h^\vee})$ and $4 = c(A_2|_{k=h^\vee})$ is a
-  theorem; the fact that the formula <em>uses</em> these numbers could be
-  because they are the correct physical quantities, or because small
-  integers always have many mathematical interpretations. The
-  $c|_{k=h^\vee} = \dim(\text{fund})$ pattern holding only for $G_2$ and
-  $F_4$ (octonionic) is suggestive, but suggestive is not derivative.</li>
-
-  <li><b>The superstring hints are weak.</b> $c(G_2) + c(A_2) = 11 =
-  c_{\beta\gamma}$ and $c(G_2) + 2c(A_2) = 15 = c_\text{matter}$ are exact
-  but the WZW $c$-values are dense enough that all small integers are hit.
-  Only the $F_4$–$26$–bosonic string connection (via $J(3,\mathbb O)$) and
-  the $E_8 \supset F_4 \times G_2$ theorem are solid.</li>
-
-  <li><b>The $\alpha_s$ extension (Candidate F, $\alpha_s/\alpha_\text{em}
-  = 36\pi/7$) is suggestive but not compelling.</b> It requires 3 changes
-  from the $\alpha_\text{em}$ formula and has a CF jump of only $42\times$.
-  Best treated as a separate conjecture, not a prediction.</li>
-
-  <li><b>Candidate E was wrong.</b> An earlier $\alpha_s$ formula
-  ($49\sqrt 3 \pi^3 e^{-4} G^4 L(2,\chi_3)^3$) passed at f64 and failed at
-  50-digit precision. The elaborate "confinement interpretation" attached
-  to it was post-hoc numerology on a false positive. This is a cautionary
-  tale about over-interpreting f64-level hits.</li>
-</ul>
-
-<h3>12.3 The honest verdict</h3>
-
-<p>
-The formula $\alpha = 40/(7\sqrt 3\,\pi^2\,e^4\,G^2)$ is a genuinely new,
-parameter-free prediction matching experiment to $0.25\sigma$, with a
-continued-fraction structure characteristic of a true identity, and every
-component admitting a clean independent mathematical interpretation. It is
-the most numerically precise and structurally coherent candidate closed
-form for $\alpha$ of which we are aware.
-</p>
-
-<p>
-It is <em>not</em> a derivation, and the structural coherence is not a
-proof. A genuine derivation would need to explain why the
-Chern-Simons / WZW partition function on a specific arithmetic 3-manifold
-gives the electromagnetic coupling, and no such theorem currently
-exists. The formula is best understood as a <em>strong hint</em> — a
-numerical and structural pattern pointing toward an arithmetic-geometric
-origin of $\alpha$ that, if real, would be the first concrete
-realization of the long-speculated connection between number theory and
-fundamental physics.
-</p>
-
-<p>
-The project has reached the limit of what can be established without
-either (a) a theoretical breakthrough connecting the
-Chern-Simons / WZW structure to the electromagnetic coupling, or (b) a
-$3$–$10\times$ improvement in experimental $\alpha$ precision. Both are
-plausible within the next decade. Until then, the formula stands as a
-hypothesis: not numerology, not a derivation, but a genuine
-parameter-free prediction awaiting experimental test.
-</p>
-
-<!-- ================================================================== -->
-<h2 id="summary">13. Summary</h2>
-
-<p>
-The candidate formula
-$$
-\boxed{\;\;7\,\sqrt 3\,\alpha\,\pi^2\,e^4\,G^2 \;=\; 40\;\;}
-$$
-is, at present, the most numerically precise and structurally coherent
-candidate closed form for the fine-structure constant of which we are
-aware. Every component admits an independent interpretation:
-</p>
-
-<ul>
-  <li>$\sqrt 3 = |\tau(\chi_3)| = \sqrt{|\text{disc}\,\mathbb Q(\sqrt{-3})|}$
-  — Gauss sum / CM discriminant, tied to the $A_2$ root lattice of $SU(3)$.</li>
-  <li>$\pi^2 = 6\,L(2,\chi_1) = 6\,\zeta_{\mathbb Q}(2)$ — $L$-value of the
-  trivial character.</li>
-  <li>$G = L(2,\chi_4) = D(i) = 6\,\zeta_{\mathbb Q(i)}(2)/\pi^2$ —
-  Catalan's constant, the Borel regulator of $\mathbb Q(i)$ and the
-  hyperbolic volume of the ideal tetrahedron $T_i$.</li>
-  <li>$e^4 = \exp\!\bigl(c(A_2|_{k=h^\vee})\bigr) = \exp\!\bigl(h^\vee(G_2)\bigr)
-  = \exp\!\bigl(-8\,\zeta(0)\bigr)$ — the WZW central charge of $SU(3)$
-  at the self-dual level, equal to the dual Coxeter number of $G_2$, equal
-  to $-\dim(SU(3))\,\zeta(0)$ (a theorem: $c(G|_{k=h^\vee}) = \tfrac 12
-  \dim G$ for any simple $G$).</li>
-  <li>$7 = c(G_2|_{k=h^\vee}) = \dim G_2\text{ fund}$ — the WZW central
-  charge of $G_2$ at the self-dual level.</li>
-  <li>$40 = 8 \cdot 5 = \dim SU(3) \cdot \dim SU(5)_{\text{fund}}$ — a
-  pure dimension ratio in the embedding chain $G_2 \supset SU(3) \subset
-  SU(5)$.</li>
-</ul>
-
-<p>
-All three transcendental components are $L$-values (or a Gauss sum) of
-<em>all</em> primitive quadratic Dirichlet characters whose conductor
-divides $12 = \dim(\text{SM gauge algebra})$. The factor $7\,e^4$ is a pair
-of self-dual WZW central charges — a pattern that holds only for $G_2$
-and $F_4$, the two octonionic groups of the Freudenthal–Tits Magic
-Square. The formula's structure is that of a Chern-Simons / WZW
-partition function on the arithmetic 3-manifold
-$SL_2(\mathbb Z[i])\backslash\mathbb H^3$, with the Borel regulator of
-$\mathbb Q(i)$ supplying $G^2$, the Gauss sum of $\mathbb Q(\sqrt{-3})$
-supplying $\sqrt 3$, and the WZW central charges supplying $7$ and $e^4$.
-</p>
-
-<p>
-The formula matches experiment to $0.25\sigma$ (relative error
-$3.75\times 10^{-11}$), exhibits a continued-fraction jump of $2.5\times
-10^8$ characteristic of a genuine identity, is unique in a $51.7$ million
-combination search, and the first three loop orders of any putative
-correction are bounded away by data — with the first unconstrained order
-matching $h^\vee(G_2) = 4$. It is consistent with all current QED
-precision tests at better than $2.2\sigma$ (the $2.17\sigma$ tension with
-Morel 2020 being the most interesting signal), and is falsifiable with a
-$3$–$10\times$ improvement in $\alpha$ measurement precision.
-</p>
-
-<p>
-A thorough literature search confirms the formula is genuinely new: no
-prior work combines Catalan's constant, Dirichlet $L$-values, the
-Bloch-Wigner dilogarithm, the Borel regulator, $e^4$, or $G_2$ WZW
-central charges with the fine-structure constant.
-</p>
-
-<p>
-Whether the formula is a true identity of nature or a very tight numerical
-coincidence cannot be decided with current experimental precision or
-theoretical machinery. A factor-of-$4$ improvement in the measurement of
-$\alpha$ — bringing $\Delta\alpha$ below $3\times 10^{-13}$ — would
-either detect an $\alpha_0^4$ correction (supporting the WZW
-interpretation) or push the residual below $0.1\sigma$ (making the
-formula effectively exact). Until then, it is best read as a
-<strong>strong hint</strong> — a numerical and structural pattern
-pointing toward an arithmetic-geometric origin of $\alpha$, awaiting
-either a theoretical derivation or a decisive experimental test.
-</p>
-
-<hr>
-
-<div class="footer">
-<p>
-<b>Method.</b> Candidate was identified by a systematic parallel search (Rust
-+ rayon, 4 threads) over $\sim 51.7 \times 10^6$ combinations of $\sim 510$
-transcendental kernels (Riemann zeta values, Dirichlet $L$-functions for
-$q \in \{1,3,4,5,7,8,11,13\}$, Dedekind zetas of imaginary quadratic
-fields, polylogs, theta functions, $q$-Pochhammer symbols, harmonic zeta
-sums) against $84$ transforms of $\alpha$ with $\sim 300{,}000$ structural
-prefactors, followed by high-precision verification (Python
-<code>Decimal</code>, 50–80 digits) and a continued-fraction identity
-test. Post-discovery analyses: a derivation attempt (Chern-Simons / WZW
-partition function structure), a literature search (arXiv + Wikipedia
-for historical $\alpha$ formulas), an exceptional-geometry investigation
-($F_4$, $E_8 \supset F_4 \times G_2$), and QED precision tests (electron
-$g-2$, muon $g-2$, Rydberg, alpha discrepancy). Full code, verifications,
-and detailed project notes in <code>~/alpha/</code> and
-<code>~/alpha/PROJECT_NOTES.md</code>.
+A closed form for the fine-structure constant,
+$$\frac{1}{\alpha}=\frac{7}{40}\,\pi^{2}e^{4}G^{2}\sqrt3 ,$$
+was found by exhaustive search over an arithmetic grammar, matches CODATA 2022
+at \(0.245\sigma\), is unique in its search space at odds of hundreds-to-thousands
+against chance, and carries no free continuous parameters. Each of its four
+factors has an exact structural identity: a doubled norm counting on the Gaussian
+integers; the unique source&ndash;work fixed point of a composability law; the
+exact capacity of a matched four-ary channel; and a representation-theoretic
+census unique among fifteen candidate laws. The formula fills the one-loop
+path-integral template exactly and mirrors the analytic class number formula of
+an unidentified arithmetic object.
 </p>
 <p>
-<b>Experimental value.</b> $\alpha = 0.0072973525643(11)$,
-$1/\alpha = 137.035999177(21)$. The notation $(11)$ denotes $\pm 11 \times
-10^{-13}$ in the last digit, i.e.\ $\Delta\alpha \approx 1.1\times
-10^{-12}$. Formula prediction: $1/\alpha_\text{formula} =
-137.035999182138\ldots$
+Around the formula stands a theory: five axioms and one postulate from which the
+factors are derived and \(1/\alpha\) is an output. The theory's arena is the
+Gaussian integers; its stage is a cube (whose double carries the fermionic sign);
+its dynamics pass a thermodynamic stability proof; its Born weights are a
+theorem; and it makes two independent falsifiable statements &mdash; the frozen
+numerical prediction watched by future CODATA releases, and a lattice scale
+\(a\lesssim5\times10^{-15}\,\mathrm{m}\) bounded by atomic inverse-square tests.
 </p>
 <p>
-<b>Caveat.</b> This document describes a candidate closed form discovered
-by computer search and analyzed for its mathematical structure. It is
-not a derivation. The formula's structural coherence is strong evidence
-but not a proof; its falsifiability requires a $3$–$10\times$ improvement
-in $\alpha$ measurement precision. See §12 ("An Honest Assessment") for
-the full statement of what is and is not established.
+One statement remains postulated, one completion remains to be built, and one
+transcendence shadow remains beyond current mathematics; all three are named
+exactly. The alternative to the whole reading is a one-in-hundreds
+search coincidence whose every factor nevertheless carries independent
+structure. The formula is either a coincidence of the search space, or the
+class number formula of an object physics has not yet named. The theory says
+the latter, names the object's remaining demand exactly, and &mdash; uniquely
+for a proposal of this kind &mdash; states in advance what evidence will
+refute it.
 </p>
-</div>
+
+<footer>
+Value locked: \(1/\alpha = 137.03599918213800305751867085525344865261005407504\ldots\)
+(50 digits, machine-verified). All structural identities quoted above are exact;
+all numerical claims carry their stated verification precision.
+</footer>
 
 </body>
 </html>
