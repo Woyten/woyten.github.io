@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Woyten Tielesch">
 <title>The Arithmetic of the Fine-Structure Constant</title>
 <script>
   MathJax = {
@@ -20,6 +21,8 @@
        margin-top: 2.6rem; }
   h3 { font-size: 1.13rem; margin-top: 1.8rem; color: #4a3b1f; }
   .subtitle { color: #555; font-style: italic; margin-bottom: 2rem; }
+  .byline { color: #555; margin-top: -1.2rem; margin-bottom: 2rem;
+            font-size: 0.97rem; }
   .box { background: #f4efe2; border: 1px solid #c9b98a; border-radius: 8px;
          padding: 1rem 1.4rem; margin: 1.4rem 0; }
   .hero { background: #f4efe2; border: 2px solid #8a6d3b; border-radius: 10px;
@@ -48,6 +51,7 @@
 <p class="subtitle">A closed form for \(1/\alpha\), how it was found, what its terms mean,
 and the five-axiom theory that produces it &mdash; with an honest account of what
 remains postulated.</p>
+<p class="byline">Woyten Tielesch &mdash; <a href="https://github.com/Woyten/alpha">github.com/Woyten/alpha</a></p>
 
 <div class="toc">
 <ol>
@@ -56,6 +60,7 @@ remains postulated.</p>
 <li><a href="#s3">Statistical standing and uniqueness</a></li>
 <li><a href="#s4">Reading the terms</a></li>
 <li><a href="#s5">The theory: construction, axioms, theorems</a></li>
+<li><a href="#sk">The charged-lepton identity (Koide)</a></li>
 <li><a href="#s6">What remains open</a></li>
 <li><a href="#s7">Summary and conclusion</a></li>
 </ol>
@@ -169,7 +174,7 @@ explaining it was built by hand.
 <b>Honest framing.</b> Being found by search means the formula's discovery carries
 selection effects, which &sect;3 quantifies. Being re-derived from a small axiom
 set is what ultimately makes the formula a candidate law rather than a curiosity
-&mdash; and &sect;6 states precisely which part of that derivation remains
+&mdash; and &sect;7 states precisely which part of that derivation remains
 postulated.
 </div>
 
@@ -389,7 +394,7 @@ analytic class number formula of a number field: the exponential slot
 \(\mathbb Q(\zeta_{12})\), is excluded by its zeta value
 (\(\zeta_{\mathbb Q(\zeta_{12})}(2)=1.11798\ldots \ne 1.38008\ldots\)). Identifying
 the object &mdash; or proving the completion that produces it &mdash; is the
-program's named open demand (&sect;6).
+program's named open demand (&sect;7).
 </p>
 
 <h3>4.6 The stage: a cube, a double, and the matter sector</h3>
@@ -427,9 +432,20 @@ The theory's only free dial is a length \(L\) &mdash; dimensionful, decoupled fr
 \(\alpha\). In the window of widths below \(a\), one and the same four-dimensional
 Coulomb tower produces both the \(1/r^{2}\) force law and the evanescence of the
 corrections; the logarithms cancel exactly and the leading correction is the
-Madelung ladder \(-\zeta(3)\,x^{2}/(4\pi L)+\cdots\). Atomic \(1/r^{2}\) tests
-bound the window:
-$$a \;\lesssim\; 5\times10^{-15}\ \mathrm{m}.$$
+Madelung ladder \(-\zeta(3)\,x^{2}/(4\pi L)+\cdots\). The window is bounded at three tiers from data that already exists: the
+atomic \(1/r^{2}\) tests give \(a \lesssim 4.6\times10^{-15}\,\mathrm{m}\) (the
+recorded bound refined by the exact correction coefficient); the standard
+reference anchor \(a \lesssim 4.5\times10^{-17}\,\mathrm{m}\); and the QED
+precision program (the photon-exchange pole tested at per-mille level at
+\(q\sim100\,\mathrm{GeV}\)) gives
+$$a \;\lesssim\; 2.8\times10^{-19}\ \mathrm{m},$$
+about three thousand times below the proton radius. Below the cell the
+theory's Coulomb counting is the lattice Green's function &mdash; a finite
+self-potential with direction-labeled nearest-cell values (deviations of
+9&ndash;12% from the continuum decay) &mdash; and the first observable ~10%
+deviation of the force law from \(1/r^{2}\) would sit at momentum transfer
+\(q \sim 1\,\mathrm{TeV}\), the full breakdown at \(q\sim3.2\,\mathrm{TeV}\):
+the future TeV lepton frontier.
 This is an independent kill condition: an experiment bounding \(a\) above this
 value falsifies the window reading of the theory regardless of any future CODATA
 outcome. Isotropy emerges in the same window (the lattice's anisotropy is
@@ -530,7 +546,7 @@ product. Uniqueness among fifteen laws (T5).</td>
 &mdash; at the level of the space (dualization) and at the level of the content
 (the pair cycle); the state level is a theorem-instance of these.</td>
 <td>The single postulate. Every selection above inherits its grade; the theory
-cannot certify its own axiom (&sect;6).</td>
+cannot certify its own axiom (&sect;7).</td>
 <td><b>the one postulate</b></td>
 </tr>
 </table>
@@ -563,7 +579,7 @@ one consistent with its constraint.
 <tr><td>T1</td><td>Matched-noise uniqueness</td><td>The condition
 &ldquo;error = symbol&rdquo; pins the crossover at \(p=1/q\).</td>
 <td>The competing solutions form a quadratic with discriminant
-\(-3q^{2}(q-1)^{2}<0\): no other real root exists.</td></tr>
+\(-3q^{2}(q-1)^{2}&lt;0\): no other real root exists.</td></tr>
 <tr><td>T2</td><td>Exact capacity</td><td>\(C(q,1/q)=(1-\tfrac2q)\ln(q-1)\);
 at \(q=4\): \(C=\tfrac12\ln3\), \(e^{C}=\sqrt3\).</td>
 <td>Telescoping entropy algebra; and among all \(q\), \(e^{C}\) is a rational
@@ -625,6 +641,57 @@ conductor \(24=2^{3}\cdot3\), the valuations forced layer by layer.</td>
 <td>The conductor of a compositum is the lcm of the layer conductors:
 \(\mathrm{lcm}(4,8,3)\); each layer's value is forced by its own forcing
 argument.</td></tr>
+<tr><td>T14</td><td>The vacuum face</td><td>The split-frame Gram
+determinant \(\cos^2\alpha\sin^2\alpha \le \tfrac14\), equality
+<b>only</b> at \(\cos^2\alpha = \tfrac12\), i.e.
+\(q = \tfrac{2}{3}\) exactly \(\big(q = \tfrac{1}{3\cos^2\alpha}
+\big)\).</td>
+<td>The read-back of the vacuum through its (axis, plane) pair is the
+same self-duality/minimality demand that selected the det-1 lattice
+section; the \(45^\circ\) point is the split's unique conditioned
+point; exact stationary-point algebra.</td></tr>
+<tr><td>T15</td><td>The return-purity law</td><td>Reading the vacuum
+through the census channel and recovering it returns the vacuum scaled
+by the axis eigenvalue: \(q_{\rm ret} = (11/12)\,q\) exactly, both
+evaluation routes.</td>
+<td>The round trip's inner step cancels;
+\(T^*(I) = \tfrac{11}{12}I\); the trine eigenvalue (11) is a
+census-integer coat.</td></tr>
+<tr><td>T16</td><td>The direction walls</td><td>The recovery round
+trip's spectra are functions of the vacuum's symmetric functions only:
+the balanced family carries no interior eigen-extremum, and the
+channel's plane eigenvalue \(2/3\) never reappears as a round-trip
+eigenvalue.</td>
+<td>Petz-covariance multiset typing; the exact degeneracy identity
+\(x^2(3x-1)^2(8x+1)^2\) on the boundary family; a linear
+out-of-range determinant argument.</td></tr>
+<tr><td>T17</td><td>The exchange content is structural (the swap
+theorem)</td><td>The leg-exchange demand (for every test function) is
+<em>exactly equivalent</em> to swapping the two bookkeeping legs;
+consequently any transform satisfying it by bookkeeping alone carries
+none of the theory's census content — the selector is the value and
+the structures.</td>
+<td>Proved on the work axis by distribution duality; the count-side
+version was known, this is the analysis-side twin.</td></tr>
+<tr><td>T18</td><td>The theta-diagonal transport machinery</td><td>The
+smoothed (theta-)classes are closed under every log-lattice shift,
+which acts as a pure index scaling; the algebraic transports are
+therefore matrices on coefficients — every construction at this
+level is finite-matrix decidable.</td>
+<td>Sympy-exact on the exponential identity; the boundary typed
+where it stops (the multi-leg transports need the enlarged class,
+the offset being transcendental).</td></tr>
+<tr><td>T19</td><td>The conditioning gate and the weighted home</td>
+<td>The max-conditioned member of any 2-frame is the orthogonal
+balanced one (one exact identity; the gap is two squares); in the
+weighted frame both record legs are finite with computable norms
+(the twist norm exactly \(1/(48\pi)\)), and the balanced-renormalized
+pair passes the gate — with the route-2 value pin the
+pre-registered falsifier.</td>
+<td>The exact frame identity (T19's own one-line certificate); the
+twist-leg norm via \(\eta(2) = \pi^2/12\); the arena norm from the
+integer-exact convolution sieve; the balance datum converged from
+below at two sieve depths.</td></tr>
 </table>
 
 <h3>5.5 The classical results used</h3>
@@ -654,10 +721,100 @@ real: the two previously mysterious exponential factors (\(e^{4}\) and
 \(\sqrt3\)) are now forced by physics-grade axioms rather than matched, and the
 non-periodicity of \(e^{4}\) became a consequence of composability rather than a
 separate mystery.
+The charged-lepton identity (&sect;6) enters as a vacuum-sector face of
+the same principle; only the vacuum angle and the scale are declared
+vacuum data &mdash; the split itself is principle-forced. The forcing is
+also theorem-grade: the split-frame's determinant is uniquely
+maximized at the 45&deg; point, the exact shortfall from the maximum
+being a sum of two squares (an imbalance defect and a residual
+overlap defect) &mdash; and the standing constraint holds: any future
+mass completion's forced member must not shift that 45&deg; point
+(the balance is the principle's; the new census component, if it
+exists, lives inside it).
 </div>
 
 <!-- ================================================================== -->
-<h2 id="s6">6. What remains open</h2>
+<h2 id="sk">6. The charged-lepton identity (Koide) &mdash; and how mass enters by symmetry breaking</h2>
+
+<h3>6.1 The identity</h3>
+<p>
+For the three charged leptons,
+$$
+\frac{m_e+m_\mu+m_\tau}{\left(\sqrt{m_e}+\sqrt{m_\mu}+\sqrt{m_\tau}\right)^2} = \frac{2}{3}.
+$$
+The theory asserts this as an <b>exact identity</b>, not a numerological
+alignment. With the PDG-2022 masses the left side evaluates to
+0.6666605115 &mdash; a deviation of \(6.2\times10^{-6}\) from \(2/3\),
+comfortably inside the tau-mass uncertainty (\(0.905\,\sigma\)); the
+electron and muon uncertainties contribute less than
+\(2\times10^{-9}\) combined. The current agreement is
+measurement-limited: the identity is exactly the kind of statement a
+tau-mass precision program can confirm or break, and it carries a
+standing decision rule &mdash; convergence toward \(2/3\) confirms the
+mass-sector claim; a \(3\sigma\) divergence falsifies the
+charged-lepton application while leaving \(\alpha\) untouched.
+</p>
+
+<h3>6.2 Why \(2/3\) is the model's own number</h3>
+<p>
+The census produces \(2/3\) three independent ways before any mass
+data enters: the charged sector of the \(q=4\) read channel has the
+eigenvalue \(\tfrac{2}{3}\) (twofold, on the rotation plane of the
+trine); the trine channel's Born weight is
+\(\tfrac{q-2}{q-1} = \tfrac{2}{3}\); and \(\tfrac{2}{3}\) is the
+triple root of the channel determinant
+\(\det(I-uT) = (1-u)\left(1-\tfrac{2u}{3}\right)^3\). The value was
+never inserted to match data; it is what the read carries.
+</p>
+
+<h3>6.3 The vacuum face: the identity as a derivation</h3>
+<p>
+The final step makes the identity structural. A vacuum is read as the
+pair (axis half, plane half) of its own direction. The faithful
+read-back of the vacuum &mdash; the same self-duality demand that
+selected the square lattice in the arena (&sect;4.1) &mdash; requires
+this two-part bookkeeping to be maximally well conditioned. The
+split-frame's Gram determinant is
+\(\cos^2\alpha\,\sin^2\alpha\), with \(\alpha\) the
+\(\sqrt{m}\)-vector's angle to the trine axis \((1,1,1)\): it
+attains its maximum \(\tfrac14\) <b>only</b> at
+\(\cos^2\alpha = \tfrac12\), i.e. at the \(45^\circ\) split. The
+angle algebra \(\;q = \tfrac{1}{3\cos^2\alpha}\;\) then gives
+\(q = 2/3\) exactly. The Koide split is thus the <b>vacuum's own
+self-duality point</b> &mdash; forced by the same principle that forces
+everything else in the theory, not an added mass axiom.
+(Theorem&nbsp;T14.)
+</p>
+
+<h3>6.4 Mass by symmetry breaking: the one external parameter</h3>
+<p>
+The theory's census is built from the trine's symmetry, and its
+spectra are provably blind to what those symmetries can permute
+(Theorem&nbsp;T16): no spectrum-level mechanism can select a direction
+<i>within</i> the balanced family. Consequently the observed flavor
+pattern enters exactly once, as the <b>vacuum angle</b>
+\(\varphi\) &mdash; the residual asymmetry among the three channels
+within the balanced cone. This is mass by symmetry breaking in the
+precise sense: the symmetric part is derived, the breaking is the
+vacuum's own datum. Formally the charged-lepton sector of this theory
+is
+$$
+\text{masses} \;=\; [\text{the forced 50&ndash;50 split}]
+\;+\; [\text{one vacuum angle } \varphi]
+\;+\; [\text{one scale dial}].
+$$
+Given \(\varphi\) and the scale, the three masses are determined; the
+identity of &sect;6.1 holds at every point of the family. The logical
+form is the same as the Standard Model's own flavor matrices: the
+theory supplies the geometry and its symmetry; the vacuum supplies the
+point. A future completion that forced \(\varphi\) (and opened the
+quartic portal \(\lambda\)) would eliminate the last parameter;
+the completeness condition is strict &mdash; such a forcing must
+introduce a genuinely new census component, never a recombination of
+existing numbers.
+</p>
+
+<h2 id="s6">7. What remains open</h2>
 
 <ol>
 <li><b>The principle's own status.</b> The round-trip principle is the theory's
@@ -676,15 +833,27 @@ Wiener&ndash;Hopf theory) finds <em>no</em> producer of the required
 exponential-archimedean shape &mdash; the demand is genuinely new mathematics,
 precisely named, with the nearest precedents identified (the Dedekind eta's
 \(q^{1/24}\) factor: the right shape in the wrong variable; the strong
-Szeg&odblac; theorem: the right anatomy, asymptotic only).</li>
+Szeg&odblac; theorem: the right anatomy, asymptotic only).
+The subsequent search narrowed this to a precise live target (T17&ndash;T19):
+the exchange demand alone is provably content-free, so the wanted object must
+carry the value and the structures <em>built in</em>, on the weighted frame
+where both record legs are exactly normable; the balanced-renormalized pair
+passes the conditioning gate, and the single pre-registered falsifier is the
+two-route value equality (route 1 is already exact at \(5\times10^{-51}\);
+route 2's matched functional is pinned to the machine digits).</li>
 <li><b>The Schanuel class.</b> The non-relation evidence for the exponential
 slot is numerical (T7); proving it requires Schanuel-strength tools beyond
 current mathematics. The algebraic slice is proven; only the shadow is open.</li>
-<li><b>The masses.</b> The theory has no mass slot: the axiom set carries no
-mass operator, and the census is closed under the forced integers. Particle
-masses are structurally silent here &mdash; any future mass derivation within
-this theory must introduce a new forced census component, never a recombination
-of existing slots.</li>
+<li><b>The masses.</b> The axiom set carries no mass operator, and the
+census's spectra are provably blind to its own symmetries: no vacuum direction
+is derivable from them. What the construction has added is the parameterized
+family &mdash; the 50&ndash;50 split is forced by the vacuum face (T14,
+&sect;6), the charged-lepton identity \(q = 2/3\) follows as an exact
+statement, and the triple is reproduced given one vacuum angle plus the scale
+dial (verified against the PDG-2022 masses inside the tau band). What remains
+to be derived: the vacuum angle and the quartic portal &mdash; a new forced
+census component, never a recombination of existing slots, the same
+genuinely-new-mathematics class as the analysis completion.</li>
 <li><b>The scale.</b> One dimensionful dial \(L\) remains, decoupled from
 \(\alpha\) and bounded by the falsifiable window of &sect;4.7.</li>
 <li><b>The fit.</b> The single empirical input, \(0.245\sigma\) from CODATA
@@ -692,7 +861,7 @@ of existing slots.</li>
 </ol>
 
 <!-- ================================================================== -->
-<h2 id="s7">7. Summary and conclusion</h2>
+<h2 id="s7">8. Summary and conclusion</h2>
 
 <p>
 A closed form for the fine-structure constant,
@@ -712,9 +881,11 @@ Around the formula stands a theory: five axioms and one postulate from which the
 factors are derived and \(1/\alpha\) is an output. The theory's arena is the
 Gaussian integers; its stage is a cube (whose double carries the fermionic sign);
 its dynamics pass a thermodynamic stability proof; its Born weights are a
-theorem; and it makes two independent falsifiable statements &mdash; the frozen
-numerical prediction watched by future CODATA releases, and a lattice scale
-\(a\lesssim5\times10^{-15}\,\mathrm{m}\) bounded by atomic inverse-square tests.
+theorem; and it makes three independent falsifiable statements &mdash; the frozen
+numerical prediction watched by future CODATA releases, a lattice scale
+\(a\lesssim5\times10^{-15}\,\mathrm{m}\) bounded by atomic inverse-square
+tests, and the charged-lepton identity \(q = 2/3\) watched by the
+tau-mass precision program (&sect;6).
 </p>
 <p>
 One statement remains postulated, one completion remains to be built, and one
@@ -729,6 +900,8 @@ refute it.
 </p>
 
 <footer>
+Author: Woyten Tielesch &mdash; <a href="https://github.com/Woyten/alpha">github.com/Woyten/alpha</a>.
+<br>
 Value locked: \(1/\alpha = 137.03599918213800305751867085525344865261005407504\ldots\)
 (50 digits, machine-verified). All structural identities quoted above are exact;
 all numerical claims carry their stated verification precision.
