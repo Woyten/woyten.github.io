@@ -48,38 +48,57 @@
 <body>
 
 <h1>The Arithmetic of the Fine-Structure Constant</h1>
-<p class="subtitle">A closed form for \(1/\alpha\), how it was found, what its terms mean,
-and the five-axiom theory that produces it &mdash; with an honest account of what
-remains postulated.</p>
+<p class="subtitle">The claim, the hints hidden in it, the theory built from those
+hints, the physics it reproduces, the mass relations it connects to, the gravity
+picture it suggests, and an honest accounting of what remains postulated.</p>
 <p class="byline">Woyten Tielesch &mdash; <a href="https://github.com/Woyten/alpha">github.com/Woyten/alpha</a></p>
 
 <div class="toc">
 <ol>
-<li><a href="#s1">The formula and the claim</a></li>
-<li><a href="#s2">How it was found</a></li>
-<li><a href="#s3">Statistical standing and uniqueness</a></li>
-<li><a href="#s4">Reading the terms</a></li>
-<li><a href="#s5">The theory: construction, axioms, theorems</a></li>
-<li><a href="#sk">The charged-lepton identity (Koide)</a></li>
-<li><a href="#s6">What remains open</a></li>
-<li><a href="#s7">Summary and conclusion</a></li>
+<li><a href="#s1">The claim we started with</a></li>
+<li><a href="#s2">The hints the formula hid</a></li>
+<li><a href="#s3">The theory, and why it was built that way</a></li>
+<li><a href="#s4">How the theory produces the number</a></li>
+<li><a href="#s5">The Standard-Model bookkeeping the theory carries for free</a></li>
+<li><a href="#s6">Mass: the charged-lepton identity and the Higgs relation</a></li>
+<li><a href="#s7">Gravity: the model so far</a></li>
+<li><a href="#s8">The honesty ledger: postulated, named, unreachable</a></li>
+<li><a href="#s9">How to check this document</a></li>
 </ol>
 </div>
 
+<div class="note">
+<b>Reading guide.</b> Chapter 1 alone is the five-minute version: what was claimed
+and how strongly it stands. Chapters 2&ndash;4 are the theory itself &mdash; what the
+found formula revealed, the physical picture constructed from it, and how the
+number comes back out. Chapters 5&ndash;7 are the physics beyond the one number: the
+particle bookkeeping, the mass relations, the gravity picture. Chapter 8 is the
+honesty chapter: exactly what is postulated, what is named rather than derived,
+and what was never hunted. Every claim that reaches numerical precision is
+machine-verified in a public test suite; grades are stated in plain words
+throughout (<em class="t">derived</em> means the construction forces the value;
+<em class="t">named</em> means a natural structural home without a derivation;
+<em class="t">postulated</em> means assumed; <em class="t">reading</em> means a
+consistent interpretation that carries no numbers).
+</div>
+
 <!-- ================================================================== -->
-<h2 id="s1">1. The formula and the claim</h2>
+<h2 id="s1">1. The claim we started with</h2>
 
 <p>
 The fine-structure constant \(\alpha \approx 1/137\) sets the strength of the
-electromagnetic interaction. It is measured, not predicted: the Standard Model takes it
-as input. This document reports a candidate closed form for it, and the theory built
-around that form.
+electromagnetic interaction. In the Standard Model it is measured, not
+predicted. This document reports a candidate closed form for it and the
+theory that grew out of the closed form &mdash; a theory whose nature is different
+from the Standard Model's (chapter 3), but which survives being confronted
+with the same data.
 </p>
 
 <div class="hero">
 <p style="margin:0.3rem 0;">
-$$\frac{1}{\alpha} \;=\; \zeta(2)\, G^{2}\, e^{4}\, \frac{21}{20}\,\sqrt{3}
-\;=\; \frac{7}{40}\,\pi^{2}\, e^{4}\, G^{2}\,\sqrt{3}
+$$\frac{1}{\alpha} \;=\; \zeta(2)\,G^{2}\,e^{4}\,\frac{21}{20}\,\sqrt{3}
+\;=\; \frac{7}{40}\,\pi^{2}\,e^{4}\,G^{2}\,\sqrt{3}
+\;=\; \frac{40}{7\,\sqrt{3}\,\pi^{2}\,e^{4}\,G^{2}}
 \;=\; 137.035999182138003057518670855253448652610054\ldots$$
 </p>
 <p style="margin:0.5rem 0 0.2rem;">
@@ -87,824 +106,1399 @@ $$\alpha \;=\; \frac{40}{7\sqrt{3}\,\pi^{2}\,e^{4}\,G^{2}},
 \qquad G = \beta(2) = L(2,\chi_{-4}) = 0.9159655941\ldots$$
 </p>
 <p style="margin:0.4rem 0 0.2rem; font-size:0.95rem; color:#444;">
-CODATA 2022: \(1/\alpha = 137.035999177(21)\). Deviation:
-\(5.1\times10^{-9}\), i.e. <b>0.245&sigma;</b> &mdash; inside the measurement
-uncertainty. Every constant on the right is canonical: \(\pi\), the natural base
-\(e\), \(\zeta(2)=\pi^2/6\), \(\sqrt3\), the rational \(21/20\), and Catalan's
-constant \(G\), the Dirichlet beta value at \(s=2\).
+CODATA 2022: \(1/\alpha = 137.035999177(21)\). Deviation
+\(2.07\times10^{-8}\) in \(1/\alpha\), a relative error of
+\(3.75\times10^{-11}\) &mdash; <b>0.245&sigma;</b>, inside the measurement
+uncertainty. Every constant on the right is canonical: \(\pi\), the natural
+base \(e\), \(\zeta(2)=\pi^{2}/6\), \(\sqrt3\), the rational \(21/20\), and
+Catalan's constant \(G\), the value of the Dirichlet beta function \(\beta\)
+at \(s=2\).
 </p>
 </div>
 
+<h3>1.1 Where the form came from</h3>
 <p>
-The claim has three parts, and they should be kept apart:
-</p>
-<ol>
-<li><em>The numerical claim.</em> The closed form above matches the measured
-\(1/\alpha\) to \(0.245\sigma\) of the 2022 CODATA uncertainty. This is a fact of
-arithmetic, machine-verified to fifty digits.</li>
-<li><em>The structural claim.</em> Each factor has a forced home: a counting
-identity on the Gaussian integers, a composability law that forces the exponential,
-a channel capacity that forces \(\sqrt3\) exactly, and a finite census that supplies
-the rational. This is a construction, not yet a full derivation &mdash; see
-&sect;5 for exactly what is derived and what is postulated.</li>
-<li><em>The falsifiable claim.</em> The formula predicts one number and one
-physical scale. Any future CODATA value more than about \(3\sigma\) away from
-\(137.035999182138\ldots\) rejects it; convergence confirms it. The accompanying
-theory adds a second, independent kill condition (&sect;4.7).</li>
-</ol>
-
-<div class="note">
-<b>The fit count is one.</b> Across the entire construction exactly one continuous
-quantity was ever adjusted &mdash; a normalization fixed by requiring that a source
-equal the work it produces (&sect;4.2). Its forced value is \(1\), and at that value the
-formula lands \(0.245\sigma\) from the measurement. There are no other free parameters:
-every remaining factor is an integer, a rational, or an exact evaluation of a canonical
-function.
-</div>
-
-<!-- ================================================================== -->
-<h2 id="s2">2. How it was found</h2>
-
-<p>
-The formula was <em>found by exhaustive computer search</em>, not derived. It is
-important to say so plainly, because the search's design is what makes the hit
-meaningful.
-</p>
-
-<h3>2.1 The search space</h3>
-<p>
-The search enumerated a grammar of closed forms built from arithmetic constants:
+The formula was <em>found by exhaustive computer search</em>, not derived,
+and it matters to say so plainly: the design of the search is what makes the
+hit meaningful. A parallel engine (written in Rust for speed) enumerated a
+grammar of closed forms over an arithmetic constant pool:
 </p>
 <ul>
 <li><b>Kernels:</b> 531 special values &mdash; Riemann and Dedekind zeta values,
-Dirichlet \(L\)-functions (including Catalan's constant \(G=L(2,\chi_{-4})\)),
+Dirichlet \(L\)-functions (including Catalan's \(G=L(2,\chi_{-4})\)),
 polylogarithms, theta constants, \(q\)-products, harmonic sums &mdash; in
 combinations of up to three factors.</li>
-<li><b>Prefactors:</b> all rationals \(\frac{p}{q}\) with \(|p|\le 72,\ q\le 48\),
-dressed with powers \(\pi^{a}e^{b}\), \(|a|,|b|\le 4\), and quadratic radicals
-\(\sqrt{d}\).</li>
-<li><b>Targets:</b> the CODATA value of \(1/\alpha\) and several equivalent
-transforms of it.</li>
+<li><b>Prefactors:</b> all rationals \(p/q\) with \(|p|\le72,\ q\le48\),
+dressed with powers \(\pi^{a}e^{b}\) (\(|a|,|b|\le4\)) and quadratic
+radicals \(\sqrt{d}\).</li>
+<li><b>Targets:</b> the measured \(1/\alpha\), filtered at the measurement
+window.</li>
 </ul>
 <p>
-A parallel engine evaluated tens of millions of combinations in exact rational and
-high-precision floating arithmetic, filtering by the measurement window. In the
-restricted family \(\frac{p\sqrt{d}}{q}\,\pi^{a}e^{b}G^{c}\) exactly <em>one</em>
-form matches to better than \(10^{-6}\) relative error &mdash; the one above. It
-then survived every widening of the search: no competing form exists anywhere in
-the enumerated space.
+Tens of millions of combinations were evaluated in exact rational and
+high-precision floating arithmetic. In the natural restricted family
+\(\frac{p\sqrt{d}}{q}\,\pi^{a}e^{b}G^{c}\), exactly <em>one</em> form matches
+to better than \(10^{-6}\) relative error &mdash; the one above. Every widening
+of the search then found <em>no</em> competing form: within the enumerated
+space the match is unique.
 </p>
 
-<h3>2.2 From a hit to a structure</h3>
-<p>
-A search hit alone is weak evidence; the record contains many one-off numerical
-coincidences. What distinguishes this one is what happened next. Each factor was
-individually investigated, and every one turned out to carry an independent
-structural identity (&sect;4): \(\pi^2G^2\) is a doubled arithmetic counting
-function; \(e^4\) is the unique fixed point of a source&ndash;work law;
-\(\sqrt3\) is an exact channel capacity; \(7/40\) is a representation-theoretic
-census. The pieces then assembled into a construction chain &mdash; a quantum
+<h3>1.2 The claim, in three parts</h3>
+<ol>
+<li><em>Numerical.</em> The closed form equals the measured \(1/\alpha\) to
+\(0.245\sigma\) of the 2022 uncertainty. This is arithmetic, machine-verified
+to fifty digits; the identity is also known in three equivalent exact forms
+(in terms of the zeta function of the Gaussian integers, the Dirichlet beta
+function at \(s=1\) and \(s=2\), and an Artin \(L\)-function).</li>
+<li><em>Structural.</em> Each factor carries an exact independent identity
+(chapter 2), and the factors assemble into a construction &mdash; a quantum
 statistical mechanical counting in the tradition of Bost&ndash;Connes &mdash; and
-finally into the five-axiom theory of &sect;5, in which \(1/\alpha\) is an
-<em>output</em> rather than a target. The number was found by search; the theory
-explaining it was built by hand.
-</p>
+finally into an axiom-supported theory in which \(1/\alpha\) is an
+<em>output</em>, not a target (chapters 3&ndash;4).</li>
+<li><em>Falsifiable.</em> The formula predicts one number and freezes it: any
+future CODATA value more than about \(3\sigma\) away from
+\(137.035999182138\ldots\) <b>rejects</b> the form; convergence <b>confirms</b>
+it decisively. The theory adds independently falsifiable claims of its own
+(a length scale, &sect;3.8; mass-sector relations with kill-windows, &sect;6).</li>
+</ol>
 
-<div class="warn">
-<b>Honest framing.</b> Being found by search means the formula's discovery carries
-selection effects, which &sect;3 quantifies. Being re-derived from a small axiom
-set is what ultimately makes the formula a candidate law rather than a curiosity
-&mdash; and &sect;7 states precisely which part of that derivation remains
-postulated.
+<div class="note">
+<b>The fit count is one.</b> Across the entire development exactly one
+continuous quantity was ever adjusted: a response-speed normalization whose
+demand &ldquo;the source equals the work it produces&rdquo; fixes its value to
+\(1\). At that value the formula lands \(0.245\sigma\) from the measurement.
+No other free continuous parameter exists anywhere in the construction: every
+remaining factor is an integer, a rational, or an exact evaluation of a
+canonical function. A companion rule protected this state: a structural hit
+may only ever be <em>added</em>, never re-fitted, and every near-miss
+encountered at the last digits was logged as a near-miss rather than claimed.
 </div>
 
-<!-- ================================================================== -->
-<h2 id="s3">3. Statistical standing and uniqueness</h2>
-
-<h3>3.1 The residual</h3>
-<p>
-With CODATA 2022, \(1/\alpha = 137.035999177(21)\), the formula's value
-\(137.035999182138\ldots\) differs by \(5.1\times10^{-9}\): a relative error of
-\(3.75\times10^{-11}\), or <b>0.245&sigma;</b>. The residual is \(2\times10^{8}\)
-times smaller than the one-loop QED running of the coupling between zero momentum
-and \(1\)~GeV (\(\delta_{\rm QED}\sim6\times10^{-3}\)), so the formula cannot be
-read as \(\alpha\) evaluated at some running scale; it sits at the zero-momentum
+<div class="warn">
+<b>What a sub-\(\sigma\) agreement does and does not show.</b> Any formula with
+relative error below roughly \(1.5\times10^{-10}\) would be consistent with the
+measurement; the measurement alone cannot elevate the candidate. The
+structural evidence of chapter 2 &mdash; each factor independently verified as an
+exact identity with a forced value &mdash; is what turns a search hit into a
+theory-anchored claim. And the residual is far too small to be a scale effect:
+it is \(2\times10^{8}\) times smaller than the one-loop running of the QED
+coupling between zero momentum and \(1\)~GeV, so the formula cannot be read as
+\(\alpha\) evaluated at some other momentum; it sits at the zero-momentum
 value itself.
-</p>
-<div class="warn">
-<b>What the residual does not show.</b> Sub-\(\sigma\) agreement is consistency,
-not confirmation: any formula with relative error below \(\sim1.5\times10^{-10}\)
-would be equally consistent with the measurement. The measurement alone cannot
-elevate the formula; the structural evidence below is what does the work.
 </div>
 
-<h3>3.2 Odds against a search coincidence</h3>
+<h3>1.3 Uniqueness: why this is not one-lucky-hit noise</h3>
 <p>
-The search space contained roughly \(60\)&ndash;\(200\) <em>independent</em>
-transcendental atoms (kernels whose values are not algebraically related at
-achievable precision). Weighting by the effective number of forms the grammar can
-generate, the odds against finding a sub-\(10^{-10}\)-relative match by chance are
-<b>240:1 to 8,800:1</b>. Complementary diagnostics strengthen this:
+Search hits carry selection effects; this is how they are quantified:
 </p>
 <ul>
-<li><b>Log-basis uniqueness.</b> At 120-digit precision, a PSLQ relation search
-over \(\{\ln\pi,\ \ln G,\ \ln\Gamma(1/4),\ \ln\Gamma(1/3),\ \ln 2,\ \ln 3,\ \ln 5,\ \ln\zeta(3)\}\)
-finds no integer relation involving \(\ln e^4 = 4\) (null \(\sim10^{-81}\),
-conditional on the Kontsevich&ndash;Zagier period conjecture). The exponential
-slot is not reachable by any period-producing mechanism.</li>
-<li><b>The sibling search.</b> Running the same grammar against \(\sim270\) other
-measured physical constants produces no clean hit. The construction is specific to
-\(\alpha\), not a generic formula generator.</li>
-<li><b>No alternative assignment.</b> The census reading of &sect;4.4 consumes the
-channel size \(d=4\). Re-running the assembly at the neighboring channel sizes
-\(d=3\) and \(d=5\) gives \(24.7\) and \(1314\) &mdash; off by factors of \(5.5\)
-and \(9.6\). The match lives or dies at \(d=4\).</li>
+<li><b>The odds.</b> The search space contained roughly 60&ndash;200
+<em>independent</em> transcendental atoms (kernels whose values are provably
+not algebraically related at achievable precision). Weighting by the
+effective number of forms the grammar generates, the odds against producing
+a sub-\(10^{-10}\)-relative match by chance are <b>240:1 to 8,800:1</b>.</li>
+<li><b>Log-basis independence.</b> At 120-digit precision, a PSLQ integer-relation
+search over \(\{\ln\pi,\ \ln G,\ \ln\Gamma(1/4),\ \ln\Gamma(1/3),\ \ln2,\
+\ln3,\ \ln5,\ \ln\zeta(3)\}\) finds no relation involving
+\(\ln e^{4}=4\) (null \(\sim10^{-81}\), conditional on the
+Kontsevich&ndash;Zagier period conjecture). The exponential slot is not
+reachable by any period-producing mechanism.</li>
+<li><b>The sibling search.</b> The same grammar run against about 270 other
+measured physical constants produces no clean hit. The construction is
+specific to \(\alpha\).</li>
+<li><b>No alternative assembly.</b> The census reading of &sect;2.5 consumes the
+channel size \(d=4\). Re-running the full assembly at the neighboring sizes
+\(d=3\) and \(d=5\) yields \(24.7\) and \(1314\) instead of \(137.04\) &mdash;
+off by factors of \(5.5\) and \(9.6\). The match lives or dies at \(d=4\).</li>
 </ul>
 
-<h3>3.3 Correction bounds</h3>
+<h3>1.4 Correction bounds</h3>
 <p>
 If the formula is the leading term of an expansion
-\(\alpha^{-1} = \alpha^{-1}_0\,(1+c\,\alpha_0^{\,n})\), the residual bounds
-\(|c|\) at the first three orders:
+\(\alpha^{-1}=\alpha^{-1}_0(1+c\,\alpha_0^{\,n})\), the residual bounds
+\(|c|\) order by order:
 </p>
 <table>
 <tr><th>Order \(n\)</th><th>2&sigma; bound on \(|c|\)</th><th>Reading</th></tr>
 <tr><td>1</td><td>\(&lt;\,5.7\times10^{-7}\)</td><td>one-loop-size corrections excluded</td></tr>
 <tr><td>2</td><td>\(&lt;\,7.8\times10^{-5}\)</td><td>two-loop-size corrections excluded</td></tr>
 <tr><td>3</td><td>\(&lt;\,1.1\times10^{-2}\)</td><td>three-loop-size corrections excluded</td></tr>
-<tr><td>4</td><td>\(&lt;\,1.5\)</td><td>first order not constrained by data</td></tr>
+<tr><td>4</td><td>\(&lt;\,1.5\)</td><td>not yet constrained by data</td></tr>
 </table>
 <p>
-The first unconstrained correction order is \(n=4\) &mdash; the same integer that
-appears in \(e^4\) (&sect;4.2). If a deeper theory corrects the formula, its first
-correction is expected at fourth order.
+The first order the data cannot rule out is \(n=4\) &mdash; the same integer that
+appears in \(e^{4}\) (&sect;2.3). If a deeper theory corrects the formula, its
+first correction is expected at fourth order.
 </p>
 
-<h3>3.4 Tuning protection</h3>
+<h3>1.5 Tuning protection</h3>
 <p>
-The one adjustable normalization \(c\) (the response speed of &sect;4.2, normally
-fixed to \(1\)) was stress-tested as a free dial: its \(3\sigma\) window is
-\(|c-1| &lt; 1.01\times10^{-10}\), while every named alternative base or speed
-(\(2, 3, 4, 10, \pi, 2\pi\); speeds \(1/2\) and \(2\)) is excluded by
-\(3.7\times10^{9}\sigma\) or more. The dial could not have absorbed a wrong
-choice: the formula's agreement is not a product of hidden tuning. All identities
-quoted in this document are machine-verified to at least 40-digit precision, with
-the central value locked to 50 digits.
-</p>
-
-<h3>3.5 The wait state</h3>
-<p>
-The decision rule is fixed in advance: any future CODATA value of \(1/\alpha\)
-more than about \(3\sigma\) from \(137.035999182138\ldots\) <b>rejects</b> the
-formula; convergence to it <b>confirms</b> it decisively. No further fitting is
-possible or permitted &mdash; the formula is frozen.
+The one adjustable normalization was stress-tested as a free dial: its
+\(3\sigma\) window is \(|c-1|&lt;1.01\times10^{-10}\), while every named
+alternative base or speed (\(2,3,4,10,\pi,2\pi\); speeds \(1/2\) and \(2\))
+is excluded at \(3.7\times10^{9}\sigma\) or more. The dial could never have
+absorbed a wrong choice: the agreement is not hidden tuning.
 </p>
 
 <!-- ================================================================== -->
-<h2 id="s4">4. Reading the terms</h2>
+<h2 id="s2">2. The hints the formula hid</h2>
 
 <p>
-The formula has four slots. Each has an interpretation that is exact rather than
-suggestive, and each was forced by a constraint that admits no alternative
-(&sect;5 gives the forcing arguments). The census decomposition is:
+A hit alone is weak evidence. What turned this one into a theory was what
+happened next: each factor was individually investigated, and every one
+turned out to be an <em>exact</em> identity with an independent meaning &mdash;
+not a fitted constant but a value with a reason. Chapter 3 explains why.
+This chapter reports what was found, factor by factor, because these are the
+hints that dictated the theory's shape.
 </p>
+
 <div class="box">
-$$\frac{1}{\alpha} \;=\;
-\underbrace{\big[\ \zeta(2)\,G^{2}\ \big]}_{\text{the L-content: the doubled arena}}
-\;\times\;
-\underbrace{\big[\ e^{4}\,\sqrt{3}\ \big]}_{\text{the archimedean bracket } =\, e^{\Lambda},\ \Lambda = 4+\frac12\ln 3}
-\;\times\;
-\underbrace{\big[\ \tfrac{21}{20}\ \big]}_{\text{the rational census } =\, 6\,\times\, \frac{7}{40}}$$
+$$\frac{1}{\alpha} = \underbrace{\big[\ \zeta(2)\,G^{2}\ \big]}_{\text{a doubled arithmetic counting}}
+\times \underbrace{\big[\ e^{4}\ \big]}_{\text{a source-work fixed point}}
+\times \underbrace{\big[\ \sqrt{3}\ \big]}_{\text{an exact channel capacity}}
+\times \underbrace{\big[\ \tfrac{21}{20}\ \big]}_{\text{a finite census }=\,6\times\frac{7}{40}}$$
 </div>
 
-<h3>4.1 \(\pi^{2}G^{2}\) &mdash; the vacuum: a doubled arithmetic counting</h3>
+<h3>2.1 \(\pi^{2}G^{2}\), or \(\zeta(2)G^{2}\) &mdash; the counting of the Gaussian integers</h3>
 <p>
-The factor \(\zeta(2)G^{2}=1.3800881177\ldots\) is the value at \(s=2\) of the
-Dirichlet series
-$$D(s) \;=\; \zeta(s)\,\beta(s)^{2},$$
-where \(\beta\) is the Dirichlet beta function. The reading: <em>the norm counting
-of the Gaussian integers \(\mathbb Z[i]\), read forward, multiplied by the same
-counting read back through the parity twist</em>. Concretely, \(D(s)\) counts the
-nonzero lattice points of \(\mathbb Z[i]\) by squared norm with a multiplicity that
-records the round trip: the second factor of \(\beta\) is a <em>leg</em> of the
-counting, not a doubled constant. The equivalent form
-\(\zeta(2)G^{2}=\zeta_{\mathbb Q(i)}(2)^{2}/\zeta(2)\) exhibits it as the relative
-tensor square of the completed counting system of \(\mathbb Q(i)\) &mdash; a
-thermodynamic partition function of the Bost&ndash;Connes type over the Gaussian
-integers, evaluated at its operating temperature.
+Identically,
+$$\zeta(2)\,G^{2} \;=\; \frac{\zeta_{\mathbb Q(i)}(2)^{2}}{\zeta(2)}
+= 1.3800881177\ldots$$
+where \(\zeta_{\mathbb Q(i)}\) is the zeta function of the Gaussian integers
+\(\mathbb Z[i]\). This places the factor squarely in the anatomy of number
+theory:
 </p>
-<p>
-Catalan's constant itself has a geometric home: \(G/3\) is the volume of
-\(\mathrm{SL}_2(\mathbb Z[i])\backslash\mathbb H^{3}\) (the moduli space of
-unit-area flat tori with a marked point), \(G\) is the tree entropy of the
-\(\mathbb Z[i]\) lattice, and \(4\zeta(2)G=\sum' (m^{2}+n^{2})^{-2}\) over the
-Gaussian integers. And \(\pi\) and \(G\) are not independent guests: they are the
-first two log-moments of a single kernel,
-$$L_k=\int_0^1 \frac{\ln^k(1/t)}{1+t^2}\,dt = k!\,\beta(k+1),
+<ul>
+<li>\(\zeta(2)G^{2}\) is the value at \(s=2\) of the Dirichlet series
+\(D(s)=\zeta(s)\beta(s)^{2}\), which counts the nonzero lattice points of
+\(\mathbb Z[i]\) by squared norm &mdash; forward and, through the parity twist
+\(\beta\), back again.</li>
+<li>Catalan's constant \(G\) is the <em>regulator</em> of that arithmetic:
+Borel's computation locates the weight-2 \(K\)-group of \(\mathbb Z[i]\)
+at rank 1, and the evaluation \(\zeta_{\mathbb Q(i)}(2)=\pi^{2}G/6\)
+identifies that regulator's critical value with Catalan's constant. \(G\) is also the tree entropy of the \(\mathbb Z[i]\)
+lattice, and \(G/3\) is the volume of the moduli space
+\(\mathrm{SL}_2(\mathbb Z[i])\backslash\mathbb H^{3}\); the identity
+\(4\zeta(2)G=\sum'(m^{2}+n^{2})^{-2}\) sums the inverse fourth-power norms
+over the whole lattice.</li>
+<li>\(\pi\) and \(G\) are not independent guests. They are the first two
+log-moments of one kernel:
+$$L_k=\int_0^1\frac{\ln^{k}(1/t)}{1+t^{2}}\,dt = k!\,\beta(k+1),
 \qquad L_0=\frac{\pi}{4},\quad L_1=G,$$
-so the entire period content of the formula is the first two values of one
-\(L\)-function &mdash; the non-tautological reason \(\pi\) and \(G\) co-occur.
+so the entire period content of the formula is the first two values of a
+single \(L\)-function. This is the non-tautological reason \(\pi\) and \(G\)
+co-occur.</li>
+</ul>
+
+<h3>2.2 The slot anatomy</h3>
+<p>
+Two independent templates recognize the formula's shape:
+</p>
+<p><em>(a) The one-loop template.</em> A free one-loop partition function has
+the exact anatomy \(Z = e^{-S_{\rm cl}}\cdot[\text{determinant}]\cdot[\text{measure}]\).
+The formula fills it with \(e^{4}\) in the classical-action slot,
+\(\pi^{2}G^{2}\) in the determinant slot, and \((7/40)\sqrt3\) in the measure
+slot. Notably, \(e^{4}\) is the one factor that is <em>not</em> a period in the
+Kontsevich&ndash;Zagier sense &mdash; and the classical-action slot is exactly where
+a non-period must sit.</p>
+<p><em>(b) The class-number-formula shape.</em> The same slots mirror the
+analytic class number formula of a number field: the exponential slot
+\((2\pi)^{r_{2}}\), the count \(h/w\), the regulator squared, and the
+conductor root \(1/\sqrt{|D|}\). The formula occupies that template with
+\(e^{4}\), \(21/20\), \(G^{2}\), and \(\sqrt3\) &mdash; as if it were the class
+number formula of an <em>unidentified arithmetic object</em>. The obvious
+candidate is excluded on its own zeta value
+(\(\zeta_{\mathbb Q(\zeta_{12})}(2)=1.11799\neq1.38009\)); identifying the
+object is the sharpest open demand of the program (&sect;8).</p>
+
+<h3>2.3 \(e^{4}\) &mdash; the source equals the work</h3>
+<p>
+Consider a free four-dimensional Gaussian with a linear source \(J\):
+\(\int_{\mathbb R^{4}} e^{-|x|^{2}+Jx_{1}}\,d^{4}x = \pi^{2}e^{J^{2}/4}\).
+The source of strength \(J\) produces the response \(\exp(J^{2}/4)\) &mdash; it
+does the <em>work</em> \(J^{2}/4\). Demanding that the response equal the
+source selects
+$$J = \frac{J^{2}}{4} \;\Longrightarrow\; J=4, \qquad
+\left.e^{J^{2}/4}\right|_{J=4} = e^{4}.$$
+So \(e^{4}\) is the unique exponential of a Gaussian whose source strength
+equals the work it produces: a fixed point, not a chosen value. It is also
+the unique integer \(N\) for which \(e^{N}\) arises this way (&sect;4.2, the
+channel-size uniqueness check). The response of any candidate base \(b\)
+would insert a free dial \(\ln b\): the zero-parameter discipline forbids
+it, and the completion's field of definition closes the argument (&sect;4.2).
+Chapter 3 will show why a <em>response</em> factor of exactly this kind
+has to appear at all.
 </p>
 
-<h3>4.2 \(e^{4}\) &mdash; the response: the source equals the work</h3>
+<h3>2.4 \(\sqrt3\) &mdash; an exact capacity, and provably external</h3>
 <p>
-Consider a free four-dimensional Gaussian \(\int_{\mathbb R^4} e^{-|x|^2+Jx_1}d^4x
-=\pi^2 e^{J^2/4}\): a source of strength \(J\) produces the response
-\(\exp(J^2/4)\) &mdash; it does the <em>work</em> \(J^{2}/4\). The response equals
-the source exactly when \(J = J^{2}/4\), whose unique nonzero solution is
-$$J = 4, \qquad e^{J^2/4}\Big|_{J=4} = e^{4}.$$
-So \(e^4\) is the unique exponential of a Gaussian whose source strength equals
-the action it produces &mdash; a fixed-point condition, not a chosen value. The
-same number arises from composability (&sect;5, axiom P3): if independent work
-adds and responses multiply, \(R(w_1{+}w_2)=R(w_1)R(w_2)\), then continuity forces
-\(R(w)=e^{cw}\), and the matched-source normalization \(c=1\) gives \(R(4)=e^4\).
-The base \(e\) is thereby <em>forced</em>, not selected: any other base would
-insert a free continuous dial \(\ln b\) into a theory that has none
-(&sect;3.4).
-</p>
-<p>
-In the completed anatomy the archimedean bracket is the single exponential
-\(e^{\Lambda}\) with \(\Lambda = 4+\tfrac12\ln 3\): four exponential places (the
-census count \(d=4\), each with the natural measure \(\ln e = 1\)) convolved with
-the discriminant place of the trine field (\(\tfrac12\ln 3\)). The bracket is
-atomic &mdash; the Laplace transform of a point mass at the total work &mdash;
-and flat in the completion variable, a structural difference from every classical
-completion, whose Gamma factors curve it.
-</p>
-
-<h3>4.3 \(\sqrt{3}\) &mdash; the capacity at the matched noise</h3>
-<p>
-Read the vacuum through a 4-ary symmetric channel with crossover probability
-\(p\). The channel's capacity is \(C=\ln 4 - H(Y)\), where \(Y\) is the output
-distribution. Impose the matched-noise condition &mdash; the probability of a
-read error equals the probability of the true symbol, \((1-p)=(q-1)p\) &mdash;
-whose unique solution is \(p=1/4\). The output distribution becomes
-\((\tfrac34,\tfrac1{12},\tfrac1{12},\tfrac1{12})\) with entropy
-\(H(Y)=0.8369882168\ldots\) nats, and the capacity collapses exactly:
-$$C \;=\; \ln 4 - H(Y) \;=\; \tfrac12\ln 3 \quad\text{exactly}, \qquad e^{C}=\sqrt3.$$
-Among all channel sizes \(q\), the capacity exponential \(e^{C}\) is the square
-root of an integer only at \(q=4\) &mdash; the square-root capacity is unique to
-this channel. Independently, \(\sqrt3\) is the absolute value of the classical
-Gauss sum of the quadratic character \(\chi_{-3}\), and the discriminant place of
-\(\mathbb Q(\sqrt{-3})\): the trine field, whose six units supply the census
-factor \(6\) below. It is provably external to the \(\mathbb Q(i)\) counting of
-&sect;4.1 (no norm-3 ideal exists in \(\mathbb Z[i]\), so \(\sqrt3\) cannot arise
-from that tower): the formula requires exactly two arithmetic worlds,
+Read a vacuum through a \(q\)-ary symmetric channel with crossover
+probability \(p\) (the probability of a read error). Impose the
+matched-noise condition &mdash; the error rate equals the symbol rate,
+\((1-p)=(q-1)p\) &mdash; whose unique real solution is \(p=1/q\). The channel's
+capacity then collapses exactly:
+$$C\Big(q,\frac{1}{q}\Big)=\Big(1-\frac{2}{q}\Big)\ln(q-1), \qquad q=4:
+\quad C=\frac12\ln 3, \qquad e^{C}=\sqrt{3}.$$
+Among all \(q\), the capacity exponential \(e^{C}\) is the square root of an
+integer <em>only</em> at \(q=4\): the square-root capacity is unique to this
+channel. Independently, \(\sqrt3\) is the absolute value of the classical
+Gauss sum of the quadratic character \(\chi_{-3}\) and the conductor root of
+the number field \(\mathbb Q(\sqrt{-3})\) (its six units supply the census
+factor \(6\) in \(21/20\)). And &mdash; crucially for the theory's shape &mdash;
+\(\sqrt3\) is <em>provably external</em> to the \(\mathbb Q(i)\) counting of
+&sect;2.1: no norm-3 ideal exists in \(\mathbb Z[i]\), so that tower cannot
+produce a \(\sqrt3\). The formula uses exactly two arithmetic worlds,
 \(\mathbb Q(i)\) and \(\mathbb Q(\sqrt{-3})\), joined at the primes 2 and 3.
 </p>
 
-<h3>4.4 \(7/40\) &mdash; the census of the read</h3>
+<h3>2.5 \(\tfrac{21}{20}\) and the channel census \(7/40\)</h3>
 <p>
-The probe that reads the vacuum is a four-state channel \(T\) whose closed-walk
-generating function is
-$$\det(I-uT)=(1-u)\left(1-\tfrac{2u}{3}\right)^{3},$$
-a spectrum \(\{1,\ \tfrac23,\ \tfrac23,\ \tfrac23\}\). Its census &mdash; the
-trace product over one pair cycle &mdash; is
-$$\operatorname{tr}(T)\,\operatorname{tr}(T^{2}) = 3\cdot\tfrac{7}{3} = 7,
-\qquad
-\frac{\operatorname{tr}(T)\operatorname{tr}(T^{2})}{2d(d+1)}
-= \frac{7}{2\cdot4\cdot5} = \frac{7}{40}.$$
-This is a theorem of the channel family, valid for every size \(q\) (the numerator
-is the polynomial \(q^{2}-3q+3\)), not a numerological extraction. The factor
-\(21/20\) in the formula is this census times the trine's six units:
-\(21/20 = 6\times\frac{7}{40}\). In physical dress: the count of all photon spin
-states including the gauged longitudinal mode, taken over physical channels
-times the vacuum times two &mdash; the gauge-count reading and the channel census
-coincide at \(d=4\). Of the fifteen admissible counting laws for this slot, only
-the pair-cycle law satisfies the content demand that the detected numerator be
-the channel's own trace product; the other fourteen die (&sect;5.4).
+The remaining factor splits as \(21/20 = 6\times\frac{7}{40}\). The
+factor \(6\) is the trine field's unit count (&sect;2.4); the census comes
+from the read channel:
+$$\frac{7}{40} \;=\;
+\frac{\mathrm{tr}\,T\cdot\mathrm{tr}\,T^{2}}{2\,d(d+1)} \;=\;
+\frac{1+3\cdot\frac23}{2\cdot4\cdot5} \;=\;
+\frac{3\cdot\frac{7}{3}}{40} = \frac{7}{40}.$$
+Concretely: the reading channel is a four-state map \(T\) with spectrum
+\(\{1,\tfrac23,\tfrac23,\tfrac23\}\) (&sect;3.4), its trace product over one
+pair cycle is
+\(\mathrm{tr}\,T\cdot\mathrm{tr}\,T^{2}=3\cdot\frac{7}{3}=7\), and the
+physical normalization over (physical channels \(\times\) vacuum \(\times\) 2)
+is \(2d(d+1)=40\). This is a theorem of the channel family &mdash; the
+numerator is the polynomial \(q^{2}-3q+3\), giving 7 nowhere else nearby
+&mdash; not a numerological extraction. In physical dress, \(7/40\) is the
+count of all photon spin states including the gauged longitudinal mode,
+taken over physical channels, the vacuum, and two; and a second,
+representation-theoretic reading
+(\(c(G_{2},4)/(\dim\mathrm{SU}(3)\cdot(\dim S^{6}-1)) = 7/(8\cdot5)\))
+coincides numerically at \(d=4\). Of the fifteen admissible counting laws
+for this slot, exactly one satisfies the content demand that the detected
+numerator be the channel's own trace product; \(7/40\) is its value
+(&sect;4.4).
 </p>
 
-<h3>4.5 The two anatomies</h3>
-<p><em>(a) The one-loop template.</em> The formula exactly fills the path-integral
-anatomy of a free one-loop partition function,
-$$Z \;=\; e^{-S_{\rm cl}}\cdot[\text{determinant}]\cdot[\text{measure}],$$
-with \(e^{4}\) in the classical-action slot (an amplification, \(S_{\rm cl}=-4\)),
-\(\pi^{2}G^{2}\) in the determinant slot, and \((7/40)\sqrt3\) in the measure
-slot. Notably \(e^4\) is the only factor that is not a period in the
-Kontsevich&ndash;Zagier sense &mdash; and the classical-action slot is exactly
-where a non-period <em>must</em> sit.
-</p>
-<p><em>(b) The class number formula shape.</em> The same four slots mirror the
-analytic class number formula of a number field: the exponential slot
-\((2\pi)^{r_2}\), the count \(h/w\), the regulator squared, and the conductor root
-\(1/\sqrt{|D|}\). The formula occupies this template with \(e^{4}\), \(21/20\),
-\(G^{2}\), and \(\sqrt3\) &mdash; as if it were the class number formula of an
-<em>unidentified arithmetic object</em>. The obvious candidate,
-\(\mathbb Q(\zeta_{12})\), is excluded by its zeta value
-(\(\zeta_{\mathbb Q(\zeta_{12})}(2)=1.11798\ldots \ne 1.38008\ldots\)). Identifying
-the object &mdash; or proving the completion that produces it &mdash; is the
-program's named open demand (&sect;7).
-</p>
-
-<h3>4.6 The stage: a cube, a double, and the matter sector</h3>
+<h3>2.6 The doubles of the integer 4</h3>
 <p>
-The read channel's four labels are the four body diagonals of a cube. The
-classical isomorphisms lock the stage: \(\Gamma L_1(\mathbb F_4)\cong S_4\) and
-\(\mathrm{Rot(cube)}\cong S_4\) are the same group acting the same way &mdash; the
-24 rotations of the cube act on the four diagonals exactly as the read's
-relabeling group acts on its four labels. The three natural section planes carry
-the three quadratic radicals of the construction: the face sections \(\{100\}\)
-(Gram determinant \(1\), self-dual &mdash; the arena \(\mathbb Q(i)\)), the edge
-sections \(\{110\}\) (determinant \(2\) &mdash; \(\sqrt2\), the field of the
-phase), and the diagonal sections \(\{111\}\) (determinant \(3\) &mdash;
-\(\sqrt3\), the interface of &sect;4.3). The total root field is
-\(\mathbb Q(\zeta_{24})\), and its conductor is derived, not observed:
-$$24=\mathrm{lcm}(4,8,3) = 2^{3}\cdot3,$$
-with the exponent \(2^3\) forced by the phase field \(\mathbb Q(\sqrt2)\) and the
-exponent \(3\) by the trine field \(\mathbb Q(\sqrt{-3})\).
-</p>
-<p>
-The stage has a <em>double</em>: the binary octahedral group \(2O\) of unit
-quaternions covers the cube's rotations with kernel \(\{\pm1\}\). In the double,
-commuting label-moves lift to anticommuting quaternions &mdash; the sign so
-produced is the Fermi sign. The matter sector of the construction is the double's
-content: spin-\(\tfrac12\) flux composites, with the Born weights a
-<em>theorem</em> (Gleason's theorem) on this four-dimensional probe space &mdash;
-the flat census \(I/4\). The census is parity-even throughout, which doubly
-excludes the weak interaction from the construction: the formula is
-electromagnetic by structure, not by omission.
-</p>
-
-<h3>4.7 The window: a falsifiable scale</h3>
-<p>
-The theory's only free dial is a length \(L\) &mdash; dimensionful, decoupled from
-\(\alpha\). In the window of widths below \(a\), one and the same four-dimensional
-Coulomb tower produces both the \(1/r^{2}\) force law and the evanescence of the
-corrections; the logarithms cancel exactly and the leading correction is the
-Madelung ladder \(-\zeta(3)\,x^{2}/(4\pi L)+\cdots\). The window is bounded at three tiers from data that already exists: the
-atomic \(1/r^{2}\) tests give \(a \lesssim 4.6\times10^{-15}\,\mathrm{m}\) (the
-recorded bound refined by the exact correction coefficient); the standard
-reference anchor \(a \lesssim 4.5\times10^{-17}\,\mathrm{m}\); and the QED
-precision program (the photon-exchange pole tested at per-mille level at
-\(q\sim100\,\mathrm{GeV}\)) gives
-$$a \;\lesssim\; 2.8\times10^{-19}\ \mathrm{m},$$
-about three thousand times below the proton radius. Below the cell the
-theory's Coulomb counting is the lattice Green's function &mdash; a finite
-self-potential with direction-labeled nearest-cell values (deviations of
-9&ndash;12% from the continuum decay) &mdash; and the first observable ~10%
-deviation of the force law from \(1/r^{2}\) would sit at momentum transfer
-\(q \sim 1\,\mathrm{TeV}\), the full breakdown at \(q\sim3.2\,\mathrm{TeV}\):
-the future TeV lepton frontier.
-This is an independent kill condition: an experiment bounding \(a\) above this
-value falsifies the window reading of the theory regardless of any future CODATA
-outcome. Isotropy emerges in the same window (the lattice's anisotropy is
-confined to the evanescent terms), resolving why a lattice-regularized
-electromagnetism nevertheless observes rotational symmetry to high precision.
+The integer entering every slot is the same 4: the unit count of the
+Gaussian integers \((|\mu_4|=4)\), the source-work fixed point
+(\(J=4\)), the only channel size with a square-root capacity, the channel
+count itself, and &mdash; representation-theoretically &mdash; the dual
+Coxeter number \(h^{\vee}(G_{2})=4\), read over the trine's long roots. And the joined root
+field is
+$$24 = \mathrm{lcm}(4,8,3) = 2^{3}\cdot3,$$
+with each valuation forced by a different constructed layer (the doubled
+\(\mathbb Q(i)\) counting, the phase field \(\mathbb Q(\sqrt2)\), the trine
+field). These overdeterminations are what made the assembly-level demands
+feel discovered rather than chosen: the same integer is staring back from
+every corner of the formula.
 </p>
 
 <!-- ================================================================== -->
-<h2 id="s5">5. The theory: construction, axioms, theorems</h2>
+<h2 id="s3">3. The theory, and why it was built that way</h2>
 
-<h3>5.1 How the theory was constructed</h3>
+<h3>3.1 The genre question, answered by conviction</h3>
 <p>
-The theory was built backwards from the formula by asking, for each factor,
-<em>which constraint forces exactly this value and no other</em>. The ladder ran:
+Why was the theory <em>constructed this way</em> at all &mdash; and not as a
+phenomenological Lagrangian, a string compactification, or a numerological
+pattern-book? Because the formula's own anatomy (chapter 2) forced a specific
+conclusion in each direction:
+</p>
+<ul>
+<li>\(\zeta(s)\beta(s)^{2}\) is a <em>counting function</em> of a crystal.
+Counting functions belong to structures that have crystals. So the theory
+took the crystal as fundamental rather than as a regulator.</li>
+<li>\(e^{4}\) is a <em>response</em> factor: the moment generating function of
+a measurement. Responses belong to measurement. So the theory took
+measurement as primitive &mdash; the reading of a system, not a classical state.</li>
+<li>\(\sqrt3\) is a <em>capacity</em>: information theory produced an exact
+arithmetic constant. So the theory took the reading channel to be the load-bearing
+object and built its probabilistic structure from it.</li>
+<li>\(7/40\) is a <em>census</em>: a finite inventory of trace products.
+Censuses belong to finite algebras. So the theory treated the Standard Model's
+gauge groups and matter bookkeeping as emergent from the same finite algebra,
+not postulated.</li>
+</ul>
+<p>
+The result is a theory of a genre between condensed-matter physics and the
+operator-algebraic constructions of mathematical physics:
+<em class="t">an arithmetic lattice theory with emergent gauge structure</em>.
+Each word does work. The spatial floor is a cubic crystal (fundamental,
+not a regularization device). Dynamics live on an operator-algebraic
+(system-of-quantum-statistical-mechanics) layer over that floor. Particle
+structure comes from the arithmetic of number fields. And gauge groups are
+not postulated &mdash; they arise as the natural label algebras of three crystal
+sections.
+</p>
+
+<h3>3.2 The condensed-matter analogy that carries the ontology</h3>
+<table>
+<tr><th>Condensed matter</th><th>This theory</th></tr>
+<tr><td>crystal lattice (real)</td><td>the cubic floor (real &mdash; not a regulator)</td></tr>
+<tr><td>atoms per unit cell</td><td>four channel/label states per site</td></tr>
+<tr><td>phonons (emergent)</td><td>photons (emergent &mdash; the read's wave law)</td></tr>
+<tr><td>band structure, trapped modes</td><td>masses (reading &mdash; see &sect;3.6 and chapter 6)</td></tr>
+<tr><td>point-group symmetry &rarr; selection rules</td><td>section geometry &rarr; gauge bookkeeping</td></tr>
+</table>
+<p>
+Closest kin and the point of difference: causal sets (here the floor is a
+<em>regular</em> cubic crystal, not a random partial order), loop quantum
+gravity (cubic and arithmetic rather than spin-network labels),
+&rsquo;t&thinsp;Hooft cellular automata (the dynamics here are probabilistic:
+channel- and thermal-layer driven), Bost&ndash;Connes quantum statistical
+mechanics (the same machinery applied over the counting arena of
+\(\mathbb Q(i)\) &mdash; the fine-structure application is the new step), and
+lattice QCD (there the lattice is a regulator removed at the end; here it is
+load-bearing, and removing it would contradict the physics).
+</p>
+
+<h3>3.3 The two spaces</h3>
+<p>
+Conflating two spaces produced every classic misreading of the genre, so
+this section fixes them apart.
 </p>
 <ol>
-<li><b>The arena.</b> The read needs a self-dual counting space. The demand
-&ldquo;reading back returns the same space&rdquo; selects, among lattices, the
-square section of determinant one &mdash; uniquely. Its rotation group is
-\(\mu_4\), so the channel size is \(d=|\mu_4|=4\): <em>forced</em>, not chosen.</li>
-<li><b>The noise.</b> The read is a channel. The condition that a read error be
-indistinguishable from the true symbol pins the crossover at \(p=1/q\) &mdash; the
-unique real root of the census equation (the competing quadratic factor has
-negative discriminant). No other noise level is self-consistent.</li>
-<li><b>The measure.</b> At that crossover the channel capacity is exactly
-\(\tfrac12\ln3\) &mdash; the equal-branch collapse makes the entropy formula
-telescope. The square root in the formula is thereby an <em>exact capacity</em>,
-the unique square-root capacity in the channel family.</li>
-<li><b>The response.</b> Independent work must compose: additive in the work,
-multiplicative in the response. The fixed point &ldquo;source = work&rdquo; then
-selects the count \(4\) and the normalization \(c=1\), giving \(e^4\).</li>
-<li><b>The content.</b> The census slot must equal the channel's own pair-cycle
-content. Of fifteen candidate counting laws, exactly one survives that demand;
-the census \(7/40\) is its value at \(d=4\).</li>
-<li><b>The assembly.</b> The three calibrated quantities &mdash; the response
-\(e^4\), the capacity \(\sqrt3\), the census \(7/40\) &mdash; together with the
-forced arena counting \(\zeta(2)G^2\) and the forced 2:1 temperature gear,
-compose to \(1/\alpha\) exactly.</li>
+<li><b>The spatial floor</b> \(\mathbb Z^{3}\) &mdash; the cubic crystal, cell
+\(a\). This is physical space. Its 3+1 dimensionality is not added: the
+four-dimensional Coulomb tower that produces the \(1/r^{2}\) force law is
+<em>derived from</em> the floor plus its lattice book (&sect;3.8), not an
+extra physical direction.</li>
+<li><b>The internal channel space</b> &mdash; four <b>dimensionless</b> labels
+attached to the counting at each site. It is not a direction in space; it
+is the algebra the vacuum's own bookkeeping speaks. The closest classical
+analogy is spin: a magnet's sites carry spin-\(\tfrac12\), and the spin is
+not a direction <em>in</em> the crystal.</li>
 </ol>
 <p>
-At the end of the ladder the number that search had found was re-derived from
-five axioms and one principle. The formula became an output; the fit count
-remained one.
+The number fields \(\mathbb Q(i)\) and \(\mathbb Q(\sqrt{-3})\) live in
+the second space: they are the <em>arithmetic</em> of the counting
+bookkeeping. Their relationship to the cube is isomorphic, not literal
+&mdash; the cube's rotation group acts on the labels the same way the fields
+act on ideals (&sect;3.7). The fields were not chosen to decorate a cube; the
+cube's symmetries and the fields' symmetries are the same object seen
+twice.
 </p>
-
-<h3>5.2 The axioms</h3>
 <p>
-Five axioms define the theory; a sixth statement &mdash; the round-trip
-principle &mdash; is its one postulate. Each axiom is stated with the constraint
-that forces it and its epistemic grade.
+The total state space is therefore the tensor product over the floor,
+\(\bigotimes_{n\in\mathbb Z^{3}}\mathbb C^{4}_{n}\) &mdash; enormously large
+but simple. <b>\(\mathbb C^{4}\) is the alphabet, not the dictionary:</b> a
+particle is not the \(\mathbb C^{4}\) value at one site but a
+<em>pattern across the lattice</em>, exactly as a phonon is not one atom's
+displacement but a collective wave. In particular, a state is generically
+not any particular label &mdash; the vacuum's flat census state
+\(\mathbb I/4\) (a theorem via Gleason, at this probe dimension) is the
+symmetric default that carries no labels at all.
 </p>
-<table>
-<tr><th>Axiom</th><th>Statement</th><th>Forcing constraint</th><th>Grade</th></tr>
-<tr>
-<td><b>P1</b> The crystal</td>
-<td>The counting arena is the \(\mathbb Q(i)\)-plane crossed with an integer
-ladder, self-dual, at the free point.</td>
-<td>The self-duality demand (the read-back returns the read space) admits only
-the determinant-one section.</td>
-<td>data-forced, principle-confirmed</td>
-</tr>
-<tr>
-<td><b>P2</b> The norm counting</td>
-<td>The Boltzmann weight of a configuration is the inverse of its ideal norm;
-the two cycles of the round trip pair the weight as \(1/\mathfrak N^{2}\).</td>
-<td>The only probability-consistent weight on the arena compatible with
-multiplicativity of the norm.</td>
-<td>derived</td>
-</tr>
-<tr>
-<td><b>P3</b> The composability</td>
-<td>The response of independent work adds in the work and multiplies in the
-response: \(R(w_1{+}w_2)=R(w_1)R(w_2)\), normalized at the matched source
-(\(c=1\)).</td>
-<td>The physical demand that independent contributions compose at all; the
-normalization is the unique value at which source equals work.</td>
-<td>derived (the base \(e\) forced; see T3)</td>
-</tr>
-<tr>
-<td><b>P4</b> The channel coupling</td>
-<td>The probe reads the vacuum through a \(q\)-ary symmetric channel with
-\(q=4\), crossover \(p=1/4\).</td>
-<td>\(q=d=|\mu_4|\) from the arena; \(p=1/q\) the unique matched-noise root.</td>
-<td>derived</td>
-</tr>
-<tr>
-<td><b>P5</b> The probe census</td>
-<td>The Born weights are the flat norm census of the
-\(\mu_4\otimes\mu_6\) channel space; the census value is the pair-cycle
-content \(7/40\).</td>
-<td>The content demand: the detected numerator must be the channel's own trace
-product. Uniqueness among fifteen laws (T5).</td>
-<td>derived modulo the round-trip principle</td>
-</tr>
-<tr>
-<td><b>RP</b> The round-trip principle</td>
-<td>Reading the vacuum and reading back the result returns the same object
-&mdash; at the level of the space (dualization) and at the level of the content
-(the pair cycle); the state level is a theorem-instance of these.</td>
-<td>The single postulate. Every selection above inherits its grade; the theory
-cannot certify its own axiom (&sect;7).</td>
-<td><b>the one postulate</b></td>
-</tr>
-</table>
 
-<h3>5.3 The derivation ledger</h3>
-<table>
-<tr><th>Slot of the formula</th><th>Source axiom(s)</th><th>Status</th></tr>
-<tr><td>\(\zeta(2)G^{2}\) (the L-content)</td><td>P1 + P2</td><td><b>derived</b>
-(the counting identity \(\zeta(s)\beta(s)^2\), independently validated against
-ray-class computations)</td></tr>
-<tr><td>\(e^{4}\) (the response)</td><td>P3 + the gear</td><td><b>derived</b>
-(Cauchy's equation + the source&ndash;work fixed point)</td></tr>
-<tr><td>\(\sqrt3\) (the measure)</td><td>P4</td><td><b>derived</b> (the capacity
-exponential \(\exp(\frac12\ln3)\), exact)</td></tr>
-<tr><td>\(\tfrac{21}{20}\) (the rational census)</td><td>P5 + RP</td><td><b>derived
-modulo RP</b> (the cycle census \(6\times\frac{7}{40}\); unique among fifteen
-laws given the content demand)</td></tr>
-<tr><td>the value \(1/\alpha = 137.035999182\ldots\)</td><td>all of the above</td>
-<td><b>output</b>, \(0.245\sigma\) vs CODATA 2022</td></tr>
-</table>
-
-<h3>5.4 The theorems (discovered in this construction)</h3>
+<h3>3.4 The one postulate and the channel</h3>
 <p>
-No proofs are given here; each theorem is machine-locked, and each carries its
-&ldquo;why forced&rdquo; justification &mdash; the reason the value is the only
-one consistent with its constraint.
+The construction has exactly one postulate:
 </p>
-<table>
-<tr><th>#</th><th>Theorem</th><th>Content</th><th>Why this value is forced</th></tr>
-<tr><td>T1</td><td>Matched-noise uniqueness</td><td>The condition
-&ldquo;error = symbol&rdquo; pins the crossover at \(p=1/q\).</td>
-<td>The competing solutions form a quadratic with discriminant
-\(-3q^{2}(q-1)^{2}&lt;0\): no other real root exists.</td></tr>
-<tr><td>T2</td><td>Exact capacity</td><td>\(C(q,1/q)=(1-\tfrac2q)\ln(q-1)\);
-at \(q=4\): \(C=\tfrac12\ln3\), \(e^{C}=\sqrt3\).</td>
-<td>Telescoping entropy algebra; and among all \(q\), \(e^{C}\) is a rational
-square root only at \(q=4\).</td></tr>
-<tr><td>T3</td><td>The forced base</td><td>The continuous solutions of
-\(R(w_1{+}w_2)=R(w_1)R(w_2)\) are \(R(w)=e^{cw}\); the matched normalization
-\(c=1\) gives \(R(4)=e^{4}\).</td>
-<td>Cauchy's functional equation. Any other base inserts the free dial
-\(\ln b\) &mdash; forbidden by the zero-parameter discipline; the field of
-definition of the completion also forces it.</td></tr>
-<tr><td>T4</td><td>The channel theorem</td><td>For the cycle family of size
-\(q\), the census numerator is \(q^{2}-3q+3\); at \(q=4\), \(7\).</td>
-<td>A general-\(q\) computation of the trace product; the value at \(q=4\)
-is forced by the arena's \(d=4\).</td></tr>
-<tr><td>T5</td><td>Content uniqueness</td><td>Among fifteen admissible counting
-laws for the census slot, exactly one satisfies the content demand; it yields
-\(7/40\).</td>
-<td>The demand itself: the detected numerator must equal the channel's trace
-product; fourteen laws fail it at the first check.</td></tr>
-<tr><td>T6</td><td>Channel-size uniqueness</td><td>\(N=4\) is the unique integer
-satisfying the source&ndash;work fixed point, the unit count of the arena, and
-the duality constraint simultaneously.</td>
-<td>The fixed point \(N=2\sqrt N\) has the unique nonzero solution \(4\); the
-unit and duality constraints select the same integer.</td></tr>
-<tr><td>T7</td><td>Non-periodicity of the exponential slot</td><td>\(\ln e^4=4\)
-is independent of the logs of every known period at 120-digit PSLQ precision.</td>
-<td>Conditional on the Kontsevich&ndash;Zagier conjecture: \(e^4\) is not a
-period, so no geometric invariant can produce it; the composability axiom
-explains why an exponential of a rational count appears at all.</td></tr>
-<tr><td>T8</td><td>The window theorem</td><td>One 4D Coulomb tower yields both
-the \(1/r^{2}\) law and the evanescence; the log corrections cancel exactly;
-the ladder is \(-\zeta(3)x^{2}/(4\pi L)+\cdots\).</td>
-<td>Closed-form evaluation; the only free shape is the window width, bounded by
-atomic tests (\(a\lesssim5\times10^{-15}\)~m).</td></tr>
-<tr><td>T9</td><td>Thermodynamic stability</td><td>The fused counting system is
-stable: the curvature \(E(b)=(\ln\zeta)''+2(\ln L)''>0\) for all \(b>1\); the
-third law holds; the condensation residue is \(\pi^{2}/16\).</td>
-<td>A certified three-regime argument (saturation bound, sweep, analytic tail)
-with 17 orders of numerical headroom; the operating point lies inside the
-proven region.</td></tr>
-<tr><td>T10</td><td>The Born form as a theorem</td><td>On the four-dimensional
-probe space, the quadratic (Born) form of quantum mechanics follows from the
-measure axioms (Gleason).</td>
-<td>Classical theorem applied at the recorded dimension; the flat census \(I/4\)
-is the unique homogeneous measure on it.</td></tr>
-<tr><td>T11</td><td>Read forcing</td><td>The pair-equivariant read operations
-span the discrete Fourier transform, uniquely up to phase.</td>
-<td>The Stone&ndash;von Neumann uniqueness structure at dimension 4; the
-involutivity (reading twice returns the space) holds exactly at the 2-torsion
-level of the clock algebra.</td></tr>
-<tr><td>T12</td><td>The local-route closure</td><td>No local self-dual measure
-can produce the archimedean bracket: any such measure is forced to be a point
-mass, and no point mass is self-dual.</td>
-<td>Laplace/Fourier uniqueness (the cumulants beyond the first vanish); the
-classical Gamma-completion is additionally excluded by the value
-(\(16/\pi^{3}\neq1\), \(4/\pi^{3}\neq1\)).</td></tr>
-<tr><td>T13</td><td>The conductor derivation</td><td>The total root field has
-conductor \(24=2^{3}\cdot3\), the valuations forced layer by layer.</td>
-<td>The conductor of a compositum is the lcm of the layer conductors:
-\(\mathrm{lcm}(4,8,3)\); each layer's value is forced by its own forcing
-argument.</td></tr>
-<tr><td>T14</td><td>The vacuum face</td><td>The split-frame Gram
-determinant \(\cos^2\alpha\sin^2\alpha \le \tfrac14\), equality
-<b>only</b> at \(\cos^2\alpha = \tfrac12\), i.e.
-\(q = \tfrac{2}{3}\) exactly \(\big(q = \tfrac{1}{3\cos^2\alpha}
-\big)\).</td>
-<td>The read-back of the vacuum through its (axis, plane) pair is the
-same self-duality/minimality demand that selected the det-1 lattice
-section; the \(45^\circ\) point is the split's unique conditioned
-point; exact stationary-point algebra.</td></tr>
-<tr><td>T15</td><td>The return-purity law</td><td>Reading the vacuum
-through the census channel and recovering it returns the vacuum scaled
-by the axis eigenvalue: \(q_{\rm ret} = (11/12)\,q\) exactly, both
-evaluation routes.</td>
-<td>The round trip's inner step cancels;
-\(T^*(I) = \tfrac{11}{12}I\); the trine eigenvalue (11) is a
-census-integer coat.</td></tr>
-<tr><td>T16</td><td>The direction walls</td><td>The recovery round
-trip's spectra are functions of the vacuum's symmetric functions only:
-the balanced family carries no interior eigen-extremum, and the
-channel's plane eigenvalue \(2/3\) never reappears as a round-trip
-eigenvalue.</td>
-<td>Petz-covariance multiset typing; the exact degeneracy identity
-\(x^2(3x-1)^2(8x+1)^2\) on the boundary family; a linear
-out-of-range determinant argument.</td></tr>
-<tr><td>T17</td><td>The exchange content is structural (the swap
-theorem)</td><td>The leg-exchange demand (for every test function) is
-<em>exactly equivalent</em> to swapping the two bookkeeping legs;
-consequently any transform satisfying it by bookkeeping alone carries
-none of the theory's census content — the selector is the value and
-the structures.</td>
-<td>Proved on the work axis by distribution duality; the count-side
-version was known, this is the analysis-side twin.</td></tr>
-<tr><td>T18</td><td>The theta-diagonal transport machinery</td><td>The
-smoothed (theta-)classes are closed under every log-lattice shift,
-which acts as a pure index scaling; the algebraic transports are
-therefore matrices on coefficients — every construction at this
-level is finite-matrix decidable.</td>
-<td>Sympy-exact on the exponential identity; the boundary typed
-where it stops (the multi-leg transports need the enlarged class,
-the offset being transcendental).</td></tr>
-<tr><td>T19</td><td>The conditioning gate and the weighted home</td>
-<td>The max-conditioned member of any 2-frame is the orthogonal
-balanced one (one exact identity; the gap is two squares); in the
-weighted frame both record legs are finite with computable norms
-(the twist norm exactly \(1/(48\pi)\)), and the balanced-renormalized
-pair passes the gate — with the route-2 value pin the
-pre-registered falsifier.</td>
-<td>The exact frame identity (T19's own one-line certificate); the
-twist-leg norm via \(\eta(2) = \pi^2/12\); the arena norm from the
-integer-exact convolution sieve; the balance datum converged from
-below at two sieve depths.</td></tr>
-</table>
-
-<h3>5.5 The classical results used</h3>
-<p>
-The construction stands on standard mathematics, used and cited as such:
-Dirichlet's analytic class number formula and the evaluation of \(L\)-values at
-\(s=1\) (\(L(1,\chi_{-4})=\pi/4\), \(L(1,\chi_{-3})=\pi/(3\sqrt3)\)); the
-Bost&ndash;Connes quantum statistical mechanics and its KMS machinery; Tate's
-thesis and Poisson summation; the Stone&ndash;von Neumann uniqueness theorem;
-Gleason's theorem; the Lindemann&ndash;Weierstrass and Baker theorems
-(transcendence); the Kontsevich&ndash;Zagier period conjecture and the
-Commelin&ndash;Habegger&ndash;Huber theory of exponential periods (the natural
-home of the \(e\)-constants); and the classical representation theory of
-\(S_4\), the binary octahedral group, and the ADE/McKay correspondence. Where a
-step is machine-assisted (the stability proof, the PSLQ nulls), the verification
-protocol is stated alongside the claim.
-</p>
-
-<h3>5.6 The honesty clause</h3>
-<div class="warn">
-One statement is postulated: the round-trip principle RP. Everything else
-&mdash; the arena, the counting, the capacity, the response, the census, the
-gear &mdash; is derived from it plus data. The formula's agreement with CODATA
-is not laundered into the derivation: the value enters only through the
-measurement-world calibration, exactly once. What the axiomatization changed is
-real: the two previously mysterious exponential factors (\(e^{4}\) and
-\(\sqrt3\)) are now forced by physics-grade axioms rather than matched, and the
-non-periodicity of \(e^{4}\) became a consequence of composability rather than a
-separate mystery.
-The charged-lepton identity (&sect;6) enters as a vacuum-sector face of
-the same principle; only the vacuum angle and the scale are declared
-vacuum data &mdash; the split itself is principle-forced. The forcing is
-also theorem-grade: the split-frame's determinant is uniquely
-maximized at the 45&deg; point, the exact shortfall from the maximum
-being a sum of two squares (an imbalance defect and a residual
-overlap defect) &mdash; and the standing constraint holds: any future
-mass completion's forced member must not shift that 45&deg; point
-(the balance is the principle's; the new census component, if it
-exists, lives inside it).
+<div class="box">
+<b>The round trip.</b> Reading the vacuum, and reading the result back,
+returns the object that was read.
 </div>
+<p>
+Reading means an involutive, Fourier-like state transform (an
+<em>intertwiner</em> of the measurement channel). Like every axiom, its
+status cannot be certified from inside the theory (&sect;8). But its faces can
+be stated: at the <em>space</em> face it reads back into a space (demanding a
+self-dual lattice), at the <em>content</em> face it reads back into a census
+pair (demanding the pair-cycle book), and the <em>state</em> face &mdash;
+returned Born weights &mdash; turns out to follow from those two.
+</p>
+<p>
+The construction under one postulate:
+</p>
+<ol>
+<li><b>The arena.</b> The self-duality demand selects, among lattices, the
+determinant-one square section &mdash; uniquely. Its rotation group is
+\(\mu_4\) (the four units \(\pm1,\pm i\) of \(\mathbb Z[i]\)), so the
+channel size is \(d=|\mu_4|=4\): <em>forced</em>, not chosen.</li>
+<li><b>The norm counting.</b> The only probability-consistent weight on that
+arena compatible with multiplicativity of the norm is the inverse ideal
+norm. The round trip's two cycles pair the Boltzmann weight as
+\(\mathfrak N^{-2}\). The counting identity
+\(\zeta_{\mathbb Q(i)}(s)=\zeta(s)\,\beta(s)^{2}\) follows (and
+cross-checks against independent ray-class computations). This is the
+\(\zeta(2)G^{2}\) slot of the formula.</li>
+<li><b>The response.</b> Independent contributions must compose at all:
+additive in the work, multiplicative in the response,
+\(R(w_1{+}w_2)=R(w_1)R(w_2)\). Continuity forces \(R(w)=e^{cw}\); the
+source-work fixed point forces \(c=1\) and \(w=4\); the base \(e\) is
+forced because any other base would insert a free dial. This is the
+\(e^{4}\) slot.</li>
+<li><b>The matched-noise channel.</b> The probe reads the vacuum through a
+\(q\)-ary symmetric channel at the matched noise \(p=1/q\), \(q=d=4\). The
+capacity collapse gives the exact \(\sqrt3\). This is the capacity slot.</li>
+<li><b>The census.</b> The detected content must be the channel's own
+trace product &mdash; the content demand selects, among fifteen candidate
+counting laws, exactly one: the pair-cycle law. Its value at \(d=4\) is
+\(7/40\), and the \(\sqrt3\)-leg's sixfold unit count takes it to
+\(21/20\). This is the census slot.</li>
+<li><b>The assembly.</b> The vacuum system and the response system are two
+copies of the same construction (the pairing 2 is itself forced: the two
+cycles read the norm-counting through the doubled temperature). They
+compose multiplicatively with the census and capacity:
+$$\frac{1}{\alpha}
+=\underbrace{\left[\frac{\zeta_{\mathbb Q(i)}(2)^{2}}{\zeta(2)}e^{4}\right]}_{Z_{\rm fused}(2,4)}
+\times\; \underbrace{\frac{21}{20}\sqrt{3}}_{\text{census }\times\text{ capacity}}$$
+with the fused-window value \(Z_{\rm fused}(2,4)\times(21/20)\sqrt3 = 1/\alpha\)
+machine-locked at the \(10^{-31}\) tier (and re-locked to
+\(\sim10^{-136}\) relative by the final identity re-derivations).</li>
+</ol>
+
+<h3>3.5 The dynamical layer and its thermal state</h3>
+<p>
+The counting is not static: the site-gas of \(\mathbb Z[i]\) (a probe reads
+each lattice point by its norm) is a Bost&ndash;Connes-type
+\(C^{*}\)-dynamical system, whose self-adjoint operator has eigenvalues the
+norms \(\mathfrak N(\mathfrak a)\) and whose time evolution scales the
+shifts by \(\mathfrak N(\mathfrak a)^{it}\). Its thermal (KMS) layers carry
+the Bost&ndash;Connes hallmark: the Boltzmann weight
+\(\omega_\beta=\mathfrak N^{-\beta}\), exact, with the level deficits
+vanishing at the rate \(2^{-2(\beta-1)}\) per level doubling.
+</p>
+<p>
+The theory then completes the construction ad&egrave;lically (over the
+pro-finite integers of \(\mathbb Q(i)\)) in the Bost&ndash;Connes
+multiplication form: the ground-state manifold is exactly the probability
+measures on the unit boundary of the ring of integers; the vacuum in every
+sector is the <em>phase-blind</em> flat state. Fusing the vacuum copy with the
+response copy (a state-layer tensor product) under a forced 2:1 temperature
+gear produces one KMS state at the fused temperature \(\beta=2\); the fused
+partition function <em>is</em> the product
+\(Z_{\rm fused}(2,4)=\zeta(2)G^{2}e^{4}\). This is why the formula's
+counting factor is a <em>square</em>: the same lattice counted twice, by the
+vacuum and by the probe, paired at a temperature the construction selected.
+</p>
+<p>
+A thermodynamic stability proof closes the loop: the fused counting's free
+energy is strictly convex for all admissible temperatures with 17 orders of
+numerical headroom, so the operating point is inside the stable region; the
+third law holds; and the condensation residue at the operating temperature
+is exactly \(\pi^{2}/16=(\beta(1))^{2}\) &mdash; one more census integer in the
+ledger.
+</p>
+
+<h3>3.6 What a particle is in this ontology</h3>
+<p>
+Chapter 5 works out the full dictionary. The pattern that makes <em>these</em>
+status assignments rather than others flows from two statements:
+</p>
+<ul>
+<li><b>Force carriers are legs of the read.</b> The photon is the read's
+self-dual leg &mdash; the one whose wave law (the heat kernel's reflection
+identity) closes on the face where reading and reading-back are the same
+operation. Its read is two cycles of \(2\pi\) each &mdash; the \(4\pi\)
+charge unit \(2\cdot2\pi\) of the construction's arithmetic. The gluons and the weak bosons are the
+transition <em>lines</em> of the two non-self-dual grids (the color triangle
+and the isospin segment), the six directed flips plus the two neutral
+cells, the off-diagonal generators of the \(\mathbb A_1\) and
+\(\mathbb A_2\) weight algebras.</li>
+<li><b>Matter is a point with a phase, and its phase lives on the cube's
+double cover.</b> The fermionic sign is not an added axiom: lifting a
+commuting label-move through the double cover of the cube's rotation group
+turns commuting label-moves into anticommuting unit quaternions
+(\(ij=-ji\)); that sign is the Pauli/Fermi sign. Spin-\(\tfrac12\) is
+therefore census-native (the unit quaternions <em>are</em> the double cover
+of \(\mathrm{SO}(3)\)), while the Lorentzian dressing of the Dirac operator
+(the \(\gamma^{0}\) slot) is not constructed &mdash; the honest boundary of the
+dictionary (chapter 8).</li>
+</ul>
+
+<h3>3.7 The stage: the cube, the sections, the fields</h3>
+<p>
+The read's four labels are the four body diagonals of a cube. Two classical
+isomorphisms lock this: the relabeling group of the four labels is
+\(S_4\), and the rotation group of the cube is the same \(S_4\) acting the
+same way &mdash; the 24 rotations act on the four diagonals exactly as the
+read's relabeling acts on its labels. The three natural section planes of
+the cube carry the three quadratic radicals of the construction:
+</p>
+<table>
+<tr><th>Section</th><th>Gram det.</th><th>Field</th><th>Carries</th></tr>
+<tr><td>face ({100})</td><td>1</td><td>\(\mathbb Q(i)\)</td><td>the self-dual arena; the formula's counting \(\zeta(2)G^{2}\); the \(U(1)\)/photon book</td></tr>
+<tr><td>edge ({110})</td><td>2</td><td>\(\mathbb Q(\sqrt2)\)</td><td>the double cover of the stage (the fermi sign); the \(\mathrm{SU}(2)/\)isospin structure; the phase field, and later the mass-side bookkeeping</td></tr>
+<tr><td>diagonal ({111})</td><td>3</td><td>\(\mathbb Q(\sqrt{-3})\)</td><td>the capacity \(\sqrt3\) and the trine (the 3-fold triangle); the \(\mathrm{SU}(3)/\)color structure</td></tr>
+</table>
+<p>
+The total root field is \(\mathbb Q(\zeta_{24})\), and its conductor is
+<em>derived</em>, not observed (&sect;2.6). The three section volumes
+\(\{1,\sqrt2,\sqrt3\}\) are the construction's three radicals, consumed
+exactly once each: 1 is silent, \(\sqrt3\) is in \(1/\alpha\), and
+\(\sqrt2\) prices the mass-side quartic (&sect;6.4).
+</p>
+
+<h3>3.8 The window: the one free length</h3>
+<p>
+The theory's only free dial is a dimensionful length \(L\) (or the lattice cell
+\(a\)), decoupled from \(\alpha\). Below the cell, a four-dimensional
+Green's function tower built over the floor produces:
+</p>
+<ul>
+<li>the zero mode &rarr; the exact \(1/r\) potential (the \(1/r^{2}\) force);</li>
+<li>the discreteness ladder &rarr; Madelung corrections \(1/r^{3},1/r^{5},\ldots\)
+with odd-\(\zeta\) coefficients (\(-\zeta(3)\) first);</li>
+<li>the exact cancellation of all logarithmic corrections;</li>
+<li>a sub-cell signature: finite, direction-labeled, discrete (9&ndash;12%
+deviations of nearest-cell values from the continuum decay).</li>
+</ul>
+<p>
+Existing data bound the cell at three tiers: atomic \(1/r^{2}\) tests give
+\(a\lesssim4.6\times10^{-15}\)~m; the standard electromagnetism reference
+anchor \(a\lesssim4.5\times10^{-17}\)~m; and QED pole-level precision testing
+gives \(a\lesssim2.8\times10^{-19}\)~m &mdash; roughly 3,000&times; below the
+proton radius. The first <em>observable</em> force-law deviation is scheduled
+at momentum transfer \(q\sim1\)~TeV (about a 10% effect), with full
+breakdown at \(q\sim3.2\)~TeV: the future lepton-collider frontier. This is
+an independent kill condition &mdash; independent of all CODATA outcomes:
+an experiment bounding \(a\) above the QED-precision tier falsifies the
+window reading on its own. Isotropy <em>emerges</em> in the
+same window: the lattice's anisotropy is confined to evanescent (RG-irrelevant)
+corrections, resolving why a lattice-realized electromagnetism still
+observes rotational symmetry to current precision.
+</p>
 
 <!-- ================================================================== -->
-<h2 id="sk">6. The charged-lepton identity (Koide) &mdash; and how mass enters by symmetry breaking</h2>
+<h2 id="s4">4. How the theory produces the number</h2>
+
+<h3>4.1 The derivation ledger</h3>
+<table>
+<tr><th>Slot of the formula</th><th>Source demand</th><th>Status</th></tr>
+<tr><td>\(\zeta(2)G^{2}\) (the counting)</td><td>the round trip's space face + the norm multiplicativity</td><td><b>derived</b> (the counting identity, independently validated against ray-class computations)</td></tr>
+<tr><td>\(e^{4}\) (the response)</td><td>composability + the source-work fixed point</td><td><b>derived</b> (Cauchy's equation + the forced base)</td></tr>
+<tr><td>\(\sqrt3\) (the capacity)</td><td>the matched-noise channel at \(q=4\)</td><td><b>derived</b> (the exact capacity collapse)</td></tr>
+<tr><td>\(\tfrac{21}{20}\) (the census)</td><td>the content demand on the read's pair cycle</td><td><b>derived</b> (unique among fifteen counting laws, conditional on the round-trip postulate)</td></tr>
+<tr><td>the gear 2 (the doubled temperature)</td><td>the two temperature conventions the construction banks (the response runs at standard β, the vacuum at the doubled one)</td><td><b>forced</b> (the fused KMS condition fails without it and holds exactly with it)</td></tr>
+<tr><td>the value \(1/\alpha = 137.035999182\ldots\)</td><td>all of the above</td><td><b>output</b>, \(0.245\sigma\) vs CODATA 2022</td></tr>
+</table>
+<p>
+One slot refuses the derivation ledger: the \(7/40\) within \(21/20\) is
+<em>named</em> rather than derived &mdash; two independent structural readings
+(the gauge-count and its Lie-algebra twin) produce it, but the forcing
+argument that would collapse them has not been found; it is the most
+precise named gap of the whole program (&sect;8).
+</p>
+
+<h3>4.2 The verified results, machine-locked</h3>
+<p>
+The following results are the derivation ledger's teeth. Each is locked in
+a public test file at the stated precision.
+</p>
+<table>
+<tr><th>Result</th><th>Content</th><th>Why this value is forced</th></tr>
+<tr><td>Matched-noise uniqueness</td><td>&ldquo;error&nbsp;=&nbsp;symbol&rdquo; pins the crossover at \(p=1/q\)</td><td>the competing quadratic has discriminant \(-3q^{2}(q-1)^{2}&lt;0\): no other real root</td></tr>
+<tr><td>Exact capacity</td><td>\(C(q,1/q)=(1-\tfrac2q)\ln(q-1)\); \(e^{C}\) a square root only at \(q=4\)</td><td>telescoping entropy algebra</td></tr>
+<tr><td>The forced base</td><td>\(R(w_1{+}w_2)=R(w_1)R(w_2)\) &rArr; \(R(w)=e^{cw}\); matched normalization \(c=1\) gives \(R(4)=e^{4}\)</td><td>Cauchy's equation; any other base inserts a free dial \(\ln b\)</td></tr>
+<tr><td>The channel's census polynomial</td><td>numerator \(q^{2}-3q+3\); at \(q=4\): 7</td><td>general-\(q\) trace product; the 4 forced by the arena</td></tr>
+<tr><td>Content uniqueness</td><td>one of fifteen counting laws satisfies the content demand; it yields \(7/40\)</td><td>the demand itself kills the other fourteen at the first check</td></tr>
+<tr><td>Channel-size uniqueness</td><td>\(N=4\) is the unique integer satisfying the source-work fixed point, the unit count, and the duality constraint</td><td>\(N=2\sqrt N\) has the unique nonzero solution 4</td></tr>
+<tr><td>Non-periodicity of the exponential</td><td>\(\ln e^{4}=4\) is independent of the logs of every known period (PSLQ at 120 digits, null \(\sim10^{-81}\))</td><td>conditional on the Kontsevich&ndash;Zagier conjecture; composability explains the non-period's presence</td></tr>
+<tr><td>The window theorem</td><td>one Coulomb tower yields both the \(1/r^{2}\) law and evanescence; log corrections cancel exactly</td><td>closed-form evaluation; the only free shape is the window width</td></tr>
+<tr><td>Thermodynamic stability</td><td>free energy strictly convex for all admissible \(\beta\); third law holds; condensation residue \(\pi^{2}/16\)</td><td>certified three-regime argument, 17 orders of headroom</td></tr>
+<tr><td>The Born form as a theorem</td><td>at the probe dimension 4, the quadratic Born form follows from the measure axioms (Gleason); \(I/4\) is the unique homogeneous measure</td><td>classical theorem at the recorded dimension</td></tr>
+<tr><td>Read forcing</td><td>the pair-equivariant read operations span the discrete Fourier transform, uniquely up to phase</td><td>Stone&ndash;von Neumann uniqueness at dimension 4; involutivity exact at the 2-torsion level</td></tr>
+<tr><td>Local-route closure</td><td>no local self-dual measure produces the archimedean bracket; classical Gamma-completions excluded by value</td><td>Laplace/Fourier uniqueness (cumulants beyond the first vanish); \(16/\pi^{3}\neq1\)</td></tr>
+<tr><td>The conductor derivation</td><td>root field \(\mathbb Q(\zeta_{24})\), \(24=\mathrm{lcm}(4,8,3)\)</td><td>compositum conductor laws; each valuation forced by its own layer</td></tr>
+</table>
+
+<h3>4.3 The completion: from constructed to derived</h3>
+<p>
+A construction is not yet a derivation. Between the axiom table and the
+number stood once a further demand: the counting has to be <em>completed</em>
+by a self-dual smoothing of exactly the right kind &mdash; the discretized
+counting needs an analytic regularization whose own reading-back returns
+the object, so that the value the formula prices is caught with no free
+dial anywhere in the machinery. That completion has been carried out, and
+each step arrived as a theorem rather than as a choice:
+</p>
+<ol>
+<li><b>The exchange content is structural.</b> The demand that the two
+counting legs exchange under the read is provably equivalent to a bare leg
+swap; by itself it carries no census content. So the selector has to live
+one level up: in the <em>value</em> and in the coupled structures.</li>
+<li><b>The pair completion exists as a theorem.</b> On the pair space of
+(counting leg, read-back leg), the map \(P(f,g)=(T_\mu g,\ Tf)\) is
+involutive exactly (\(P^{2}=\) identity), as a consequence of the
+M&ouml;bius inversion the counting itself obeys. Its fixed space is
+precisely the set of pairs whose response equals the transported action
+&mdash; the completion demanded.</li>
+<li><b>The last continuous normalization is forced.</b> The one remaining
+dimensionless choice &mdash; which Gaussian the \(2\pi\)-read normalizes
+&mdash; has a unique self-dual answer \(e^{-\pi x^{2}}\): the fixed-point
+conditions for the read-back both force \(a=\pi\) exactly, sympy-symbolically
+and numerically. The &ldquo;one \(\pi\)&rdquo; the completion owed turns out to
+be the same \(\pi\) that reappears in its Mellin kernel &mdash; the value is
+reproduced by both routes.</li>
+<li><b>The value carrier is a fused, provably pair-borne counting.</b> The
+fused Dirichlet coefficient \(b=a\ast\chi\) is not a transport image of
+either leg (integer-exact: the weight vectors differ at 384 of the first
+512 indices, e.g. \(b(15)=-3\) where a transported leg would give
+\((a\ast1)(15)=+3\)); it is a genuinely pair-borne object &mdash; and exactly
+this member's matched-point chain lands on \(1/\alpha\) at the
+\(10^{-40}\) tier given the forced \(\pi\).</li>
+<li><b>The archimedean face is an exact two-cycle pair.</b> The
+mollified pair (Gaussian shifted by the total work
+\(\Lambda=4+\frac12\ln3\); its read-back image, the modulated Gaussian)
+form a closed two-cycle of the read in both directions, and their own
+Laplace content is \(e^{\Lambda}=e^{4}\sqrt3\) &mdash; the formula's
+archimedean bracket, recovered as a pair identity rather than inserted.</li>
+<li><b>The vacuum term and the regularization are forced.</b> The vacuum
+constant obeying the reflection law is the zero-mode pair
+\(\alpha(1+e^{-x/2})\) (a constant would break the two-cycle by the exact
+imbalance \(c(1-e^{-x/2})\)); the tempting weight \(-1/8\) was an
+analytic-continuation value, refuted as a series term; the pole's two
+windows agree (\(\pi^{2}/32\)); and the regularization semantics is
+selected by value-chain consistency &mdash; the value lives on the
+raw-convergent piece and the pole side continues to zero exactly through
+\(\beta(-1)=0\) (the functional-equation partner mechanism), the rival
+finite-part extraction being \(\epsilon\)-stable and nonzero: it is
+distinguishable, and it lost.
+</li>
+</ol>
+<p>
+The assumption layer between the one postulate and the number is now
+empty: every step above is machine-locked from the theory's own materials,
+with no new postulate introduced at any stage.
+</p>
+
+<h3>4.4 The two anatomies, one more time</h3>
+<p>
+With the completion in hand, the two shapes from &sect;2.2 read differently:
+they are no longer <em>analogies</em> but slot-conformance statements. The
+formula fills the one-loop template because the census &times; capacity
+product it prices is a measure over the read's state space, and it looks
+like a class number formula because the object it prices lives on an
+adelic doubling not yet identified with a conventional arithmetic object.
+Both analogies are now understood as consequences of the same construction,
+and the identified object whose class number formula this resembles &mdash;
+the <em>completed counting of the read's own fused algebra</em> &mdash; is the
+construction itself, made self-conscious.
+</p>
+
+<!-- ================================================================== -->
+<h2 id="s5">5. The Standard-Model bookkeeping the theory carries for free</h2>
+
+<h3>5.1 The two arithmetic grids and the stage</h3>
+<p>
+There are two grids carrying the dictionary's loads: the square lattice
+\(\mathbb Z[i]\) (the self-dual arena where \(1/\alpha\) is counted) and the
+hexagonal lattice (the trine plane of the diagonal sections). The stage that
+carries them together is a cube, and the cube's double cover is the
+three-dimensional quaternion algebra. In this language:
+</p>
+<ul>
+<li><b>Matter = points with a phase.</b> The fermion states are the
+<em>weight points</em> of the two grids: the three vertices of the color
+triangle, and the two endpoints of the isospin segment, doubled by a phase
+flip (each doublet partner is the mirror image of the same point). The
+fermion sign (the Pauli/Fermi sign) is manufactured on the cube's double
+cover &mdash; lifting a commuting label-move turns it into anticommuting
+quaternions. The matter sector lives on the level where the read is
+involutive.</li>
+<li><b>Gauge bosons = the lines of the grids, made into operators.</b>
+A gauge boson is a <em>transition operator</em>: subtract one weight
+point from another and you get the generator that carries state to state.
+The six directed differences of the color triangle are the gluon
+generators; the two directed flips of the isospin segment plus its one
+neutral cell are the weak triple; the one-dimensional extra direction is
+the hypercharge boson.</li>
+<li><b>The photon = the read's mirror face.</b> On the square section,
+reading and reading back are the same operation &mdash; the wavefunction is a
+fixed point of one full read-and-read-back cycle. In this language matter
+and light differ by <em>which cycle</em> returns them: the matter cycle
+returns through the phase (a fixed point only up to the phase), the light
+cycle returns exactly.</li>
+<li><b>The Higgs = the breathing mode of the vacuum landscape</b> &mdash;
+the dictionary's least formal member, priced by the quartic portal of
+&sect;6.4 (fenced, not derived).</li>
+</ul>
+
+<h3>5.2 What the dictionary does <em>not</em> claim</h3>
+<p>Being precise here prevents every misreading of the dictionary's scope:</p>
+<ul>
+<li><b>Spacetime propagation</b> is not derived, with one exception: the
+bounded electrostatic window of &sect;3.8 (where the derived Coulomb tower
+yields the whole \(1/r^{2}\) force law and its corrections).</li>
+<li><b>Confinement, coupling running, quark and neutrino masses</b> are not
+addressed; the dictionary's rows are structural bookkeeping, not dynamics.</li>
+<li><b>The photon&ndash;\(Z\) mixing</b> requires one external number
+(the Weinberg angle) the census cannot see (the sweep of the gauge bookkeeping's
+constants is provably rational, while everything the mass angle touches lives
+in the phase field \(\mathbb Q(\sqrt2)\) &mdash; the gauge column and the angle
+column are field-separated).</li>
+<li><b>The naming</b> of which census role goes to which Standard-Model
+particle is imported: what the census supplies is the arithmetic of every
+structural member below.</li>
+</ul>
+<p>
+Falsifiers are built in: a particle with a non-third-quantized electric
+charge, a transition operator off this lattice, or a tree-level lepton
+electric dipole moment would kill rows of the table. Nothing has.
+</p>
+
+<h3>5.3 The zoo table</h3>
+<table>
+<tr><th>Standard-Model item</th><th>The census statement</th><th>A check you can do</th></tr>
+<tr><td>Electric charges \(\{\pm\tfrac23,-\tfrac13\}\)</td><td>the color triangle's weight coordinates \((2,-1,-1)/3\) and \((1,1,-2)/3\) are the up and down charges verbatim; proton \(=+1=2\cdot\tfrac23-\tfrac13\); neutron \(=0\)</td><td>\((2-1-1)/3=0\) (the neutral weight sum); the neutrality identity \(3(u+d)+e=0\)</td></tr>
+<tr><td>The charge quantum \(\tfrac16\)</td><td>the two grids' index lattices multiply: \(\mathbb Z/3\times\mathbb Z/2\simeq\mathbb Z/6\)</td><td>\(3\times2=6\)</td></tr>
+<tr><td>Hypercharge \(Y=2Q\)</td><td>the full one-generation electroweak table: \(Y(u_L)=Y(d_L)=\tfrac13\), \(Y(\nu,e)_L=-1\), the right-handed sheets carrying \(Y=2Q\) verbatim</td><td>\(Y=2(Q-T_3)\): check \(u_L\): \(2(\tfrac23-\tfrac12)=\tfrac13\)</td></tr>
+<tr><td>Doublet pairing \(T_3=\pm\tfrac12\)</td><td>the sextet \(3\times2=6\): color triangle times one phase flip</td><td>\(3\times2=6=|\mu_6|\), the trine's own unit count</td></tr>
+<tr><td>Gluon count \(=8\)</td><td>\(3\otimes\bar3=8\oplus1\): the \(3\times3\) pair-book has one coherent diagonal (the neutral direction) and eight traceless remainders &mdash; six directed flips + two neutral cells</td><td>\(9-1=8\); a \(3\times3\) table of ones has trace 3</td></tr>
+<tr><td>Abelian / non-Abelian split</td><td>the octet closes under commutation with <em>integer</em> structure constants (all commutators land back in the octet, book \(\{0{:}468,\ \pm1{:}36,\ \pm2{:}8\}\)); the one-dimensional algebra has no closure</td><td>numbers commute; the octet's commutator table is integer</td></tr>
+<tr><td>Gauge centers</td><td>\(Z(\mathrm{SU}(3))=\mathbb Z/3\) = the trine; \(Z(\mathrm{SU}(2))=\mathbb Z/2\) = the read's blind phase</td><td>the triangle is invariant under \(120^\circ\); the phase flip is the read's \(\pm\)</td></tr>
+<tr><td>The weak algebra</td><td>\(\mathfrak{sl}_2\) closes with integer brackets only (\(|c|\in\{2,1,0\}\); its own counting law \(r(n)=2\sum_{d|n}\chi_{-8}(d)\), machine-exact through \(n\le60\))</td><td>the bracket \([E,F]=H\) has integer structure constants only</td></tr>
+<tr><td>Anomaly cancellations</td><td>all five gauge-consistency sums vanish exactly on the census charges, e.g. \(6(\tfrac13)+2(-1)=0\), \(2(\tfrac13)-\tfrac43+\tfrac23=0\), \(6(\tfrac13)^{3}+3(-\tfrac43)^{3}+3(\tfrac23)^{3}+2(-1)^{3}+8=0\)</td><td>each row is a lattice identity at the charge table of rows above</td></tr>
+<tr><td>The Fermi sign</td><td>commuting label-moves lift to anticommuting quaternions on the double cover</td><td>\(ij=-ji\) in the unit quaternions</td></tr>
+<tr><td>Generations (three)</td><td>the trine's own 3-fold symmetry admits, without forcing, three generations of charged leptons</td><td>the triangle has three vertices &mdash; that is the whole claim (reading)</td></tr>
+<tr><td>One generation's left book</td><td>\((3+1)\times2=8=d\times2\): three color weights + the color-singlet channel (the lepton home) times the two isospin legs &mdash; exactly the Standard Model's left-handed roster</td><td>\(4\times2=8\)</td></tr>
+<tr><td>The full gauge roster</td><td>\(8+3+1=12=|\mu_{12}|\), the compositum level's unit count</td><td>\(12\) is one census integer</td></tr>
+</table>
+
+<h3>5.4 The calculator gallery: five small experiments</h3>
+<p>Each row is small enough to type into any linear-algebra tool, and each
+is load-bearing in the dictionary:</p>
+<table>
+<tr><th>Object</th><th>The matrix</th><th>What it does here</th></tr>
+<tr><td>The color Cartan</td><td>\(\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\)</td><td>determinant 3: at once the trine's cell area and \(\mathrm{SU}(3)\)'s Cartan integer; the \(\sqrt3\) of the formula is this cell's volume</td></tr>
+<tr><td>The color weights</td><td>\(\omega_{1}=\tfrac12(2,-1,-1),\ \omega_{2}=\tfrac12(1,1,-2)\)</td><td>the charge dictionary; their differences are the six gluon operators</td></tr>
+<tr><td>The read channel</td><td>\(\det(I-uT)=(1-u)(1-\tfrac{2u}{3})^{3}\)</td><td>the vacuum read: one axis direction (eigenvalue 1), the balanced plane (\(\tfrac23\), threefold); expanding the product prices the census numerator \(3\cdot\tfrac73=7\), the source of \(7/40\)</td></tr>
+<tr><td>The split-frame conditioning</td><td>\(\cos^{2}\alpha\,\sin^{2}\alpha\le\tfrac14\)</td><td>the vacuum's two-part bookkeeping is best conditioned at exactly \(45^\circ\): the charged-lepton identity \(q=\tfrac23\) of &sect;6.2</td></tr>
+<tr><td>The three section volumes</td><td>Gram determinants \(\{1,2,3\}\)</td><td>the cell volumes \(\{1,\sqrt2,\sqrt3\}\) are the construction's three radicals: 1 silent, \(\sqrt3\) in \(1/\alpha\), \(\sqrt2\) in the quartic portal (&sect;6.4)</td></tr>
+</table>
+
+<h3>5.5 The honest weak-interaction ledger</h3>
+<p>
+The census reproduces the weak algebra's <em>structure</em> exactly (the
+\(\{110\}\) face): the isospin halves \(T_3=\pm\tfrac12\), the doublet
+pairing, the \(\mathfrak{sl}_2\) bracket closure with integer constants,
+the \(\mathbb Z/2\) gauge center, the hypercharge table, and the anomaly
+arithmetic in which the trine's three colors do the work. What it does not
+do:
+</p>
+<ul>
+<li>the <em>strength</em> \(g_w\) is external <em>by structure</em>: a strength
+derivation would need a book that closes on itself, and the read-back is
+content-free on exactly one face &mdash; the self-dual one ({100}). The
+strength-scoreboard therefore closes there, and only there;</li>
+<li>the mixed \(\sin\theta_W\) is not computed: the gauge column is
+field-separated from the angle column (&sect;5.2), and no field-level route
+from one to the other exists in the construction;</li>
+<li>chirality/\(V-A\): the census is parity-even throughout, so the parity-odd
+structures are unreachable from it &mdash; the weak interaction is
+<em>not required</em> by the construction, and its odd couplings cannot reach
+the mass data;</li>
+<li>\(W/Z\) masses consume the Higgs dynamics, whose portal here is
+fenced (&sect;6.4); and neutrinos have no census slot at all &mdash; a ninth left-hand
+sheet would have to be minted by a genuinely new census component.</li>
+</ul>
+<p>
+So: <em>the weak interaction's group structure is derived; its dynamics are
+not.</em> The construction is electromagnetic by structure, not by omission
+&mdash; the formula is \(\alpha\)'s because the read-back closes exactly on the
+face the photon rides.
+</p>
+
+<h3>5.6 The small-numbers ledger</h3>
+<p>
+A by-product of the theory is a bank of small-number statements that the
+Standard Model either ignores or files as coincidences &mdash; and that here are
+exact identities, theorems, or banded claims with kill-windows. Machine-locked
+to their stated tiers; the load-bearing ones:
+</p>
+<table>
+<tr><th>Row</th><th>Relation</th><th>Content</th><th>Grade</th></tr>
+<tr><td>1</td><td>Koide \(\dfrac{m_e+m_\mu+m_\tau}{(\sqrt{m_e}+\sqrt{m_\mu}+\sqrt{m_\tau})^{2}}=\tfrac23\)</td><td>the census's balance point; three census derivations and the vacuum-face derivation (&sect;6.2&ndash;6.3)</td><td>fence, \(0.905\sigma\), watched by the tau program</td></tr>
+<tr><td>2</td><td>\(m_H\) from the lepton masses, through \(\lambda=\sqrt2(\sqrt2-1-54e_3)^{2}\)</td><td>the quartic from the cubic share of the \(\sqrt m\)-direction alone (&sect;6.4)</td><td>fence, \(0.81\sigma\), kill-windows armed</td></tr>
+<tr><td>3</td><td>\(F''/B=18\,\frac{1+\cos3\psi^{*}}{1-\cos3\psi^{*}}\)</td><td>the vacuum landscape's two candidate faces joined by an exact identity (value \(150.026\ldots\) at the data angle)</td><td>exact identity</td></tr>
+<tr><td>4</td><td>\(q_{\rm ret}=\tfrac{11}{12}\,q\); at the census point \(\tfrac{11}{18}\)</td><td>reading the vacuum and recovering it scales the balance observable by the axis eigenvalue, exactly, both routes</td><td>exact identity</td></tr>
+<tr><td>5</td><td>\(\mathrm{tr}\,\mathcal T=\tfrac94=(\tfrac32)^{2}\)</td><td>\(\tfrac{11}{12}+\tfrac23+\tfrac23=\tfrac94\): the ledger's half-integers are one ladder face</td><td>exact identity</td></tr>
+<tr><td>6</td><td>\(r^{2}=3q-1\); \(r=12\sqrt{\det G_{\rm split}}\)</td><td>the Koide fence geometry <em>is</em> the vacuum's read conditioning: one statement in two languages</td><td>exact identity</td></tr>
+<tr><td>7</td><td>\(4\zeta(2)G=\sum'(m^{2}+n^{2})^{-2}\) over \(\mathbb Z[i]\)</td><td>Catalan as the Gaussian lattice's doubled regulator (&sect;2.1)</td><td>exact identity</td></tr>
+<tr><td>8</td><td>\(L_0=\pi/4,\ L_1=G\) from one kernel</td><td>\(\pi\) and \(G\): first two log-moments of the same \(L\)-function</td><td>exact identity</td></tr>
+<tr><td>9</td><td>conductor \(24=\mathrm{lcm}(4,8,3)\)</td><td>three arithmetic layers, one root field, each valuation forced</td><td>derived</td></tr>
+<tr><td>10</td><td>\(\tan(\tfrac12\arctan\sqrt2)=\tfrac{\sqrt6-\sqrt2}{2}\)</td><td>the vacuum geometry's contact angle is exactly half the cube-corner angle (the theory's half-angle family, now on the mass side)</td><td>exact identity</td></tr>
+<tr><td>11</td><td>volumes \(\{1,\sqrt2,\sqrt3\}\) consumed once each</td><td>the three radicals are the three section volumes; the law's mechanism is the read-back Jacobian</td><td>exact instances + one fence, postulate-inherited</td></tr>
+<tr><td>12</td><td>the anomaly roster \(=0\) (five rows)</td><td>\([\mathrm{SU}(2)]^{2}U(1)\), \([\mathrm{SU}(3)]^{2}U(1)\), \([U(1)]^{3}\), gravitational-\(U(1)\), plus two structural rows</td><td>exact bookkeeping</td></tr>
+<tr><td>13</td><td>the tri-window consistency</td><td>three independent mass-side windows on one vacuum angle agree on the recorded data (max pairwise deviation \(0.4\sigma\)); the divergence schedule is stamped (&sect;6.5)</td><td>fence, under continuous watch</td></tr>
+</table>
+<p>
+The cumulative weight is the point: each row alone is small; together they
+say the Standard Model's coincidence pile and this construction's arithmetic
+are the same pile seen twice.
+</p>
+
+<!-- ================================================================== -->
+<h2 id="s6">6. Mass: the charged-lepton identity and the Higgs relation</h2>
 
 <h3>6.1 The identity</h3>
 <p>
 For the three charged leptons,
-$$
-\frac{m_e+m_\mu+m_\tau}{\left(\sqrt{m_e}+\sqrt{m_\mu}+\sqrt{m_\tau}\right)^2} = \frac{2}{3}.
-$$
-The theory asserts this as an <b>exact identity</b>, not a numerological
-alignment. With the PDG-2022 masses the left side evaluates to
-0.6666605115 &mdash; a deviation of \(6.2\times10^{-6}\) from \(2/3\),
-comfortably inside the tau-mass uncertainty (\(0.905\,\sigma\)); the
-electron and muon uncertainties contribute less than
-\(2\times10^{-9}\) combined. The current agreement is
-measurement-limited: the identity is exactly the kind of statement a
-tau-mass precision program can confirm or break, and it carries a
-standing decision rule &mdash; convergence toward \(2/3\) confirms the
-mass-sector claim; a \(3\sigma\) divergence falsifies the
-charged-lepton application while leaving \(\alpha\) untouched.
+$$\frac{m_e+m_\mu+m_\tau}{\left(\sqrt{m_e}+\sqrt{m_\mu}+\sqrt{m_\tau}\right)^{2}}
+=\frac{2}{3}.$$
+The theory asserts this as an <b>exact</b> identity. With the PDG-2022
+masses the left side evaluates to \(0.6666605115\) &mdash; a deviation of
+\(6.2\times10^{-6}\) from \(2/3\), comfortably inside the tau-mass
+uncertainty (\(0.905\,\sigma\)); the electron and muon uncertainties
+contribute less than \(2\times10^{-9}\) combined. The agreement is
+therefore measurement-limited: this is exactly the kind of statement a
+tau-mass precision program can confirm or break. The standing rule:
+convergence toward \(2/3\) confirms the mass-sector claim; a \(3\sigma\)
+divergence falsifies the charged-lepton application while leaving \(\alpha\)
+untouched.
 </p>
 
-<h3>6.2 Why \(2/3\) is the model's own number</h3>
+<h3>6.2 Why \(2/3\) is the census's own number</h3>
 <p>
-The census produces \(2/3\) three independent ways before any mass
-data enters: the charged sector of the \(q=4\) read channel has the
-eigenvalue \(\tfrac{2}{3}\) (twofold, on the rotation plane of the
-trine); the trine channel's Born weight is
-\(\tfrac{q-2}{q-1} = \tfrac{2}{3}\); and \(\tfrac{2}{3}\) is the
-triple root of the channel determinant
-\(\det(I-uT) = (1-u)\left(1-\tfrac{2u}{3}\right)^3\). The value was
-never inserted to match data; it is what the read carries.
+The census produces \(2/3\) three independent ways before any mass data
+enters: the plane eigenvalue of the read channel is \(\tfrac23\) (twofold,
+on the rotation plane of the trine); the trine channel's Born weight is
+\(\tfrac{q-2}{q-1}=\tfrac23\); and \(\tfrac23\) is the triple root of the
+channel determinant \(\det(I-uT)=(1-u)(1-\tfrac{2u}{3})^{3}\). The value
+was never inserted to match data; it is what the read carries.
 </p>
 
 <h3>6.3 The vacuum face: the identity as a derivation</h3>
 <p>
 The final step makes the identity structural. A vacuum is read as the
-pair (axis half, plane half) of its own direction. The faithful
-read-back of the vacuum &mdash; the same self-duality demand that
-selected the square lattice in the arena (&sect;4.1) &mdash; requires
-this two-part bookkeeping to be maximally well conditioned. The
-split-frame's Gram determinant is
-\(\cos^2\alpha\,\sin^2\alpha\), with \(\alpha\) the
-\(\sqrt{m}\)-vector's angle to the trine axis \((1,1,1)\): it
-attains its maximum \(\tfrac14\) <b>only</b> at
-\(\cos^2\alpha = \tfrac12\), i.e. at the \(45^\circ\) split. The
-angle algebra \(\;q = \tfrac{1}{3\cos^2\alpha}\;\) then gives
-\(q = 2/3\) exactly. The Koide split is thus the <b>vacuum's own
-self-duality point</b> &mdash; forced by the same principle that forces
-everything else in the theory, not an added mass axiom.
-(Theorem&nbsp;T14.)
+pair (axis half, plane half) of its own direction. The faithful read-back
+of the vacuum &mdash; the same self-duality demand that selected the square
+lattice in the arena &mdash; requires this two-part bookkeeping to be maximally
+well conditioned. The split frame's Gram determinant is
+\(\cos^{2}\alpha\,\sin^{2}\alpha\) with \(\alpha\) the \(\sqrt m\)-vector's
+angle to the trine axis; it attains its maximum \(\tfrac14\) <b>only</b> at
+\(\cos^{2}\alpha=\tfrac12\), the \(45^\circ\) split. The angle algebra
+\(q=1/(3\cos^{2}\alpha)\) then gives \(q=2/3\), exactly. The Koide split
+is the vacuum's own self-duality point &mdash; forced by the same principle
+that forces everything else in the theory (this is the identity the
+small-numbers ledger's row 6 re-states in the fence geometry's language,
+\(r^{2}=3q-1\)).
 </p>
 
-<h3>6.4 Mass by symmetry breaking: the one external parameter</h3>
+<h3>6.4 Mass by symmetry breaking, and the Higgs relation</h3>
 <p>
-The theory's census is built from the trine's symmetry, and its
-spectra are provably blind to what those symmetries can permute
-(Theorem&nbsp;T16): no spectrum-level mechanism can select a direction
-<i>within</i> the balanced family. Consequently the observed flavor
-pattern enters exactly once, as the <b>vacuum angle</b>
-\(\varphi\) &mdash; the residual asymmetry among the three channels
-within the balanced cone. This is mass by symmetry breaking in the
-precise sense: the symmetric part is derived, the breaking is the
-vacuum's own datum. Formally the charged-lepton sector of this theory
-is
-$$
-\text{masses} \;=\; [\text{the forced 50&ndash;50 split}]
-\;+\; [\text{one vacuum angle } \varphi]
-\;+\; [\text{one scale dial}].
-$$
-Given \(\varphi\) and the scale, the three masses are determined; the
-identity of &sect;6.1 holds at every point of the family. The logical
-form is the same as the Standard Model's own flavor matrices: the
-theory supplies the geometry and its symmetry; the vacuum supplies the
-point. A future completion that forced \(\varphi\) (and opened the
-quartic portal \(\lambda\)) would eliminate the last parameter;
-the completeness condition is strict &mdash; such a forcing must
-introduce a genuinely new census component, never a recombination of
-existing numbers.
+The census spectra are provably blind to what the trine's symmetries may
+permute: any selection <em>within</em> the balanced family cannot come from
+them. Consequently the observed flavor pattern enters exactly once, as a
+<b>vacuum angle</b> \(\varphi\). Formally the charged-lepton sector of this
+theory is
+$$\text{masses}=[\text{the forced }45^\circ\text{ split}]
++[\text{one vacuum angle } \varphi]+[\text{one scale}].$$
+Given \(\varphi\) and the scale, the three masses are determined, over-constrained
+by the exact identity &mdash; a 2-parameter family that fits 3 measurements, consuming
+exactly the tau band's slack. Measured at the PDG-2022 data, the vacuum angle
+is \(\varphi=227.26718^\circ\pm0.00048\) (equivalently, \(12.73282^\circ\)
+off the nearest trine direction); this is a symmetry-breaking datum &mdash; the
+vacuum supplies the angular position; the geometry it lives on is derived.
+A completion forcing \(\varphi\) would need a genuinely new census
+component, never a recombination of existing slots (&sect;8).
+</p>
+<p>
+The same geometry has one more measurable face. Inside the balanced
+\(45^\circ\) family, the phase-carrying residue of the \(\sqrt m\)-direction
+is its <em>cubic share</em>, a completely symmetric function of the three
+masses. The portal hypothesis (fenced, not derived) prices the Higgs
+quartic through it:
+$$e_3=\frac{\sqrt{m_e\,m_\mu\,m_\tau}}{(\sqrt{m_e}+\sqrt{m_\mu}+\sqrt{m_\tau})^{3}},
+\qquad
+\lambda=\sqrt{2}\,\big(\sqrt{2}-1-54\,e_3\big)^{2}, $$
+with the Standard Model's own pair \(m_H=v\sqrt{2\lambda}\) closing the
+chain. <b>The assumed inputs</b> (PDG-2022, quoted here for self-containment):
+\(m_e=0.511\)~MeV, \(m_\mu=105.658\)~MeV, \(m_\tau=1776.86\pm0.12\)~MeV,
+\(v=246.22\)~GeV (the electroweak vacuum scale, measured through the muon
+lifetime), and the measured pair \(\lambda=0.12938\pm0.00035\),
+\(m_H=125.25\pm0.17\)~GeV &mdash; the latter two being the same data in two
+normalizations, which is why the check below carries one independent
+content: <i>do the lepton masses alone reach the quartic?</i>
+Numerically: \(e_3=0.0020633\),
+\(\sqrt2-1-54e_3=0.30280\), \(\lambda=0.12966\) against the measured
+\(\lambda=0.12938\pm0.00035\) (\(0.81\sigma\)); the dimensionless Higgs
+statement gives \(m_H=125.39\)~GeV against \(125.25\pm0.17\)~GeV
+(\(0.8\sigma\)), the reader-facing deviation row being
+$$\Big|\,\frac{m_H}{v}\;-\;\sqrt{2\lambda(m_e,m_\mu,m_\tau)}\,\Big|
+= 5.5\times10^{-4}\quad(0.8\,\sigma).$$ The predicted quartic's precision is pinned by the mass
+inputs to \(\pm4.4\times10^{-6}\) &mdash; about fifteen times finer than the
+quartic's own measurement band (the shape of the relation is tested at the
+masses' precision while the entire offset is carried by the \(\sqrt2\)
+normalization). Every factor of that normalization now carries its own
+grade. <b>The \(\sqrt2\)</b> is derived: a cell-volume law (a mode normalizes
+by the cell volume \(\sqrt{\det G}\) of the lattice section it lives on)
+prices the portal, the mechanism being the round trip's own read-back
+Jacobian, verified per section to \(10^{-40}\). <b>The section</b> is
+selected by the law itself: under that law exactly one of the three
+constructed sections lands in the measured band (the phase field's
+\(0.0917/0.1297/0.1588\) against \(\lambda=0.12938\pm0.00035\); the
+alternatives die at 108 and 84\,\(\sigma\)), and the winner's arithmetic
+field matches the mass side's. <b>The amplitude</b> &mdash; the landscape's
+overall scale, which the relation implicitly sets to the unit &mdash; is
+selected the same way: a priori the unit is the only choice that
+introduces no new number (any other amplitude would smuggle an
+unexplained constant into the relation), and the band confirms it &mdash;
+among the twenty-three census-legal amplitudes (the unit, the
+small-integer ratios up to five, and the four section-class irrational
+values), exactly one is consistent with the measured quartic, and the
+nearest competitor misses by \(73\,\sigma\). <b>What remains is a single
+reading</b>: the identification itself &mdash; the quartic's <em>value</em>
+equals the priced barrier's <em>value</em>. The stronger reading &mdash;
+that the landscape literally is the Higgs potential &mdash; is excluded:
+the Standard Model's potential has local shape invariants
+\(\{3,\,3\}\) (universal numbers), while the census landscape's are
+\(\{11.4,\,7.6\}\) (they move with the data): different curves sharing
+one number.
+</p>
+<p>
+The relation carries standing kill-windows (falsifiers of the mass sector
+<em>only</em>; \(\alpha\) is untouched in every scenario): a future PDG
+update moving the quartic outside \(\lambda\in[0.12833,0.13043]\) or the
+Higgs mass outside \(m_H\in[124.74,125.76]\)~GeV kills the fence row.
+And the derived correlation \(\mathrm{d}\lambda/\mathrm{d}m_\tau=
++3.7\times10^{-5}\) per MeV (heavier tau lifts the predicted quartic) is a
+standing zero-fit correlation test, against a Standard Model whose own
+quartic is tau-independent: every future tau-mass revision must move the
+required quartic by the correlation the census fixes, and the Standard
+Model itself does not make.
 </p>
 
-<h2 id="s6">7. What remains open</h2>
+<h3>6.5 The measurement observatory</h3>
+<p>
+The vacuum angle is constrained by three mutually independent mass-side
+windows, all consistent at the current data (max pairwise deviation
+\(0.4\sigma\)):
+</p>
+<ul>
+<li><b>the tau window</b> (width \(0.00048^\circ\)): the fitted angle plus the
+mass band propagated through the fit;</li>
+<li><b>the mass-only window</b> (width \(0.00011^\circ\)): the cubic share
+\(e_3\), evaluated from the three masses alone and compared with the
+angle's own lattice-implied center (band-consistency, not identity &mdash; the
+promotion rule is explicit);</li>
+<li><b>the quartic window</b> (width \(0.018^\circ\)): the quartic fence read
+backwards.</li>
+</ul>
+<p>
+The sensitivity schedule is stamped: a future tau-mass revision moves two
+windows, a future quartic revision moves one; and the decisive thresholds
+are recorded in advance &mdash; one tau-band improvement (\(\sim10^{-4}\) relative) makes the
+near-identity question decidable (confirm or kill), and a thirtyfold finer
+quartic value makes the normalization's arithmetic status decidable. The
+mass sector's standing verdict: <b>parameter-free, banded, awaiting the
+next PDG revision.</b>
+</p>
 
-<ol>
-<li><b>The principle's own status.</b> The round-trip principle is the theory's
-one postulate; every derived statement inherits its grade. A theory cannot
-certify its own axiom; the remaining addresses are external (mathematical
-kinship audits) and empirical (the wait state).</li>
-<li><b>The pair-level analysis.</b> The completion that would make the census a
-full derivation is a <em>pair-level analysis whose fixed point is the round
-trip</em>: the pairing of the mass structure (the atomic bracket) with the
-phase structure (the read's characters), self-reproducing under the two-step
-read. The local route is closed by theorem (T12), the classical Gamma-completion
-is excluded by the value, and a literature census of the seven classical
-completion frameworks (trace formulas, torsion, Szeg&odblac;-type theorems,
-spectral actions, semiclassical trace formulas, modular \(q\)-products,
-Wiener&ndash;Hopf theory) finds <em>no</em> producer of the required
-exponential-archimedean shape &mdash; the demand is genuinely new mathematics,
-precisely named, with the nearest precedents identified (the Dedekind eta's
-\(q^{1/24}\) factor: the right shape in the wrong variable; the strong
-Szeg&odblac; theorem: the right anatomy, asymptotic only).
-The subsequent search narrowed this to a precise live target (T17&ndash;T19):
-the exchange demand alone is provably content-free, so the wanted object must
-carry the value and the structures <em>built in</em>, on the weighted frame
-where both record legs are exactly normable; the balanced-renormalized pair
-passes the conditioning gate, and the single pre-registered falsifier is the
-two-route value equality (route 1 is already exact at \(5\times10^{-51}\);
-route 2's matched functional is pinned to the machine digits).</li>
-<li><b>The Schanuel class.</b> The non-relation evidence for the exponential
-slot is numerical (T7); proving it requires Schanuel-strength tools beyond
-current mathematics. The algebraic slice is proven; only the shadow is open.</li>
-<li><b>The masses.</b> The axiom set carries no mass operator, and the
-census's spectra are provably blind to its own symmetries: no vacuum direction
-is derivable from them. What the construction has added is the parameterized
-family &mdash; the 50&ndash;50 split is forced by the vacuum face (T14,
-&sect;6), the charged-lepton identity \(q = 2/3\) follows as an exact
-statement, and the triple is reproduced given one vacuum angle plus the scale
-dial (verified against the PDG-2022 masses inside the tau band). What remains
-to be derived: the vacuum angle and the quartic portal &mdash; a new forced
-census component, never a recombination of existing slots, the same
-genuinely-new-mathematics class as the analysis completion.</li>
-<li><b>The scale.</b> One dimensionful dial \(L\) remains, decoupled from
-\(\alpha\) and bounded by the falsifiable window of &sect;4.7.</li>
-<li><b>The fit.</b> The single empirical input, \(0.245\sigma\) from CODATA
-2022, is watched by the standing decision rule of &sect;3.5.</li>
-</ol>
+<h3>6.6 The pool form: the Higgs mass in units of the lepton pool</h3>
+<p>
+The three lepton masses define a natural mass unit &mdash; the <b>pool</b>
+$$\kappa \;=\; m_e + m_\mu + m_\tau \;=\; 1883.14\ \text{MeV}.$$
+The pool is angle-free: whatever the vacuum angle does (it redistributes
+the masses among the three channels), the sum is fixed by construction
+&mdash; the shares sum to one, so the pool is the same in every trine. The
+pool is therefore the mass sector's own ruler, measured once (the
+Boltzmann-constant role: it converts the dimensionless shares of the trap
+book into energies), and its value is not derived by anything in this
+document.
+</p>
+<p>
+The Higgs relation of &sect;6.4 can be written in units of this ruler:
+$$m_H \;=\; \kappa\;\cdot\;\frac{v}{\kappa}\;\cdot\;
+\sqrt{2\,\lambda(m_e,m_\mu,m_\tau)},$$
+where \(v = 246.22\)~GeV is the vacuum expectation value and the measured
+ratio is \(v/\kappa = 130.757\). The formula's honest input census: the
+three lepton masses (measured), and <b>one dimensionless number</b> &mdash;
+the vev-to-pool ratio. That ratio is not a new mystery; it is the inverse
+lepton Yukawa sum in disguise,
+$$\frac{v}{\kappa} \;=\; \frac{\sqrt{2}}{\sum_i y_i},$$
+and the question it poses &mdash; <i>why the value 130.757?</i> &mdash; is
+the flavor problem (why the Yukawa couplings have their values) in its most
+compact form: a question unsolved everywhere in physics, not only here.
+</p>
+<p>
+What the pool form changes is not the measurement content (the ratio
+carries the same information as the vev) but the parameter's <b>class</b>:
+a bare scale is never derivable even in principle &mdash; a pure number is.
+The remaining input is therefore <i>derivable in principle</i>, currently
+unexplained, and the same open question the near-coincidences of this
+document (&sect;6.5's observatory; the double-proton shadow of the pool
+itself) point at from other directions. No derivation is claimed, and none
+is close: the arithmetic structure that produced the fine-structure number
+(&sect;4) has shown no reach into the flavor sector. The pool form's honest
+verdict: <b>three measured masses, one dimensionless number, and the
+question.</b>
+</p>
+
+<h3>6.7 An independently derived vacuum angle: the conditional shares</h3>
+<p>
+The two constraints of this section are complementary, not independent.
+The charged-lepton identity (the purity \(Q=2/3\), &sect;6.2) fixes the
+<b>radius</b> on the \(\sqrt m\)-cone; the vacuum angle fixes the
+<b>direction</b> on it. Three masses carry three degrees of freedom: the
+radius condition removes one, the direction removes another, and the scale
+alone remains. The consequences are stark: the mass ratios
+\(m_i/\kappa\) &mdash; the <b>shares</b> of &sect;6.6 &mdash; are a function of
+the angle alone. <i>If ever the angle is forced, the shares become pure
+predicted numbers, computed from nothing.</i>
+</p>
+<p>
+Recent literature derives the angle from outside. Shulga
+(arXiv:2605.10245) and Rousselle (arXiv:2608.19277) propose a flavor
+mechanism whose arithmetic is this document's own family &mdash; a
+Green-function sum over the flavor circle,
+\(\sum_{3\nmid n}1/n^{2}=(8/9)\zeta(2)\): the same \(\zeta(2)\) book with
+the trine's harmonic removed &mdash; locking the internal flavor angle at
+\(2/9\)~rad. Every claimed number was audited at this document's
+precision tiers before being recorded here:
+</p>
+<ul>
+<li><b>the angle lands inside the band.</b> \(2/9\,\text{rad}
+=12.7323954^\circ\) against the vacuum angle
+\(12.73282^\circ\pm0.00048^\circ\) of &sect;6.4: the deviation is
+\(0.88\sigma\); its cosine \(\cos(2/3)=0.7858873\) sits between this
+document's two mirror locks, on the data side;</li>
+<li><b>the derived center lands closer to the data than this document's
+own fit.</b> The corresponding cubic-share center is
+\(0.00206319\), which sits \(9.6\times10^{-8}\) from the data's own
+cubic share \(e_3=0.0020633\) &mdash; a factor \(4.7\) closer than the
+fitted center of &sect;6.5's windows;</li>
+<li><b>the same mechanism derives the charged-lepton identity
+exactly.</b> Its stress-free balance condition forces \(Q=2/3\) for any
+angle (verified symbolically) &mdash; a candidate mechanism for the purity
+row this document consumes as data;</li>
+<li><b>the tau mass is predicted out-of-sample:</b> \(1776.97\)~MeV
+against the measured \(1776.86\pm0.12\)~MeV (\(0.92\sigma\)) &mdash; the
+band's edge, consistent, never a precision claim.</li>
+</ul>
+<p>
+<b>The retrieval is two formulas.</b> The shares come from the angle
+through the cone's own parametrization, the stress-free amplitude
+\(\sqrt{2}\) built in:
+$$s_k(\theta)\;=\;\frac{\big(1+\sqrt{2}\,\cos(\theta+2k\pi/3)\big)^{2}}{6},
+\qquad k=0,1,2,$$
+with \(k\) running the three channels at the angle and its
+\(120^\circ\) rotations (in the external mechanism's assignment: tau
+at the angle itself, muon at \(+120^\circ\), electron at
+\(-120^\circ\)). The denominator is exact census arithmetic &mdash; the
+cosine terms cancel in the sum, \(\sum_k\cos(\theta+2k\pi/3)=0\) and
+\(\sum_k\cos^{2}(\theta+2k\pi/3)=3/2\) &mdash; so the shares sum to one
+for <i>any</i> angle: the formula is the cone's universal
+parametrization, and any future triplet satisfying the identity of
+&sect;6.2 retrieves its shares through the same line with its own
+angle. The pool is then measured through any single mass:
+$$\kappa\;=\;\frac{m_k}{s_k(\theta_F)},$$
+with \(k\) arbitrary &mdash; which overdetermines it: the three
+retrievals must agree. At the derived angle they do, at the
+\(10^{-4}\) tier: \(\kappa^{(e)}=1883.16\)~MeV,
+\(\kappa^{(\mu)}=1883.13\)~MeV, \(\kappa^{(\tau)}=1883.02\)~MeV
+against the sum's \(1883.03\)~MeV &mdash; a spread of \(0.14\)~MeV, the
+tau-band scale: three determinations of one scale, an internal
+consistency row the same future data tests.
+</p>
+<p>
+<b>Conditional on the derived angle, the three shares are pure
+numbers.</b> Evaluated at \(2/9\) &mdash; with no measured input anywhere
+in the chain &mdash; against the measured shares:
+</p>
+<table>
+<tr><th>share</th><th>predicted at the derived angle</th><th>measured</th><th>relative miss</th></tr>
+<tr><td>\(s_e=m_e/\kappa\)</td><td>\(2.71353\times10^{-4}\)</td><td>\(2.71371\times10^{-4}\)</td><td>\(6.9\times10^{-5}\)</td></tr>
+<tr><td>\(s_\mu=m_\mu/\kappa\)</td><td>\(0.056108\)</td><td>\(0.056111\)</td><td>\(5.4\times10^{-5}\)</td></tr>
+<tr><td>\(s_\tau=m_\tau/\kappa\)</td><td>\(0.943621\)</td><td>\(0.943618\)</td><td>\(3.2\times10^{-6}\)</td></tr>
+</table>
+<p>
+The misses sit at the \(10^{-4}\) tier &mdash; the angle's \(0.88\sigma\)
+offset propagated, nothing more &mdash; and they cohere: were the tau mass
+exactly the predicted value, the data's cubic share would move twelve
+times closer to the derived center.
+</p>
+<p>
+The compression this opens is the real prize. The shares are the
+normalized Yukawa couplings:
+$$y_i=\frac{\sqrt{2}\,s_i}{v/\kappa},
+\qquad\text{with}\qquad
+\sum_i y_i=\frac{\sqrt{2}}{v/\kappa}\ \text{(an identity)}.$$
+If the shares derive, the entire lepton flavor spectrum hangs on the one
+remaining measured dimensionless number &mdash; the vev-to-pool ratio of
+&sect;6.6 &mdash; and the flavor problem for leptons compresses from three
+unexplained numbers to one. What stays untouched is that one number's
+own question (<i>why \(v/\kappa=130.757\)?</i>): this chain derives the
+spectrum's <em>shape</em>; the shapeless residue remains the ratio
+itself.
+</p>
+<p>
+<b>The honest grade of the external derivation: fence.</b> Its chain
+carries two postulates (the vacuum's crystallization into the three-fold
+center; the stress-free balance) and one unit-convention step (a
+dimensionless fraction read as an angle in radians) between the exact
+arithmetic and the angle. This document types it, arms the falsifier,
+and adopts nothing: a future tau-mass revision decides &mdash; a move of
+the data's cubic share away from the derived center beyond the window
+kills the external candidate; a revision toward \(1776.97\)~MeV
+strengthens it (&sect;6.5's sensitivity schedule governs both). The fence
+rows of &sect;6.4 are untouched in every scenario, and the fit count of
+the whole document remains one.
+</p>
+<p>
+The conditional chain closes in one further collapse, and it is the
+section's twin yield. Substituting the derived center into the quartic
+fence of &sect;6.4, the mirror bridge's center constant and the
+barrier's flat-direction constant are revealed to be <em>the same
+\(-1\)</em>: they cancel, and the quartic becomes
+\(\lambda\bigl(\tfrac{2}{9}\bigr)=2\sqrt{2}\,\bigl(1-\cos(2/3)\bigr)^{2}\)
+exactly &mdash; \(0.129667\), \(+0.82\,\sigma\), inside the
+kill-windows. What remains of the Higgs chain is
+$$m_H\;=\;v\,\cdot\,2^{5/4}\,\Bigl(1-\cos\bigl(\tfrac{2}{3}\bigr)\Bigr),$$
+<i>the lepton masses discharged into the derived angle</i>: the one
+measured input left is the weak scale itself (the Fermi constant). The
+constant is \(2^{5/4}(1-\cos(2/3))=0.50925\) against the measured
+\(m_H/v=0.50869\), a \(0.11\)&nbsp;percent miss (\(+0.81\,\sigma\); the
+conditional Higgs \(125.387\)~GeV against \(125.25\pm0.17\)~GeV). The
+grade is <b>double-fenced</b> &mdash; the fence's value-identification
+crossed with the angle's postulates &mdash; and a conditional row can
+never out-grade its weaker parent: fence it stays.
+</p>
+<p>
+The derived angle's own meaning deserves one closing clarification, and
+it sharpens the section's guardrail into a classification. The angle is
+rational in <b>radians</b> &mdash; the mechanism's own unit, where its
+Green-function sum is diagonal and where the friction is \(\pi\)-free by
+the exact \(\zeta(2)\) cancellation &mdash; and \(1/(9\pi)\) of a turn in
+every other measure: the factor of \(\pi\) that appears under one
+viewpoint and hides under the other enters precisely at the
+compensation step (a dimensionless fraction read as an angle in
+radians). Within that unit the rationality uses the same small integers
+as everything else in this document: \(2/9=2/3^{2}\). And the
+classification this imposes on the center is sharp: \(\cos(2/3)\) is
+transcendental (the classical Lindemann&ndash;Weierstrass theorem, since
+\(2/3\) is a non-zero algebraic), so the derived center
+\(\nu(2/9)=(\sqrt{2}\cos(2/3)-1)/54\) is <i>transcendental</i> &mdash;
+while any center constructible without a mechanism, written down by
+combining constants the way this document does elsewhere, is algebraic
+(\(\mathbb Q(\sqrt{2})\)-class). The in-band center therefore belongs
+to a class that only a derived mechanism can populate &mdash; exactly
+the demand this section's fences encode (<i>derived, never
+matched</i>), and the sharpest reason the await is properly armed.
+</p>
 
 <!-- ================================================================== -->
-<h2 id="s7">8. Summary and conclusion</h2>
+<h2 id="s7">7. Gravity: the model so far</h2>
+
+<div class="warn">
+<b>Status banner.</b> Gravity is <em>not</em> part of the \(\alpha\)
+construction, is absent from the formula, and makes no claim on it. What
+follows is the model-ground work the theory grounds in its own fabric
+language &mdash; a research program with a named shape and named falsifiers,
+none of whose kill conditions is armed. Every statement below is either a
+theorem of the fabric model or is explicitly graded as a reading or
+speculation.
+</div>
+
+<h3>7.1 What the fabric model of gravity is</h3>
+<p>
+In the theory's ontology gravity is <em>not a fourth force</em> and has no
+census slot. It is the <b>floor itself</b>: the cubic crystal's elasticity.
+Mass, in the mass-extension reading (&sect;6.4), is a <em>trap</em>: a
+localized defect in the propagation book whose dispersion gap
+\(E(0)=mc^{2}\) is the measured rest mass. A trap loads the floor; the
+loaded floor biases every wave riding it. That is the whole picture, and
+it has one quantitative center still to be built: the exact stress&rarr;metric
+map.
+</p>
+
+<h3>7.2 What has been derived</h3>
+<table>
+<tr><th>Result</th><th>Content</th><th>Status</th></tr>
+<tr><td>The trap dispersion</td><td>\(E^{2}=(pc)^{2}+(mc^{2})^{2}\): the gap \(E(0)=mc^{2}\) <em>is</em> the mass; the \(m=0\) member is the light cone. One dispersion book, two members.</td><td>derived (the mass-measurable = the gapped branch)</td></tr>
+<tr><td>The equivalence principle as algebra</td><td>the fabric's identity part \(\Phi=\kappa/3\) is <b>angle-free</b>: the slow-down register cannot see the mass angle. Redshift universality, shape invariance, and ratio dial-freedom follow as theorems given the coupling</td><td>derived (algebra, not postulate)</td></tr>
+<tr><td>The spin-2 split</td><td>\(\Delta=M-\Phi I\) is symmetric-traceless: 6 components &rarr; 5, the spin-2 multiplet (\(m=-2..2\)); the helicity-2 fingerprint \(R(\theta)\,H\,R(-\theta)=\cos2\theta\,H-\sin2\theta\,X\) is machine-exact &mdash; gravitational waves mix horizontal and vertical polarizations at the doubled angle</td><td>derived (the trap book already speaks graviton)</td></tr>
+<tr><td>The Newtonian face</td><td>integrating out the gapless common mode between two static sources gives an attractive \(1/r\) cross-energy and a force \(F\sim -g^{2}c/r^{2}\): <b>no fitted sign, no fitted shape</b></td><td>derived at the level of the two-source potential</td></tr>
+<tr><td>The share-blind vacuum</td><td>the coupling \(\Phi=\kappa/3\) is independent of the mass configuration &mdash; flat, pole, or data-orbit vacua give identical gravity; the share configuration controls only the spin-2 book</td><td>theorem of the fabric model</td></tr>
+<tr><td>The continuum limit</td><td>\(\alpha_g=\kappa a/(3\hbar c)\) is invariant under \((a\to a/s,\ \kappa\to s\kappa)\): admitting an exact continuum limit, with the invariant content = \(\alpha_g\)+ the shape book. The grid is a legitimate regularizer here &mdash; but the SI mass layer moves with \(\kappa\), so our world has picked one member of the \(\kappa a\) family (the measured \(\kappa=1883.14\) MeV)</td><td>theorem (the invariance arithmetic)</td></tr>
+<tr><td>The dimensionless book</td><td>gravity written in grid coordinates <em>is</em> a dimensionless coupling: \(\alpha_g(\text{cell})=\kappa a/(3\hbar c)=8.9\times10^{-4}\) at the tight cell (about \(0.12\,\alpha\) in size) or \(14.5\) at the atomic cell</td><td>value row (the tier's honest shape)</td></tr>
+</table>
+<p>
+The 3D fabric book (the full face-centered-cubic cell class) carries the
+picture: the fabric's per-cell capacity is exactly the valence
+\(\langle\varepsilon\rangle_{\rm cell}=12\) by symmetry, with the Green
+function \(G_{\rm fcc}(0)=0.083606753\ldots\) and the four census-pinned
+gap roots in the \(0.04\)&ndash;\(1\) lattice-unit band; the first-order
+Euclidean self-consistency class closes in both 2D and 3D with no hit at
+any census-pinned coupling (the honest negatives that shape the remaining
+doors).
+</p>
+
+<h3>7.3 What is still missing, and the named doors</h3>
+<p>
+The fabric model has one missing center: the exact <b>stress&rarr;metric
+map</b> (the operator taking the floor's defect stress to the deformation
+other probes ride). Its absence is honestly priced: the multiplicity that
+converts dimensionless counting into a stiffness is \(10^{32}\), not a
+small number. The open speculative doors are then:
+</p>
+<ul>
+<li><b>the collision-residue door.</b> The bookkeeping contains exact-cancellation-with-surviving-residue classes (neutralized signed lattice sums whose \(z\to1^{+}\) continuation survives by a finite residue). Whether \(\alpha_g\) is such a collision residue &mdash; the one mechanism that could cancel <em>both</em> scale rulers together &mdash; is the currently nominated door; a demonstration of the residue grammar exists (the sliding-window calculus class), the specific \(\alpha_g\) application has not been run.</li>
+<li><b>the kernel door.</b> The gravitationally coupling object should be a
+genre-universal stress kernel (the photon's gravitational strength cannot
+be photon-specific &mdash; the stress book is genre-universal), whose value
+<i>is</i> \(G_N\). Deriving that kernel law is the single sheet of work the whole gravity track collapses to; nobody has run it.</li>
+<li><b>the two-rulers collapse.</b> The fabric models carry exactly two
+dimensionful inputs \(\{\kappa, a\}\); every observable they price is a
+ratio in which \(\kappa\) and \(a\) cancel &mdash; except the couplings
+themselves, \(\alpha\) and \(\alpha_g\). <strong>Closing the
+theory</strong> at the invariance level means collapsing the two-ruler
+problem to one ruler or zero; the kernel door above is the currently
+nominated route, and short of it the model stays honest with two
+rulers.</li>
+<li><b>the vacuum-angle coupling conjecture (speculation tier).</b> The
+author's inference chain &mdash; mass by symmetry breaking tied to the vacuum
+angle, the angle fixed by the lepton masses, the equivalence principle
+coupling gravity to that same broken symmetry &mdash; would make \(G_N\) <em>not
+an independent constant</em>. The candidate expression
+\(\alpha_G\overset{?}{=}4^{-74}\cdot\frac{2}{3}\) sits \(6.7\%\) from the
+measured \(\alpha_G=1.7518\times10^{-45}\) (after an unknown correction
+factor). Per the hard discipline stated in chapter 8 (a new derivation needs a
+<em>new</em> census component, never a recombination of existing numbers),
+this is a speculation row: the exponent \(74=2\cdot37\) resists the closed
+multiplication table of the census (which <em>does</em> classify its
+neighbors 72 and 75), and the recruitment of any new atom would be the
+lane's promotion gate. Not claimed.</li>
+</ul>
+
+<h3>7.4 The falsifier roster (proposed, none armed)</h3>
+<ul>
+<li><b>Gravity&ndash;Koide coupling</b> &mdash; if the angle coupling is real, an improved \(m_\tau\) moves the predicted \(G_N\) in tandem; a \(3\sigma\) divergence kills the connection.</li>
+<li><b>No low-energy running</b> &mdash; gravity should not run below the window's \(a^{-1}\sim7\)~GeV; sub-millimeter inverse-square tests must show no deviation beyond the derived ladder.</li>
+<li><b>No spin-2 census slot</b> &mdash; gravity as emergent means no graviton in the particle census (consistent with the existing window-typed row). Gravitational waves confirm classical general relativity, not a graviton, in this framework.</li>
+<li><b>The acoustic-branch count</b> &mdash; an elastic floor carries 3 acoustic branches (2 transverse + 1 longitudinal); a clean pulsar-timing or interferometer exclusion of the third (scalar/longitudinal) polarization would disprove the elastic reading.</li>
+<li><b>No singularities below the floor</b> &mdash; the reading suggests a maximum density near \(m_{\rm Planck}/a^{3}\), and window-scale dispersion corrections in gravitational-wave propagation (registered, not endorsed).</li>
+</ul>
+
+<!-- ================================================================== -->
+<h2 id="s8">8. The honesty ledger: postulated, named, unreachable</h2>
 
 <p>
-A closed form for the fine-structure constant,
-$$\frac{1}{\alpha}=\frac{7}{40}\,\pi^{2}e^{4}G^{2}\sqrt3 ,$$
-was found by exhaustive search over an arithmetic grammar, matches CODATA 2022
-at \(0.245\sigma\), is unique in its search space at odds of hundreds-to-thousands
-against chance, and carries no free continuous parameters. Each of its four
-factors has an exact structural identity: a doubled norm counting on the Gaussian
-integers; the unique source&ndash;work fixed point of a composability law; the
-exact capacity of a matched four-ary channel; and a representation-theoretic
-census unique among fifteen candidate laws. The formula fills the one-loop
-path-integral template exactly and mirrors the analytic class number formula of
-an unidentified arithmetic object.
+Every proposal of this kind accumulates soft claims. This chapter
+inventories the boundaries instead, in three groups: what is postulated,
+what is named but not derived, and what was never hunted (with the reason).
+The gains side (the fit count, the strong structural strings &mdash; which
+had to grow in number of rows without ever growing in tunable parameters)
+is scoped precisely by these boundaries, not puffed by them.
 </p>
+
+<h3>8.1 Postulated</h3>
+<div class="warn">
+<b>The round-trip principle</b> is the theory's one axiom, and the faces it
+generates (chapter 3) inherit its grade wholesale. A theory cannot certify
+its own axiom. What has been done instead: the principle's neighborhood has
+been mapped against its closest mathematical kin (the Hardy, Chiribella&ndash;D'Ariano&ndash;Perinotti,
+and Masanes&ndash;M&uuml;ller reconstruction families), with every kinship audit at
+the verified literal wording: <em>none</em> of the audited kin carries the
+fixed-point return demand as an axiom (the nearest is the purification
+statement, in an up-to-environment form the principle precisely does not
+meet). That result does not raise or lower the principle's standing; it
+names the standing. The audit rule is one-way: if any future axiom system
+adopts the exact fixed-point form, the demand gets re-priced &mdash; the trigger
+is armed and the record is watching.
+</div>
+
+<h3>8.2 Named, not derived</h3>
+<ul>
+<li><b>\(7/40\).</b> The gauge-count reading and its Lie-algebra twin agree
+at \(d=4\) (&sect;2.5), and both are census-natural; but the forcing
+argument that would collapse them has not been found. This is the most
+precise named gap in the derivation; the coupling-normalization question
+(why this normalization is the physical one at all aside from the forced
+\(c=1\)) belongs to the same box.</li>
+<li><b>The Schanuel-class shadow of \(e^{4}\).</b> That the exponential slot
+is non-periodic is proven only at the numerical tier: a formal proof needs
+transcendence tools of Schanuel strength, beyond present mathematics. The
+remaining demand decomposes exactly into three parts &mdash; the classical
+anchor (Schanuel implies the independence of \(e\) and \(\pi\)); the period
+demand for \(G\) (the arena's own regulator: its transcendence is not a
+Schanuel-class question but an open-period obstruction); and the
+exponential demand \(e^{4}\notin\overline{\mathbb Q}(\mathcal P)\). Two theorem-grade
+structures bound the shadow's reach: the still-open critical values here
+(\(G=\beta(2)\) among them) are exactly those whose functional-equation
+partner is a <em>trivial zero</em> (\(\beta(-1)=0\)) &mdash; \(G\) is the
+arena's &ldquo;first misaligned value&rdquo; by this exact criterion, in the
+same family as \(\zeta(3)\) (one notch deeper: no Ap&eacute;ry-style tool
+yet); and Nesterenko's theorem makes \(\pi\), \(e^{\pi}\), and
+\(\Gamma(1/4)\) algebraically independent, so part of the archimedean
+independence picture is theorem, not conjecture.</li>
+<li><b>The scale.</b> One dimensionful dial, bounded above by the window tier
+of &sect;3.8 &mdash; a dial, not a gap: it is decoupled from \(\alpha\)
+and every dimensionless claim stands without it.</li>
+<li><b>The mass atom.</b> The vacuum angle's center has a named
+completeness clause: any forcing of it must come from a genuinely <em>new</em>
+census component (never a recombination of existing slots), and the
+candidate book has been exhausted three times, honestly &mdash; the angle
+stays a declared external datum until then.</li>
+</ul>
+
+<h3>8.3 Declared unreachable, and the reasons</h3>
 <p>
-Around the formula stands a theory: five axioms and one postulate from which the
-factors are derived and \(1/\alpha\) is an output. The theory's arena is the
-Gaussian integers; its stage is a cube (whose double carries the fermionic sign);
-its dynamics pass a thermodynamic stability proof; its Born weights are a
-theorem; and it makes three independent falsifiable statements &mdash; the frozen
-numerical prediction watched by future CODATA releases, a lattice scale
-\(a\lesssim5\times10^{-15}\,\mathrm{m}\) bounded by atomic inverse-square
-tests, and the charged-lepton identity \(q = 2/3\) watched by the
-tau-mass precision program (&sect;6).
+The record names explicitly what it will never target, to keep the claim's
+falsifiability scope clean. The physical reasons are structural, not
+evasive:
 </p>
+<ul>
+<li><b>\(g-2\) and the running of \(\alpha\)</b> &mdash; loop-level quantities are
+outside a census. The theory names exactly one <em>internal</em> strength
+(the one whose read-back closes on itself), and loop correction structure
+is beyond its bookkeeping.</li>
+<li><b>\(m_{p}-m_{e}\), \(G_F\), and the strong coupling \(\alpha_s\)</b> &mdash; the
+strong sector's <em>structure</em> is carried by the trine face's counting
+law and Hecke-kernel Green's functions, but the strong and weak strengths
+are external <em>by structure</em> (&sect;5.5) rather than pretending they
+carry census values; the proton's internal mass split is dynamics, not
+bookkeeping.</li>
+<li><b>Neutrino masses</b> &mdash; no slot. A ninth census sheet would need a
+genuinely new census component &mdash; honestly, neither derived nor
+excluded.</li>
+<li><b>Cabibbo/Wolfenstein/PMNS/Weinberg mixing, and the field-level weak angle</b> &mdash;
+the gauge column is provably angle-blind (&sect;5.2, the field-separation
+result), so mixing angles are unreachable in this construction; the
+noise-level alignments that were tried are logged as near-misses and never
+claimed.</li>
+</ul>
+
+<h3>8.4 The wait state</h3>
 <p>
-One statement remains postulated, one completion remains to be built, and one
-transcendence shadow remains beyond current mathematics; all three are named
-exactly. The alternative to the whole reading is a one-in-hundreds
-search coincidence whose every factor nevertheless carries independent
-structure. The formula is either a coincidence of the search space, or the
-class number formula of an object physics has not yet named. The theory says
-the latter, names the object's remaining demand exactly, and &mdash; uniquely
-for a proposal of this kind &mdash; states in advance what evidence will
-refute it.
+The single empirical input &mdash; \(0.245\sigma\) against CODATA 2022 &mdash;
+is watched by the fixed decision rule of &sect;1: any future CODATA value
+more than \(\sim3\sigma\) from \(137.035999182138\ldots\) rejects the
+formula; convergence confirms it decisively. No further fitting is possible
+or permitted; the formula is frozen. The mass sector's windows
+(&sect;6.5) are scored automatically on every PDG revision. And the electron
+electric-dipole-moment row is armed qualitatively as an early-warning
+channel for the matter sector: a measured electron EDM in the
+\(10^{-30}\ldots10^{-32}\) band would falsify the matter-side reading,
+\(\alpha\) untouched in every case.
+</p>
+
+<!-- ================================================================== -->
+<h2 id="s9">9. How to check this document</h2>
+<p>
+Every numerical claim above is machine-verified either symbolically
+(sympy) or numerically (mpmath at the stated digit count) in the public
+test suite of the repository, runnable with:
+</p>
+<div class="box"><code>uv run --with mpmath --with sympy pytest tests/ -q</code></div>
+<p>
+The suite takes about one minute. The heavy-duty searches (the exhaustive
+Rust enumeration of chapter 1) are reproducible from the repository's
+<code>rust_search/</code> module. The mass-model engine of chapter 6 is a
+standalone script; the automated HTML self-containment checks (this
+document's hygiene rules) are part of the same suite. Nothing here depends on unstated external constants:
+the input values used (CODATA 2022, PDG 2022) are quoted inline wherever a
+band is claimed.
 </p>
 
 <footer>
 Author: Woyten Tielesch &mdash; <a href="https://github.com/Woyten/alpha">github.com/Woyten/alpha</a>.
 <br>
 Value locked: \(1/\alpha = 137.03599918213800305751867085525344865261005407504\ldots\)
-(50 digits, machine-verified). All structural identities quoted above are exact;
-all numerical claims carry their stated verification precision.
+(50 digits, machine-verified). All structural identities quoted in this
+document are exact; all numerical claims carry their stated verification
+precision. The fit count is one.
 </footer>
 
 </body>
